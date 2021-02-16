@@ -1,0 +1,32 @@
+openapi: 3.0.0
+info:
+  title: Timings monitor
+  description: >-
+    This is a test server for monitoring timings
+  version: 0.0.1
+tags:
+  - name: timings
+    description: Everything about timings
+paths:
+  /Timing:
+    post:
+      tags:
+        - timing
+      summary: send a timing for verification
+      operationId: PostTiming
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timing'
+components:
+  schemas:
+    Timing:
+      type: object
+      properties:
+        id:
+          type: string
+        time_stamp:
+          type: string

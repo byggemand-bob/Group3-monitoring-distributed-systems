@@ -11,7 +11,7 @@
     <groupId>com.Group3</groupId>
     <artifactId>monitor</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>pet-store</name>
+    <name>monitor</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
@@ -194,7 +194,7 @@
                         </goals>
                         <configuration>
                             <templateDirectory>${project.basedir}/src/main/resources/templates</templateDirectory>
-                            <inputSpec>${project.basedir}/src/main/resources/petstore-api.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/monitor-api.yaml</inputSpec>
                             <generatorName>spring</generatorName>
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
