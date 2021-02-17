@@ -149,7 +149,15 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
@@ -160,7 +168,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/petstore-api.yaml</inputSpec>
+							<inputSpec>${project.basedir}/src/main/resources/monitor-api.yaml</inputSpec>
 							<generatorName>java</generatorName> <!-- spring for server/java for client -->
 							<configOptions>
 								<sourceFolder>src/gen/java/main</sourceFolder>
