@@ -7,24 +7,31 @@ info:
 tags:
   - name: timings
     description: Everything about timings
+
 paths:
   /Timing:
     post:
-      tags:
-        - timing
-      summary: send a timing for verification
+      summary: post a timing to monitoring server
       operationId: PostTiming
+      requestBody:
+        description: Body of the timing
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Timing'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Timing'
+          description: OK
+
 components:
   schemas:
     Timing:
+      description: This is a timings object
       type: object
+      required:
+        - id
+        - time_stamp
       properties:
         id:
           type: string
