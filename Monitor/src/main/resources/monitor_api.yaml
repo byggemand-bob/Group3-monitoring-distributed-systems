@@ -3,10 +3,6 @@ info:
   version: "1.0.0"
   title: "Monitor Communication"
   description: "This is a specification for the communication for the monitor system"
-  
-servers:
-  - url: http://85.191.161.150:8080
-    description: Dev Server
 
 paths:
   /monitor:
