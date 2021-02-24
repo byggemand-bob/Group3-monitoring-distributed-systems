@@ -199,6 +199,7 @@
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                             </configOptions>
+                            <configurationFile>${project.basedir}/config.yaml</configurationFile>
                         </configuration>
                     </execution>
                 </executions>
