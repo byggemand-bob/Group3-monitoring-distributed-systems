@@ -1,6 +1,6 @@
 package com.Group3.petstore;
 
-import  com.Group3.petstore.Controller.PetStoreClientInterface;
+import com.Group3.petstore.Controller.PetStoreClientInterface;
 
 import org.openapitools.client.ApiException;
 import org.openapitools.client.model.Pet;
