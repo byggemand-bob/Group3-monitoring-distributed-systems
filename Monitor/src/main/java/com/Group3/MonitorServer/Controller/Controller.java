@@ -1,4 +1,4 @@
-package com.Group3.petstore.Controller;
+package com.Group3.MonitorServer.Controller;
 
 import org.openapitools.api.MonitorApi;
 import org.openapitools.model.TimingMonitorData;

@@ -12,17 +12,23 @@ import java.util.regex.Pattern;
 public class PetStoreClientInterface {
     ApiClient client;
     PetApi api;
-    MonitorClientInterface MonitorClient = new MonitorClientInterface("http://85.191.161.150:8888");
+    MonitorClientInterface MonitorClient = new MonitorClientInterface("http://localhost:8888");
 
     public PetStoreClientInterface(String ServerIP){
+        client = new ApiClient();
+        SetServerIP(ServerIP);
+        api = new PetApi(client);
+    }
+
+    public void SetServerIP(String ServerIP){
         if (Pattern.matches("^http://\\d+.\\d+.\\d+.\\d+:\\d+$", ServerIP)) {
-            client = new ApiClient();
             client.setBasePath(ServerIP);
-            api = new PetApi(client);
         } else if(Pattern.matches("^\\d+.\\d+.\\d+.\\d+:\\d+$", ServerIP)){
-            client = new ApiClient();
             client.setBasePath("http://" + ServerIP);
-            api = new PetApi(client);
+        } else if(Pattern.matches("^http://localhost:\\d+$", ServerIP)){
+            client.setBasePath(ServerIP);
+        } else if(Pattern.matches("^localhost:\\d+$", ServerIP)){
+            client.setBasePath("http://" + ServerIP);
         }
     }
 

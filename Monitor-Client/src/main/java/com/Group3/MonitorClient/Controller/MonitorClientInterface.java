@@ -14,21 +14,19 @@ public class MonitorClientInterface{
     private MonitorApi MonitorClient;
 
     public MonitorClientInterface(String MonitorIP){
-        if (Pattern.matches("^http://\\d+.\\d+.\\d+.\\d+:\\d+$", MonitorIP)) {
-            client = new ApiClient();
-            client.setBasePath(MonitorIP);
-            MonitorClient = new MonitorApi(client);
-        } else if(Pattern.matches("^\\d+.\\d+.\\d+.\\d+:\\d+$", MonitorIP)){
-            client = new ApiClient();
-            client.setBasePath("http://" + MonitorIP);
-            MonitorClient = new MonitorApi(client);
-        }
+        client = new ApiClient();
+        SetMonitorIP(MonitorIP);
+        MonitorClient = new MonitorApi(client);
     }
 
     public void SetMonitorIP(String MonitorIP){
         if (Pattern.matches("^http://\\d+.\\d+.\\d+.\\d+:\\d+$", MonitorIP)) {
             client.setBasePath(MonitorIP);
         } else if(Pattern.matches("^\\d+.\\d+.\\d+.\\d+:\\d+$", MonitorIP)){
+            client.setBasePath("http://" + MonitorIP);
+        } else if(Pattern.matches("^http://localhost:\\d+$", MonitorIP)){
+            client.setBasePath(MonitorIP);
+        } else if(Pattern.matches("^localhost:\\d+$", MonitorIP)){
             client.setBasePath("http://" + MonitorIP);
         }
     }

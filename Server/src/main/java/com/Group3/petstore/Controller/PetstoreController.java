@@ -14,11 +14,15 @@ import java.util.List;
 
 @RestController
 public class PetstoreController implements PetApi {
-    MonitorClientInterface MonitorClient = new MonitorClientInterface("http://85.191.161.150:8888");
+    MonitorClientInterface MonitorClient = new MonitorClientInterface("http://localhost:8888");
 
     @Override
-    public ResponseEntity<List<Pet>> getAllPets() throws ApiException {
-        MonitorClient.addMonitorData(1L,1L, null);
+    public ResponseEntity<List<Pet>> getAllPets() {
+        try {
+            MonitorClient.addMonitorData(2L,2L, null);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
 
         List<Pet> pets = new ArrayList<>();
 

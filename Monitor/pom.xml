@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.Group3</groupId>
-    <artifactId>petstore</artifactId>
+    <artifactId>MonitorServer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>petstore</name>
+    <name>MonitorServer</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
@@ -182,7 +182,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.Group3.petstore.PetstoreApplication</mainClass>
+                    <mainClass>com.Group3.MonitorServer.MonitorServerApplication</mainClass>
                 </configuration>
             </plugin>
 

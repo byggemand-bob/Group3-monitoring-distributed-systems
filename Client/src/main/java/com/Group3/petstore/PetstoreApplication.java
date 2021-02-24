@@ -39,7 +39,7 @@ public class PetstoreApplication {
 	}
 
 	private static void createCall() {
-        PetStoreClientInterface PetstoreInterface = new PetStoreClientInterface("http://85.191.161.150:8080");
+        PetStoreClientInterface PetstoreInterface = new PetStoreClientInterface("http://localhost:8081");
 		List<Pet> Pets = new ArrayList<Pet>();
 
 		try {

@@ -36,7 +36,7 @@ public class TestCall {
 	}
 
 	private static void createCall() {
-		MonitorClientInterface MonitorInterface = new MonitorClientInterface("http://85.191.161.150:8080");
+		MonitorClientInterface MonitorInterface = new MonitorClientInterface("http://localhost:8888");
 
 		try {
 			MonitorInterface.addMonitorData(1L, 1L, null);
