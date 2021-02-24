@@ -1,7 +1,8 @@
-language: java
+language: shell
 jdk: oraclejdk13
 os:
   - linux
+  - windows
 script: mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Client clean install
 script: mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Monitor clean install
 script: mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Server clean install
