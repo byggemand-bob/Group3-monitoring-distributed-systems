@@ -3,4 +3,4 @@ jdk: oraclejdk13
 os:
   - windows
   - linux
-script: mvn -f -x /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Client clean install
+script: mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Client clean install
