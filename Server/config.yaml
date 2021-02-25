@@ -5,97 +5,97 @@ files:
     destinationFilename: MonitorClientInterface.java
     folder: src/gen/java/main/com/Group3/monitorClient/controller
 
-  ApiCallback.mustache:
+  client/ApiCallback.mustache:
     templateType: SupportingFiles
     destinationFilename: ApiCallback.java
     folder: src/gen/java/main/com/Group3/client
 
-  ApiClient.mustache:
+  client/ApiClient.mustache:
     templateType: SupportingFiles
     destinationFilename: ApiClient.java
     folder: src/gen/java/main/com/Group3/client
 
-  ApiException.mustache:
+  client/ApiException.mustache:
     templateType: SupportingFiles
     destinationFilename: ApiException.java
     folder: src/gen/java/main/com/Group3/client
 
-  ApiResponse.mustache:
+  client/ApiResponse.mustache:
     templateType: SupportingFiles
     destinationFilename: ApiResponse.java
     folder: src/gen/java/main/com/Group3/client
 
-  Configuration.mustache:
+  client/Configuration.mustache:
     templateType: SupportingFiles
     destinationFilename: Configuration.java
     folder: src/gen/java/main/com/Group3/client
 
-  GzipRequestInterceptor.mustache:
+  client/GzipRequestInterceptor.mustache:
     templateType: SupportingFiles
     destinationFilename: GzipRequestInterceptor.java
     folder: src/gen/java/main/com/Group3/client
 
-  JSON.mustache:
+  client/JSON.mustache:
     templateType: SupportingFiles
     destinationFilename: JSON.java
     folder: src/gen/java/main/com/Group3/client
 
-  Pair.mustache:
+  client/Pair.mustache:
     templateType: SupportingFiles
     destinationFilename: Pair.java
     folder: src/gen/java/main/com/Group3/client
 
-  ProgressRequestBody.mustache:
+  client/ProgressRequestBody.mustache:
     templateType: SupportingFiles
     destinationFilename: ProgressRequestBody.java
     folder: src/gen/java/main/com/Group3/client
 
-  ProgressResponseBody.mustache:
+  client/ProgressResponseBody.mustache:
     templateType: SupportingFiles
     destinationFilename: ProgressResponseBody.java
     folder: src/gen/java/main/com/Group3/client
 
-  ServerConfiguration.mustache:
+  client/ServerConfiguration.mustache:
     templateType: SupportingFiles
     destinationFilename: ServerConfiguration.java
     folder: src/gen/java/main/com/Group3/client
 
-  ServerVariable.mustache:
+  client/ServerVariable.mustache:
     templateType: SupportingFiles
     destinationFilename: ServerVariable.java
     folder: src/gen/java/main/com/Group3/client
 
-  StringUtil.mustache:
+  client/StringUtil.mustache:
     templateType: SupportingFiles
     destinationFilename: StringUtil.java
     folder: src/gen/java/main/com/Group3/client
 
-  MonitorApi.mustache:
+  api/MonitorApi.mustache:
     templateType: SupportingFiles
     destinationFilename: MonitorApi.java
     folder: src/gen/java/main/com/Group3/client/api
 
-  ApiKeyAuth.mustache:
+  auth/ApiKeyAuth.mustache:
     templateType: SupportingFiles
     destinationFilename: ApiKeyAuth.java
     folder: src/gen/java/main/com/Group3/client/auth
 
-  Authentication.mustache:
+  auth/Authentication.mustache:
     templateType: SupportingFiles
     destinationFilename: Authentication.java
     folder: src/gen/java/main/com/Group3/client/auth
 
-  HttpBasicAuth.mustache:
+  auth/HttpBasicAuth.mustache:
     templateType: SupportingFiles
     destinationFilename: HttpBasicAuth.java
     folder: src/gen/java/main/com/Group3/client/auth
 
-  HttpBearerAuth.mustache:
+  auth/HttpBearerAuth.mustache:
     templateType: SupportingFiles
     destinationFilename: HttpBearerAuth.java
     folder: src/gen/java/main/com/Group3/client/auth
 
-  TimingMonitorData.mustache:
+  model/TimingMonitorData.mustache:
     templateType: SupportingFiles
     destinationFilename: TimingMonitorData.java
     folder: src/gen/java/main/com/Group3/client/model
