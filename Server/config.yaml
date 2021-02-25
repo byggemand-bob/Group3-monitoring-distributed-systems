@@ -1,4 +1,4 @@
-templateDir: C:/Repositories/P6/Server/src/main/resources/cstTemplates
+templateDir: src/main/resources/cstTemplates
 files:
   MonitorClientInterface.mustache:
     templateType: SupportingFiles
