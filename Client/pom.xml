@@ -160,6 +160,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
+							<configurationFile>${project.basedir}/config.yaml</configurationFile>
 							<inputSpec>${project.basedir}/src/main/resources/petstore-api.yaml</inputSpec>
 							<generatorName>java</generatorName> <!-- spring for server/java for client -->
 							<configOptions>
