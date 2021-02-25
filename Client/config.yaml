@@ -1,0 +1,20 @@
+templateDir: src/main/resources/CustomTemplates
+files:
+  MonitorClientInterface.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MonitorClientInterface.java
+    folder: src/gen/java/main/com/Group3/monitor/client
+
+  model/TimingMonitorData.mustache:
+    templateType: SupportingFiles
+    destinationFilename: TimingMonitorData.java
+    folder: src/gen/java/main/com/Group3/monitor/model
+
+  api/MonitorApi.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MonitorApi.java
+    folder: src/gen/java/main/com/Group3/monitor/api
+
+  api/api.mustache:
+    templateType: API
+    destinationFilename: .java
