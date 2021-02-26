@@ -8,4 +8,5 @@ jobs:
         - mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Monitor clean install
         - mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Server clean install
       before_install:
-        - testScript.sh
+        script:
+          - ./home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Server/testScript.sh
