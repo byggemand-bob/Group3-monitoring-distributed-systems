@@ -8,6 +8,7 @@ public class PetstoreApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PetstoreApplication.class, args);
+		// Awesome new comment, totally changing the way of coding!
 	}
 
 }
