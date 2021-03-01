@@ -5,10 +5,15 @@ import org.openapitools.client.model.TimingMonitorData;
 
 import java.util.List;
 
+/*
+* The LazyMessenger is a class to handle the Messenger class.
+* It periodically checks Requirements added to the class,
+* then pauses or resumes the Messenger based on how the requirements tests
+*/
 public class LazyMessenger implements Runnable {
     private Messenger messenger;
     private SynchronizedQueue messageQueue;
-    private List<Requirement> Requirements;
+    private List<Requirement> requirementList;
     private boolean running = true;
     private boolean paused = false;
     Thread thread;
@@ -18,63 +23,81 @@ public class LazyMessenger implements Runnable {
         messenger = new Messenger(MonitorIP, messageQueue);
     }
 
-    public void start(){
+    /* starts a thread running current class.run() */
+    public void Start(){
         thread = new Thread(this);
         thread.start();
-        messenger.start();
+        messenger.Start();
     }
 
-    public void pause(){
-        messenger.pause();
+    /*
+    * Pauses the current thread as well as the messenger,
+    * however both the thread and the messenger completes their current loops first.
+    */
+    public void Pause(){
+        messenger.Pause();
         paused = true;
     }
 
-    public void resume(){
+    /* resumes the thread as well as the messenger*/
+    public void Resume(){
         paused = false;
         notify();
-        messenger.resume();
+        messenger.Resume();
     }
 
-    public void stop(){
+    /* This terminates the thread, whoever it completes the current loop*/
+    public void Stop(){
         running = false;
         paused = false;
-        messenger.stop();
+        messenger.Stop();
         notify();
     }
 
+    /*
+    * Adds class to the list of requirements needed to pass for the Messenger to run.
+    * The class must implement to Requirement interface to work
+    */
     public void AddRequirement(Requirement requirement){
-        Requirements.add(requirement);
+        requirementList.add(requirement);
     }
 
+    /*
+    * Tests every requirement in the requirementList.
+    * Returns true if everything tests true, else false
+    */
     private boolean TestRequirements(){
-        return !Requirements.stream().anyMatch(x -> !x.test());
+        return requirementList.stream().allMatch(x -> x.test());
     }
 
+    /* Adds MonitorData to the monitor queue, to be sent later when requirements allow. */
     public void AddMonitorData(TimingMonitorData MonitorData){
         messageQueue.Add(MonitorData);
     }
 
+    /* while running continues to test the requirementList, and pauses or resumes the Messenger */
     @Override
     public void run() {
         while(running){
-            while(paused){
-                try {
-                    thread.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
 
             if(TestRequirements()){
-                messenger.resume();
+                messenger.Resume();
             } else {
-                messenger.pause();
+                messenger.Pause();
             }
 
             try {
                 thread.wait(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+
+            while(paused){
+                try {
+                    thread.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
