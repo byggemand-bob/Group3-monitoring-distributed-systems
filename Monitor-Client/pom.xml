@@ -11,7 +11,7 @@
     <groupId>com.Group3</groupId>
     <artifactId>MonitorClient</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Monitor-Client</name>
+    <name>MonitorClient</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
@@ -140,7 +140,6 @@
             <artifactId>org.apache.oltu.oauth2.common</artifactId>
             <version>1.0.2</version>
         </dependency>
-		
 	</dependencies>
 
 	<build>

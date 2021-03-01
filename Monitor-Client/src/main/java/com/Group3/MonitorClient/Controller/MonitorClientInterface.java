@@ -1,33 +1,34 @@
 package com.Group3.MonitorClient.Controller;
 
-import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
-import org.openapitools.client.api.MonitorApi;
 import org.openapitools.client.model.TimingMonitorData;
 import org.threeten.bp.OffsetDateTime;
 
 import javax.annotation.Nullable;
 import java.util.regex.Pattern;
 
-public class MonitorClientInterface{
-    ApiClient client;
-    private MonitorApi MonitorClient;
+import com.Group3.MonitorClient.LazyMessenger.LazyMessenger;
 
-    public MonitorClientInterface(String MonitorIP){
-        client = new ApiClient();
+public class MonitorClientInterface{
+    private String monitorIP;
+    private LazyMessenger messenger;
+
+    public MonitorClientInterface(String MonitorIP) {
         SetMonitorIP(MonitorIP);
-        MonitorClient = new MonitorApi(client);
+        messenger = new LazyMessenger(monitorIP);
     }
 
-    public void SetMonitorIP(String MonitorIP){
+    public void SetMonitorIP(String MonitorIP) {
         if (Pattern.matches("^http://\\d+.\\d+.\\d+.\\d+:\\d+$", MonitorIP)) {
-            client.setBasePath(MonitorIP);
+            monitorIP = MonitorIP;
         } else if(Pattern.matches("^\\d+.\\d+.\\d+.\\d+:\\d+$", MonitorIP)){
-            client.setBasePath("http://" + MonitorIP);
+            monitorIP = MonitorIP;
         } else if(Pattern.matches("^http://localhost:\\d+$", MonitorIP)){
-            client.setBasePath(MonitorIP);
+            monitorIP = MonitorIP;
         } else if(Pattern.matches("^localhost:\\d+$", MonitorIP)){
-            client.setBasePath("http://" + MonitorIP);
+            monitorIP = MonitorIP;
+        } else {
+            //TODO: crash and burn?
         }
     }
 
@@ -41,6 +42,8 @@ public class MonitorClientInterface{
             timingMonitorData.setTargetEndpoint(TargetEndPoint);
         }
 
-        MonitorClient.addMonitorData(timingMonitorData);
+        messenger.AddMonitorData(timingMonitorData);
     }
 }
+
+
