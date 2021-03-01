@@ -2,6 +2,8 @@ jobs:
   include:
     - os: linux
       langauge: java
+      python:
+        - "3.7"
       jdk: oraclejdk13
       script:
         - mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Client clean install
@@ -9,4 +11,4 @@ jobs:
         - mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Server clean install
       before_install:
         script:
-          - bash /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Server/testScript.sh
+          - bash /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Server/testScript.py
