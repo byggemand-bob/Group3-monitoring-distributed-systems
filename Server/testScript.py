@@ -1,5 +1,5 @@
 #read input file
-fin = open("config.yaml", "rt")
+fin = open("/home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Server/config.yaml", "rt")
 #read file contents to string
 data = fin.read()
 #replace all occurrences of the required string
