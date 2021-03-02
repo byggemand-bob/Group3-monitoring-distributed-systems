@@ -1,15 +1,13 @@
+language: java
+os: linux
+dist: "xenial"
 jobs:
   include:
-    - stage: Test
     - os: linux
-      langauge: java
-      python:
-        - "3.7"
+      python: "3.7"
       jdk: oraclejdk13
       script:
+        - python /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Server/testScript.py
         - mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Client clean install
         - mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Monitor clean install
         - mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Server clean install
-      before_install:
-        script:
-          - python Server/testScript.py
