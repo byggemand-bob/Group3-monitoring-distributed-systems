@@ -5,7 +5,7 @@ jobs:
   include:
     - os: linux
       python: "3.7"
-      jdk: oraclejdk13
+      jdk: oraclejdk11
       script:
         - python /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Server/testScript.py
         - mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Client clean install
