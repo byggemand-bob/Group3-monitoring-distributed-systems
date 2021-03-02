@@ -9,12 +9,16 @@ import org.openapitools.client.ApiException;
 import java.time.OffsetDateTime;
 
 import javax.annotation.Nullable;
+
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
 public class MonitorClientInterface {
     private ApiClient client;
     private MonitorApi MonitorClient;
     private String monitorURL = "http://85.191.161.150:8080";
+    private static AtomicLong eventIDSequence = new AtomicLong(1L);
+    private static final long senderID = new ConfigurationManager().getPropertyAsLong(ConfigurationManager.IDProp);
 
     private String checkTargetEndpoint(String endpoint){
         if(endpoint.charAt(0) == '/'){
@@ -45,10 +49,10 @@ public class MonitorClientInterface {
         }
     }
 
-    public void addMonitorData(long EventID, long senderID, @Nullable String TargetEndPoint, EventCodeEnum eventCode) throws ApiException {
+    private void addMonitorData(long eventID, @Nullable String TargetEndPoint, EventCodeEnum eventCode) throws ApiException {
         TimingMonitorData timingMonitorData = new TimingMonitorData();
         timingMonitorData.setEventCode(eventCode);
-        timingMonitorData.setEventID(EventID);
+        timingMonitorData.setEventID(eventID);
         timingMonitorData.setSenderID(senderID);
         timingMonitorData.timestamp(OffsetDateTime.now());
         if(TargetEndPoint != null){
@@ -56,5 +60,20 @@ public class MonitorClientInterface {
         }
 
         MonitorClient.addMonitorData(timingMonitorData);
+    }
+    
+    public long queueMonitorData(@Nullable String targetEndPoint, EventCodeEnum eventCode) throws ApiException {
+    	long eventID = getNextEventID();
+    	addMonitorData(eventID, targetEndPoint, eventCode);
+    	return eventID;
+    }
+    
+    public long queueMonitorData(long eventID, @Nullable String targetEndPoint, EventCodeEnum eventCode) throws ApiException {
+    	addMonitorData(eventID, targetEndPoint, eventCode);
+    	return eventID;
+    }
+    
+    public long getNextEventID() {
+    	return eventIDSequence.getAndIncrement();
     }
 }

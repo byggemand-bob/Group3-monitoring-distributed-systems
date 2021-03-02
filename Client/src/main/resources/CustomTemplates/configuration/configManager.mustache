@@ -1,0 +1,43 @@
+package com.Group3.monitor.configuration;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+public class ConfigurationManager {
+
+	private static final String configFile = "configuration.properties";
+	private static Properties props;
+	public static final String IDProp = "ID";
+	
+	
+	public ConfigurationManager() {
+		if (props != null) {
+			initializeProperties();
+		}
+	}
+	
+	private void initializeProperties() {
+		InputStream input = getClass().getClassLoader().getResourceAsStream(configFile);
+		
+		try {
+			props.load(input);
+		} catch (IOException e) {
+			System.out.println(String.format("Could not read properties from {0}, please check...", configFile));
+			e.printStackTrace();
+		}
+	}
+	
+	public String getProperty(String propertyName) {
+		return getProperty(propertyName, null);
+	}
+	
+	public String getProperty(String propertyName, String defaultValue) {
+		return props.getProperty(propertyName, defaultValue);
+	}
+	
+	public long getPropertyAsLong(String propertyName) {
+		String propValue = getProperty(propertyName);
+		return Long.parseLong(propValue);
+	}
+}
