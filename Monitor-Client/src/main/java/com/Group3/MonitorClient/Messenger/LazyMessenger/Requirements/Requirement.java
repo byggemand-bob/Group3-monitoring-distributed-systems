@@ -1,4 +1,4 @@
-package com.Group3.MonitorClient.LazyMessenger.Requirements;
+package com.Group3.MonitorClient.Messenger.LazyMessenger.Requirements;
 
 /*
 * The Requirement interface is an interface used in the LazyMessenger.

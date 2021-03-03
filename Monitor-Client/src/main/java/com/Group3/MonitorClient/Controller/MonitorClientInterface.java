@@ -7,11 +7,12 @@ import org.threeten.bp.OffsetDateTime;
 import javax.annotation.Nullable;
 import java.util.regex.Pattern;
 
-import com.Group3.MonitorClient.LazyMessenger.LazyMessenger;
+import com.Group3.MonitorClient.Messenger.LazyMessenger.LazyMessenger;
+import com.Group3.MonitorClient.Messenger.Messenger;
 
 public class MonitorClientInterface{
     private String monitorIP;
-    private LazyMessenger messenger;
+    private Messenger messenger;
 
     public MonitorClientInterface(String MonitorIP) {
         SetMonitorIP(MonitorIP);
