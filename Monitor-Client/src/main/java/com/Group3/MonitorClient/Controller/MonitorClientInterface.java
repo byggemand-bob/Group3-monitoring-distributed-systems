@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import com.Group3.MonitorClient.Messenger.LazyMessenger.LazyMessenger;
 import com.Group3.MonitorClient.Messenger.Messenger;
+import com.Group3.MonitorClient.Messenger.LazyMessenger.Requirements.AvailableCPURequirement;
 
 public class MonitorClientInterface{
     private String monitorIP;
@@ -17,6 +18,8 @@ public class MonitorClientInterface{
     public MonitorClientInterface(String MonitorIP) {
         SetMonitorIP(MonitorIP);
         messenger = new LazyMessenger(monitorIP);
+        ((LazyMessenger)messenger).AddRequirement(new AvailableCPURequirement(40));
+        messenger.Start();
     }
 
     public void SetMonitorIP(String MonitorIP) {

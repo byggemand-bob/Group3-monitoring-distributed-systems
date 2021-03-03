@@ -1,7 +1,10 @@
 package com.Group3.MonitorClient;
 
 
+import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
+import org.openapitools.client.api.MonitorApi;
+import org.openapitools.client.model.TimingMonitorData;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import com.Group3.MonitorClient.Controller.MonitorClientInterface;
+import org.threeten.bp.OffsetDateTime;
 
 @SpringBootApplication
 public class TestCall {
@@ -37,11 +41,27 @@ public class TestCall {
 	}
 
 	private static void createCall() {
-		MonitorClientInterface MonitorInterface = new MonitorClientInterface("http://localhost:8888");
+//		ApiClient client = new ApiClient();
+//		client.setBasePath("http://85.191.161.150:8080");
+//		MonitorApi monitorClient = new MonitorApi(client);
+//
+//		TimingMonitorData data = new TimingMonitorData();
+//		data.setEventID(1L);
+//		data.setSenderID(1L);
+//		data.setTargetEndpoint("yolo");
+//		data.setTimestamp(OffsetDateTime.now());
+//
+//		try {
+//			monitorClient.addMonitorData(data);
+//		} catch (ApiException e) {
+//			e.printStackTrace();
+//		}
+
+		MonitorClientInterface MonitorInterface = new MonitorClientInterface("http://85.191.161.150:8080");
 
 		try {
 			MonitorInterface.addMonitorData(1L, 1L, null);
-		} catch (ApiException e){
+		} catch (ApiException e) {
 			e.printStackTrace();
 		}
 	}

@@ -99,7 +99,11 @@ public class LazyMessenger implements Messenger {
      * Returns true if everything tests true, else false
      */
     private boolean TestRequirements(){
-        return requirementList.stream().allMatch(x -> x.test());
+        if(requirementList.size() > 0) {
+            return requirementList.stream().allMatch(x -> x.test());
+        } else {
+            return true;
+        }
     }
 
     public boolean MessengerIsAlive(){
