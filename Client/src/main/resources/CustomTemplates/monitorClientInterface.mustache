@@ -1,11 +1,14 @@
 package com.Group3.monitor.client;
 
+import com.Group3.monitor.configuration.ConfigurationManager;
 import com.Group3.monitor.api.MonitorApi;
 import com.Group3.monitor.model.TimingMonitorData;
 import com.Group3.monitor.model.TimingMonitorData.EventCodeEnum;
 
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
+
+import java.io.File;
 import java.time.OffsetDateTime;
 
 import javax.annotation.Nullable;
@@ -16,9 +19,9 @@ import java.util.regex.Pattern;
 public class MonitorClientInterface {
     private ApiClient client;
     private MonitorApi MonitorClient;
-    private String monitorURL = "http://85.191.161.150:8080";
+    private String monitorURL;
     private static AtomicLong eventIDSequence = new AtomicLong(1L);
-    private static final long senderID = new ConfigurationManager().getPropertyAsLong(ConfigurationManager.IDProp);
+    private static final long senderID = ConfigurationManager.getInstance().getPropertyAsLong(ConfigurationManager.getInstance().IDProp);
 
     private String checkTargetEndpoint(String endpoint){
         if(endpoint.charAt(0) == '/'){
@@ -29,23 +32,23 @@ public class MonitorClientInterface {
 
 
     public MonitorClientInterface(){
-        //if (Pattern.matches("^http://\\d+.\\d+.\\d+.\\d+:\\d+$", MonitorIP)) {
-        //    client = new ApiClient();
-        //    client.setBasePath(MonitorIP);
-        //    MonitorClient = new MonitorApi(client);
-        //} else if(Pattern.matches("^\\d+.\\d+.\\d+.\\d+:\\d+$", MonitorIP)){
-        //    client = new ApiClient();
-        //    client.setBasePath("http://" + MonitorIP);
-        //    MonitorClient = new MonitorApi(client);
-        //}
-        SetMonitorIP(monitorURL);
+    	monitorURL = ConfigurationManager.getInstance().getProperty(ConfigurationManager.getInstance().monitorServerAddressProp);
+    	client = new ApiClient();
+        ValidateAndSetMonitorIP(monitorURL);
+        MonitorClient = new MonitorApi(client);
     }
 
-    public void SetMonitorIP(String MonitorIP){
+    private void ValidateAndSetMonitorIP(String MonitorIP){
         if (Pattern.matches("^http://\\d+.\\d+.\\d+.\\d+:\\d+$", MonitorIP)) {
             client.setBasePath(MonitorIP);
         } else if(Pattern.matches("^\\d+.\\d+.\\d+.\\d+:\\d+$", MonitorIP)){
             client.setBasePath("http://" + MonitorIP);
+        } else {
+        	String msg = String.format("IP address defined in configuration property <%s> is malformed, please check...\n"+
+									   "Properties found at <%s>",
+									   ConfigurationManager.getInstance().monitorServerAddressProp, 
+									   ConfigurationManager.getInstance().getPropertiesPath());
+        	throw new RuntimeException(msg);
         }
     }
 
