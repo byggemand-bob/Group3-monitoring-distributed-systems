@@ -17,6 +17,7 @@
         <java.version>11</java.version>
     </properties>
     <dependencies>
+    	
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -136,6 +137,12 @@
             <artifactId>openapi-generator-cli</artifactId>
             <version>3.3.4</version>
             <scope>provided</scope>
+            <exclusions>
+			    <exclusion> 
+			        <groupId>log4j</groupId>
+			        <artifactId>log4j</artifactId>
+		      </exclusion>
+			</exclusions> 
         </dependency>
 
         <dependency>
@@ -197,7 +204,7 @@
                         </goals>
                         <configuration>
                             <templateDirectory>${project.basedir}/src/main/resources/templates</templateDirectory>
-                            <inputSpec>${project.basedir}/src/main/resources/monitor_api.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/CommunicationSpecV2.yaml</inputSpec>
                             <generatorName>spring</generatorName>
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
