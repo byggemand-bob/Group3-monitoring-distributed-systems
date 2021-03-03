@@ -7,7 +7,7 @@ jobs:
       python: "3.7"
       jdk: oraclejdk11
       script:
-        - python /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Server/RenameTemplatePathInConfig.py
+        - python /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/RenameTemplatePathInConfig.py
         - mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Client clean install
         - mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Monitor clean install
         - mvn -f /home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Server clean install
