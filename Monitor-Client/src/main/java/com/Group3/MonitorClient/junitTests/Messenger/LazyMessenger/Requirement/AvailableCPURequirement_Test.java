@@ -7,7 +7,7 @@ import org.junit.Assert;
 public class AvailableCPURequirement_Test {
     /* tests when the system usage is above the minimum required available memory*/
     @Test
-    public void Test_testMethod1(){
+    public void UnderLimit(){
         AvailableCPURequirement_TestClass testClass = new AvailableCPURequirement_TestClass(40);
 
         Assert.assertTrue(testClass.test());
@@ -15,7 +15,7 @@ public class AvailableCPURequirement_Test {
 
     /* tests when the system usage is below the minimum required available memory*/
     @Test
-    public void Test_testMethod2(){
+    public void OverLimit(){
         AvailableCPURequirement_TestClass testClass = new AvailableCPURequirement_TestClass(60);
 
         Assert.assertFalse(testClass.test());

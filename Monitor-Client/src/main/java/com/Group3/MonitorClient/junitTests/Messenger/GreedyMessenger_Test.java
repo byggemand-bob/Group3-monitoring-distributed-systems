@@ -11,7 +11,7 @@ public class GreedyMessenger_Test {
 
     /* tests the control functions of the GreedyMessenger, Start(), Stop(), Pause() and Resume() */
     @Test
-    public void GreedyMessenger_test1() throws InterruptedException {
+    public void ThreadControl() throws InterruptedException {
         SynchronizedQueue queue = new SynchronizedQueue();
         GreedyMessenger messenger = new GreedyMessenger_TestClass("1.1.1.1:8080", queue);
 
@@ -54,7 +54,7 @@ public class GreedyMessenger_Test {
 
     /* Ensures the AddMonitorData() method works as intended */
     @Test
-    public void GreedyMessenger_test2(){
+    public void AddDataTest(){
         SynchronizedQueue queue = new SynchronizedQueue();
         GreedyMessenger messenger = new GreedyMessenger("1.1.1.1:8080", queue);
 

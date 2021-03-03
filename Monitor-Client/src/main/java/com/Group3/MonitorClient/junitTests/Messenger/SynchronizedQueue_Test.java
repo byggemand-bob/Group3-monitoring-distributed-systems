@@ -14,7 +14,7 @@ import java.util.List;
 public class SynchronizedQueue_Test {
     /* tests the SynchronizedQueue can handle multiple Threads manipulating it at the same time */
     @Test
-    public void SyncQueue_Test1(){
+    public void MultiThreadHandling(){
         SynchronizedQueue syncQueue = new SynchronizedQueue();
         Random random = new Random();
         int numOfThreads = random.nextInt(7) + 3;
@@ -41,7 +41,7 @@ public class SynchronizedQueue_Test {
 
     /* tests the order of the queue is maintained after multiple threads take elements */
     @Test
-    public void SyncQueue_Test2(){
+    public void QueueOrderTest(){
         SynchronizedQueue syncQueue = new SynchronizedQueue();
         List<Thread> ThreadList = new LinkedList<>();
 

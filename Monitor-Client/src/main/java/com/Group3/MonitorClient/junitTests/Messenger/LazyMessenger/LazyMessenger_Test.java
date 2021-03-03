@@ -11,7 +11,7 @@ import org.openapitools.client.model.TimingMonitorData;
 public class LazyMessenger_Test {
     /* tests the control functions of the GreedyMessenger, Start(), Stop(), Pause() and Resume() */
     @Test
-    public void LazyMessenger_Test1() throws InterruptedException {
+    public void ThreadControl() throws InterruptedException {
         SynchronizedQueue queue = new SynchronizedQueue();
         LazyMessenger messenger = new LazyMessenger_TestClass("http://1.1.1.1:8080", queue);
 
@@ -57,7 +57,7 @@ public class LazyMessenger_Test {
 
     /* Ensures the AddMonitorData() method works as intended */
     @Test
-    public void LazyMessenger_test2(){
+    public void AddDataTest(){
         SynchronizedQueue queue = new SynchronizedQueue();
         LazyMessenger messenger = new LazyMessenger("1.1.1.1:8080", queue);
 
@@ -68,7 +68,7 @@ public class LazyMessenger_Test {
 
     /* tests if changing requirements between true and false, stops and runs message sending as intended */
     @Test
-    public void LazyMessenger_test3() throws InterruptedException {
+    public void RequirementsTest() throws InterruptedException {
         SynchronizedQueue queue = new SynchronizedQueue();
         LazyMessenger messenger = new LazyMessenger_TestClass("http://1.1.1.1:8080", queue);
 
