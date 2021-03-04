@@ -1,4 +1,4 @@
-templateDir: src/main/resources/CustomTemplates
+templateDir: src/main/resources/cstTemplates
 files:
   monitorClientInterface.mustache:
     templateType: SupportingFiles
