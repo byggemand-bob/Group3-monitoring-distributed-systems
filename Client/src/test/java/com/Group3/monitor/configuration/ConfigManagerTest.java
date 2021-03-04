@@ -1,40 +1,13 @@
 package com.Group3.monitor.configuration;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class ConfigManagerTest {
+import com.Group3.monitor.AbstractMonitorTest;
 
-	private static String configPath;
-	private static List<String> savedProperties = new ArrayList<String>();
-	
-	@BeforeAll
-	public static void setupTests() {
-		configPath = ConfigurationManager.getInstance().getPropertiesPath();
-		savedProperties = saveConfigProperties(configPath);
-	}
-	
-	@BeforeEach
-	public void beforeEachTest() {
-		resetConfigurationManagerSingleton();
-	}
-	
-	@AfterAll
-	public static void destroyTestEnvironment() {
-		cleanConfigProperties(configPath, savedProperties);
-	}
-		
+public class ConfigManagerTest extends AbstractMonitorTest {
+
+
 	@Test
 	public void testGetPropertyAsLongWithLongValuePositivePass() {
 		// Setup
@@ -309,59 +282,4 @@ public class ConfigManagerTest {
 		Assertions.assertNotNull(actual);
 		Assertions.assertEquals(defaultValue, actual);
 	}
-	
-	// ################### HELPER METHODS ###################
-	private static void addPropertiesToConfig(String... properties) {
-		try (FileWriter writer = new FileWriter(new File(configPath))){
-			for (String property : properties) {
-				writer.write(property + "\r\n");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static void cleanConfigProperties(String path, List<String> savedProperties) {
-		addPropertiesToConfig(savedProperties.toArray(new String[0]));
-	}
-
-	private static List<String> saveConfigProperties(String path) {
-		List<String> propertiesList = new ArrayList<String>();
-		try (Scanner input = new Scanner(new File(path))) {
-			while (input.hasNextLine()) {
-				propertiesList.add(input.nextLine());
-			}
-		} catch (FileNotFoundException e) {
-			// Do something
-		}
-
-		return propertiesList;
-	}
-	
-	private static void destroySingleton(Class singletonClazz, Object instans, String field, Object newValue) {
-		java.lang.reflect.Field f = null;
-		try {
-			f = singletonClazz.getDeclaredField(field);
-		} catch (NoSuchFieldException | SecurityException e1) {
-			e1.printStackTrace();
-		}
-		
-		if (f != null) {
-			f.setAccessible(true);			
-		}
-		
-		try {
-			f.set(instans, newValue);
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		f.setAccessible(false);
-	}
-	
-	private static void resetConfigurationManagerSingleton() {
-		destroySingleton(ConfigurationManager.class, null, "instance", null);
-	}
-
 }

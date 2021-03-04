@@ -14,6 +14,7 @@ public class ConfigurationManager {
 	public final String IDProp = "ID";
 	public final String monitorServerAddressProp = "MonitorServerAddress";
 	private static ConfigurationManager instance = null;
+	private static String EMPTY = "";
 	
 	public ConfigurationManager() {
 		if (props == null) {
@@ -37,7 +38,11 @@ public class ConfigurationManager {
 	}
 	
 	public String getProperty(String propertyName, String defaultValue) {
-		return props.getProperty(propertyName, defaultValue);
+		String propertyValue = props.getProperty(propertyName, defaultValue);
+		if ((propertyValue != null && propertyValue.equals(EMPTY)) && (defaultValue == null || !defaultValue.equals(EMPTY))) {
+			return defaultValue;
+		}
+		return propertyValue;
 	}
 	
 	public long getPropertyAsLong(String propertyName) {
