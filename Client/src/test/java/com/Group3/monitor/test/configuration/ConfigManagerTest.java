@@ -1,9 +1,10 @@
-package com.Group3.monitor.configuration;
+package com.Group3.monitor.test.configuration;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.Group3.monitor.AbstractMonitorTest;
+import com.Group3.monitor.configuration.ConfigurationManager;
+import com.Group3.monitor.test.AbstractMonitorTest;
 
 public class ConfigManagerTest extends AbstractMonitorTest {
 
