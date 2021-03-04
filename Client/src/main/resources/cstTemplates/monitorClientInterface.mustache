@@ -4,6 +4,7 @@ import com.Group3.monitor.configuration.ConfigurationManager;
 import com.Group3.monitor.api.MonitorApi;
 import com.Group3.monitor.model.TimingMonitorData;
 import com.Group3.monitor.model.TimingMonitorData.EventCodeEnum;
+import com.Group3.petstore.MonitorConfigException;
 
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
@@ -39,7 +40,7 @@ public class MonitorClientInterface {
 									   "Properties found at <%s>",
 									   ConfigurationManager.getInstance().monitorServerAddressProp, 
 									   ConfigurationManager.getInstance().getPropertiesPath());
-        	throw new RuntimeException(msg);
+        	throw new MonitorConfigException(msg);
         }
     }
 
