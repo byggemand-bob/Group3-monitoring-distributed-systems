@@ -8,7 +8,6 @@ import com.Group3.monitor.model.TimingMonitorData.EventCodeEnum;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
 
-import java.io.File;
 import java.time.OffsetDateTime;
 
 import javax.annotation.Nullable;
@@ -22,14 +21,6 @@ public class MonitorClientInterface {
     private String monitorURL;
     private static AtomicLong eventIDSequence = new AtomicLong(1L);
     private static final long senderID = ConfigurationManager.getInstance().getPropertyAsLong(ConfigurationManager.getInstance().IDProp);
-
-    private String checkTargetEndpoint(String endpoint){
-        if(endpoint.charAt(0) == '/'){
-            return endpoint;
-        }
-        return "/" + endpoint;
-    }
-
 
     public MonitorClientInterface(){
     	monitorURL = ConfigurationManager.getInstance().getProperty(ConfigurationManager.getInstance().monitorServerAddressProp);
@@ -59,7 +50,7 @@ public class MonitorClientInterface {
         timingMonitorData.setSenderID(senderID);
         timingMonitorData.timestamp(OffsetDateTime.now());
         if(TargetEndPoint != null){
-            timingMonitorData.setTargetEndpoint(checkTargetEndpoint(TargetEndPoint));
+            timingMonitorData.setTargetEndpoint(TargetEndPoint);
         }
 
         MonitorClient.addMonitorData(timingMonitorData);
@@ -76,7 +67,7 @@ public class MonitorClientInterface {
     	return eventID;
     }
     
-    public long getNextEventID() {
+    private long getNextEventID() {
     	return eventIDSequence.getAndIncrement();
     }
 }
