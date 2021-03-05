@@ -23,3 +23,8 @@ files:
     templateType: SupportingFiles
     destinationFilename: ConfigurationManager.java
     folder: src/gen/java/main/com/Group3/monitor/configuration
+    
+  exception/monitorConfigException.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MonitorConfigException.java
+    folder: src/gen/java/main/com/Group3/monitor/exception
