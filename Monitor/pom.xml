@@ -197,7 +197,7 @@
                         </goals>
                         <configuration>
                             <templateDirectory>${project.basedir}/src/main/resources/templates</templateDirectory>
-                            <inputSpec>${project.basedir}/src/main/resources/petstore-api.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/monitor-api.yaml</inputSpec>
                             <generatorName>spring</generatorName>
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
