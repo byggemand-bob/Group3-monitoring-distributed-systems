@@ -4,7 +4,7 @@ import com.Group3.monitor.configuration.ConfigurationManager;
 import com.Group3.monitor.api.MonitorApi;
 import com.Group3.monitor.model.TimingMonitorData;
 import com.Group3.monitor.model.TimingMonitorData.EventCodeEnum;
-import com.Group3.petstore.MonitorConfigException;
+import com.Group3.monitor.exception.MonitorConfigException;
 
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
@@ -35,6 +35,10 @@ public class MonitorClientInterface {
             client.setBasePath(MonitorIP);
         } else if(Pattern.matches("^\\d+.\\d+.\\d+.\\d+:\\d+$", MonitorIP)){
             client.setBasePath("http://" + MonitorIP);
+        } else if (Pattern.matches("^localhost:\\d+$", MonitorIP)){
+            client.setBasePath("http://" + MonitorIP);
+        } else if (Pattern.matches("^http://localhost:\\d+$", MonitorIP)){
+            client.setBasePath(MonitorIP);
         } else {
         	String msg = String.format("IP address defined in configuration property <%s> is malformed, please check...\n"+
 									   "Properties found at <%s>",
