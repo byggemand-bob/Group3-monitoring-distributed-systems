@@ -7,12 +7,12 @@ import java.util.Random;
 
 /* class used to simulate adding and taking elements from the SynchronizedQueue */
 public class AddRemoveThread_TestClass implements Runnable{
-    public SynchronizedQueue syncQueue;
+    public SynchronizedQueue<TimingMonitorData> syncQueue;
     public int addNum;
     public int takeNum;
     public Random random = new Random();
 
-    public AddRemoveThread_TestClass(SynchronizedQueue syncQueue, int addNum, int takeNum){
+    public AddRemoveThread_TestClass(SynchronizedQueue<TimingMonitorData> syncQueue, int addNum, int takeNum){
         this.syncQueue = syncQueue;
         this.addNum = addNum;
         this.takeNum = takeNum;

@@ -12,7 +12,7 @@ public class GreedyMessenger_Test {
     /* tests the control functions of the GreedyMessenger, Start(), Stop(), Pause() and Resume() */
     @Test
     public void ThreadControl() throws InterruptedException {
-        SynchronizedQueue queue = new SynchronizedQueue();
+        SynchronizedQueue<TimingMonitorData> queue = new SynchronizedQueue<TimingMonitorData>();
         GreedyMessenger messenger = new GreedyMessenger_TestClass("1.1.1.1:8080", queue);
 
         for(int x = 0; x < 5; x++){
@@ -55,7 +55,7 @@ public class GreedyMessenger_Test {
     /* Ensures the AddMonitorData() method works as intended */
     @Test
     public void AddDataTest(){
-        SynchronizedQueue queue = new SynchronizedQueue();
+        SynchronizedQueue<TimingMonitorData> queue = new SynchronizedQueue<TimingMonitorData>();
         GreedyMessenger messenger = new GreedyMessenger("1.1.1.1:8080", queue);
 
         messenger.AddMonitorData(new TimingMonitorData());

@@ -16,14 +16,14 @@ import java.util.List;
  */
 public class LazyMessenger implements Messenger {
     protected Messenger subMessenger;
-    private SynchronizedQueue messageQueue;
+    private SynchronizedQueue<TimingMonitorData> messageQueue;
     private List<Requirement> requirementList = new LinkedList<Requirement>();
     private boolean running = true;
     private boolean paused = false;
     private Thread thread;
 
     public LazyMessenger(String monitorIP){
-        messageQueue = new SynchronizedQueue();
+        messageQueue = new SynchronizedQueue<TimingMonitorData>();
         subMessenger = new GreedyMessenger(monitorIP, messageQueue);
     }
 
@@ -31,7 +31,7 @@ public class LazyMessenger implements Messenger {
      * specifies which SynchronizedQueue to utilize,
      * useful if multiple messengers should share the same queue.
      */
-    public LazyMessenger(String monitorIP, SynchronizedQueue messageQueue){
+    public LazyMessenger(String monitorIP, SynchronizedQueue<TimingMonitorData> messageQueue){
         subMessenger = new GreedyMessenger(monitorIP, messageQueue);
         this.messageQueue = messageQueue;
     }
@@ -44,6 +44,7 @@ public class LazyMessenger implements Messenger {
     /* starts a thread running current class.run() */
     @Override
     public void Start(){
+        running = true;
         subMessenger.Pause();
         subMessenger.Start();
         thread = new Thread(this);
@@ -114,6 +115,19 @@ public class LazyMessenger implements Messenger {
     @Override
     public void run() {
         while(running){
+            while(paused){
+                try {
+                    synchronized (this) {
+                        wait();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(!running){
+                    break;
+                }
+            }
+
             if(TestRequirements()){
                 subMessenger.Resume();
             } else {
@@ -126,16 +140,6 @@ public class LazyMessenger implements Messenger {
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
-
-            while(paused){
-                try {
-                    synchronized (this) {
-                        wait();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }

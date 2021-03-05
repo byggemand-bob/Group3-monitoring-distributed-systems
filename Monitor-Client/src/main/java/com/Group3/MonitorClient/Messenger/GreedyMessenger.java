@@ -13,14 +13,14 @@ public class GreedyMessenger implements Messenger{
     protected MonitorApi monitorClient;
     private boolean running = true;
     private boolean paused = false;
-    private SynchronizedQueue messageQueue;
+    private SynchronizedQueue<TimingMonitorData> messageQueue;
     private Thread thread;
 
     /*
      * specifies which SynchronizedQueue to utilize,
      * useful if multiple messengers should share the same queue.
      */
-    public GreedyMessenger(String monitorIP, SynchronizedQueue messageQueue){
+    public GreedyMessenger(String monitorIP, SynchronizedQueue<TimingMonitorData> messageQueue){
         ApiClient client = new ApiClient();
         client.setBasePath(monitorIP);
         monitorClient = new MonitorApi(client);
@@ -31,12 +31,13 @@ public class GreedyMessenger implements Messenger{
         ApiClient client = new ApiClient();
         client.setBasePath(monitorIP);
         monitorClient = new MonitorApi(client);
-        messageQueue = new SynchronizedQueue();
+        messageQueue = new SynchronizedQueue<TimingMonitorData>();
     }
 
     /* starts a thread running current class.run() */
     @Override
     public void Start(){
+        running = true;
         thread = new Thread(this);
         thread.start();
     }

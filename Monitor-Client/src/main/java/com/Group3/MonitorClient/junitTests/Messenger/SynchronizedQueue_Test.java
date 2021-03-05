@@ -15,7 +15,7 @@ public class SynchronizedQueue_Test {
     /* tests the SynchronizedQueue can handle multiple Threads manipulating it at the same time */
     @Test
     public void MultiThreadHandling(){
-        SynchronizedQueue syncQueue = new SynchronizedQueue();
+        SynchronizedQueue<TimingMonitorData> syncQueue = new SynchronizedQueue<TimingMonitorData>();
         Random random = new Random();
         int numOfThreads = random.nextInt(7) + 3;
 
@@ -42,7 +42,7 @@ public class SynchronizedQueue_Test {
     /* tests the order of the queue is maintained after multiple threads take elements */
     @Test
     public void QueueOrderTest(){
-        SynchronizedQueue syncQueue = new SynchronizedQueue();
+        SynchronizedQueue<TimingMonitorData> syncQueue = new SynchronizedQueue<TimingMonitorData>();
         List<Thread> ThreadList = new LinkedList<>();
 
         for(long x = 0; x < 6; x++){

@@ -12,7 +12,7 @@ public class LazyMessenger_Test {
     /* tests the control functions of the GreedyMessenger, Start(), Stop(), Pause() and Resume() */
     @Test
     public void ThreadControl() throws InterruptedException {
-        SynchronizedQueue queue = new SynchronizedQueue();
+        SynchronizedQueue<TimingMonitorData> queue = new SynchronizedQueue<TimingMonitorData>();
         LazyMessenger messenger = new LazyMessenger_TestClass("http://1.1.1.1:8080", queue);
 
         TrueFalseRequirement_TestClass trueRequirement = new TrueFalseRequirement_TestClass(true);
@@ -58,7 +58,7 @@ public class LazyMessenger_Test {
     /* Ensures the AddMonitorData() method works as intended */
     @Test
     public void AddDataTest(){
-        SynchronizedQueue queue = new SynchronizedQueue();
+        SynchronizedQueue<TimingMonitorData> queue = new SynchronizedQueue<TimingMonitorData>();
         LazyMessenger messenger = new LazyMessenger("1.1.1.1:8080", queue);
 
         messenger.AddMonitorData(new TimingMonitorData());
@@ -69,7 +69,7 @@ public class LazyMessenger_Test {
     /* tests if changing requirements between true and false, stops and runs message sending as intended */
     @Test
     public void RequirementsTest() throws InterruptedException {
-        SynchronizedQueue queue = new SynchronizedQueue();
+        SynchronizedQueue<TimingMonitorData> queue = new SynchronizedQueue<TimingMonitorData>();
         LazyMessenger messenger = new LazyMessenger_TestClass("http://1.1.1.1:8080", queue);
 
         TrueFalseRequirement_TestClass Requirement1 = new TrueFalseRequirement_TestClass(false);
