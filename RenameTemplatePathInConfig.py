@@ -21,3 +21,8 @@ def ChangeTemplateInConfig(filePath, replace):
 ChangeTemplateInConfig(
     '/home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Server/config.yaml', 
     'templateDir: Server/src/main/resources/cstTemplates')
+
+#Change the template file path in Client project
+ChangeTemplateInConfig(
+    '/home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Client/config.yaml', 
+    'templateDir: Client/src/main/resources/cstTemplates')
