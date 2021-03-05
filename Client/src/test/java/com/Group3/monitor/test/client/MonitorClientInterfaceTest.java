@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import com.Group3.monitor.client.MonitorClientInterface;
 import com.Group3.monitor.configuration.ConfigurationManager;
+import com.Group3.monitor.exception.MonitorConfigException;
 import com.Group3.monitor.test.AbstractMonitorTest;
-import com.Group3.petstore.MonitorConfigException;
+
 
 public class MonitorClientInterfaceTest extends AbstractMonitorTest{
 	private static String propertyNameID;

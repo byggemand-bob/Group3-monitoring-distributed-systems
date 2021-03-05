@@ -36,18 +36,25 @@ public abstract class AbstractMonitorTest {
 	}
 	
 	// ################### HELPER METHODS ###################
-	protected static void addPropertiesToConfig(String... properties) {
+	protected static void addPropertiesToConfig(boolean addRequired,String... properties) {
 		try (FileWriter writer = new FileWriter(new File(configPath))){
 			for (String property : properties) {
 				writer.write(property + "\r\n");
+			}
+			if (addRequired == true) {
+				writer.write(ConfigurationManager.IDProp + "=" + "1");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	protected static void addPropertiesToConfig(String... properties) {
+		addPropertiesToConfig(true, properties);
+	}
+
 	protected static void cleanConfigProperties(String path, List<String> savedProperties) {
-		addPropertiesToConfig(savedProperties.toArray(new String[0]));
+		addPropertiesToConfig(false,savedProperties.toArray(new String[0]));
 	}
 
 	protected static List<String> saveConfigProperties(String path) {

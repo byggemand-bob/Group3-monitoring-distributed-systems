@@ -1,5 +1,6 @@
 package com.Group3.monitor.test.configuration;
 
+import com.Group3.monitor.exception.MonitorConfigException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -282,5 +283,20 @@ public class ConfigManagerTest extends AbstractMonitorTest {
 		// Assert
 		Assertions.assertNotNull(actual);
 		Assertions.assertEquals(defaultValue, actual);
+	}
+
+	@Test
+	public void testValidateIDPresentFail() {
+		// Setup
+		String propertyName = "testExist";
+		String defaultValue = "the Default";
+		addPropertiesToConfig(false,propertyName + "=" + defaultValue);
+
+		// Act
+
+		// Assert
+		Assertions.assertThrows(MonitorConfigException.class, () -> {
+			ConfigurationManager.getInstance();
+		});
 	}
 }
