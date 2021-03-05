@@ -175,13 +175,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.Group3</groupId>
-            <artifactId>MonitorClient</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
     </dependencies>
 
     <build>
