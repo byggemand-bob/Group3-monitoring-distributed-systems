@@ -60,7 +60,7 @@ public class {{classname}} {
     public {{classname}}() {
         this(Configuration.getDefaultApiClient());
     }
-    //test2
+
     public {{classname}}(ApiClient apiClient) {
         monitorClientInterface = new MonitorClientInterface();
         this.localVarApiClient = apiClient;
@@ -252,7 +252,6 @@ public class {{classname}} {
     {{#isDeprecated}}
     @Deprecated
     {{/isDeprecated}}
-    //test1
     public {{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}{{operationId}}({{#allParams}}{{{dataType}}} {{paramName}}{{^-last}}, {{/-last}}{{/allParams}}) throws ApiException {
         final long eventID = monitorClientInterface.queueMonitorData("{{{path}}}", EventCodeEnum.SENDREQUEST);//TODO:FIX!
 
