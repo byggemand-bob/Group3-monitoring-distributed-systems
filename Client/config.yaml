@@ -1,0 +1,30 @@
+templateDir: src/main/resources/cstTemplates
+files:
+  monitorClientInterface.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MonitorClientInterface.java
+    folder: src/gen/java/main/com/Group3/monitor/client
+
+  model/timingMonitorData.mustache:
+    templateType: SupportingFiles
+    destinationFilename: TimingMonitorData.java
+    folder: src/gen/java/main/com/Group3/monitor/model
+
+  api/monitorApi.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MonitorApi.java
+    folder: src/gen/java/main/com/Group3/monitor/api
+
+  api/api.mustache:
+    templateType: API
+    destinationFilename: .java
+
+  configuration/configManager.mustache:
+    templateType: SupportingFiles
+    destinationFilename: ConfigurationManager.java
+    folder: src/gen/java/main/com/Group3/monitor/configuration
+    
+  exception/monitorConfigException.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MonitorConfigException.java
+    folder: src/gen/java/main/com/Group3/monitor/exception

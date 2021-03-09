@@ -1,24 +1,24 @@
 package com.Group3.petstore;
 
-import com.Group3.petstore.Controller.PetStoreClientInterface;
+import java.io.IOException;
 
 import org.openapitools.client.ApiException;
+import org.openapitools.client.api.PetApi;
 import org.openapitools.client.model.Pet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @SpringBootApplication
 public class PetstoreApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, ApiException {
 		SpringApplication.run(PetstoreApplication.class, args);
+
 		try {
 			awaitInput();
 		} catch (IOException e) {
@@ -26,6 +26,7 @@ public class PetstoreApplication {
 			e.printStackTrace();
 		}
 	}
+
 	private static void awaitInput() throws IOException {
 		String input = null;
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -39,17 +40,17 @@ public class PetstoreApplication {
 	}
 
 	private static void createCall() {
-        PetStoreClientInterface PetstoreInterface = new PetStoreClientInterface("http://localhost:8081");
+		PetApi api = new PetApi();
 		List<Pet> Pets = new ArrayList<Pet>();
 
 		try {
-			Pets = PetstoreInterface.GetAllPets();
+			Pets = api.getAllPets();
 		} catch (ApiException e) {
 			e.printStackTrace();
 		}
 
-		for (Pet pet : Pets){
-            System.out.println(pet);
-        }
-    }
+		for (Pet pet : Pets) {
+			System.out.println(pet);
+		}
+	}
 }
