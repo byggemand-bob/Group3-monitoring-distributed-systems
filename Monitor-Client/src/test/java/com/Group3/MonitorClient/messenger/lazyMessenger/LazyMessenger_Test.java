@@ -1,11 +1,12 @@
-package com.Group3.MonitorClient.junitTests.Messenger.LazyMessenger;
+package com.Group3.monitorClient.messenger.lazyMessenger;
 
-import com.Group3.MonitorClient.junitTests.TestClasses.LazyMessenger_TestClass;
-import com.Group3.MonitorClient.junitTests.TestClasses.TrueFalseRequirement_TestClass;
 import com.Group3.MonitorClient.Messenger.LazyMessenger.LazyMessenger;
+import com.Group3.monitorClient.testClasses.LazyMessenger_TestClass;
+import com.Group3.monitorClient.testClasses.TrueFalseRequirement_TestClass;
 import com.Group3.MonitorClient.Messenger.SynchronizedQueue;
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.TimingMonitorData;
 
 public class LazyMessenger_Test {
@@ -23,14 +24,14 @@ public class LazyMessenger_Test {
         }
 
         /* Confirms no messages was send before the messenger was started */
-        Assert.assertEquals(5, queue.Size());
+        Assertions.assertEquals(5, queue.Size());
 
         messenger.Start();
         Thread.sleep(100);
         messenger.Pause();
 
         /* confirms the messenger is now sending messages */
-        Assert.assertTrue(queue.Size() < 5);
+        Assertions.assertTrue(queue.Size() < 5);
 
         int SizeOfQueueBefore = queue.Size();
 
@@ -39,7 +40,7 @@ public class LazyMessenger_Test {
         }
 
         /* confirms that the messenger is paused, and is not sending messages */
-        Assert.assertEquals(SizeOfQueueBefore + 5, queue.Size());
+        Assertions.assertEquals(SizeOfQueueBefore + 5, queue.Size());
 
         SizeOfQueueBefore = queue.Size();
 
@@ -48,11 +49,11 @@ public class LazyMessenger_Test {
         messenger.Stop();
 
         /* confirms the messenger was sending messages again after being resumed */
-//        Assert.assertTrue(SizeOfQueueBefore > queue.Size());
+//        Assertions.assertTrue(SizeOfQueueBefore > queue.Size());
 
         Thread.sleep(500);
         /* confirms that the messenger thread is now dead */
-        Assert.assertFalse(messenger.MessengerIsAlive());
+        Assertions.assertFalse(messenger.MessengerIsAlive());
     }
 
     /* Ensures the AddMonitorData() method works as intended */
@@ -63,7 +64,7 @@ public class LazyMessenger_Test {
 
         messenger.AddMonitorData(new TimingMonitorData());
 
-        Assert.assertEquals(1, queue.Size());
+        Assertions.assertEquals(1, queue.Size());
     }
 
     /* tests if changing requirements between true and false, stops and runs message sending as intended */
@@ -85,20 +86,20 @@ public class LazyMessenger_Test {
         }
 
         /* ensures the the messenger isn't sending messages before being started */
-        Assert.assertEquals(5, queue.Size());
+        Assertions.assertEquals(5, queue.Size());
 
         messenger.Start();
         Thread.sleep(100);
 
         /* Test that the messenger continues to not send messages, as all requirements report false */
-        Assert.assertEquals(5, queue.Size());
+        Assertions.assertEquals(5, queue.Size());
 
         Requirement1.bool = true;
         messenger.Resume();
         Thread.sleep(100);
 
         /* Test that the messenger continues to not send messages, as only one requirement is true */
-        Assert.assertEquals(5, queue.Size());
+        Assertions.assertEquals(5, queue.Size());
 
         Requirement2.bool = true;
         Requirement3.bool = true;
@@ -106,7 +107,7 @@ public class LazyMessenger_Test {
         Thread.sleep(100);
 
         /* tests that the messenger is now sending messages as all requirements tests true */
-        Assert.assertTrue(queue.Size() < 5);
+        Assertions.assertTrue(queue.Size() < 5);
     }
 }
 

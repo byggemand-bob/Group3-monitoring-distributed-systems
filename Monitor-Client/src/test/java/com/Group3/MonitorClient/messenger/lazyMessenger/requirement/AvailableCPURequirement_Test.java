@@ -1,8 +1,9 @@
-package com.Group3.MonitorClient.junitTests.Messenger.LazyMessenger.Requirement;
+package com.Group3.monitorClient.messenger.lazyMessenger.requirement;
 
-import com.Group3.MonitorClient.junitTests.TestClasses.AvailableCPURequirement_TestClass;
-import org.junit.Test;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import com.Group3.monitorClient.testClasses.AvailableCPURequirement_TestClass;
 
 public class AvailableCPURequirement_Test {
     /* tests when the system usage is above the minimum required available memory*/
@@ -10,7 +11,7 @@ public class AvailableCPURequirement_Test {
     public void UnderLimit(){
         AvailableCPURequirement_TestClass testClass = new AvailableCPURequirement_TestClass(40);
 
-        Assert.assertTrue(testClass.test());
+        Assertions.assertTrue(testClass.test());
     }
 
     /* tests when the system usage is below the minimum required available memory*/
@@ -18,7 +19,7 @@ public class AvailableCPURequirement_Test {
     public void OverLimit(){
         AvailableCPURequirement_TestClass testClass = new AvailableCPURequirement_TestClass(60);
 
-        Assert.assertFalse(testClass.test());
+        Assertions.assertFalse(testClass.test());
     }
 }
 

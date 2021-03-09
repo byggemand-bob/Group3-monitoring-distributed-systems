@@ -1,4 +1,4 @@
-package com.Group3.MonitorClient.junitTests.TestClasses;
+package com.Group3.monitorClient.testClasses;
 
 import com.Group3.MonitorClient.Messenger.LazyMessenger.Requirements.AvailableCPURequirement;
 

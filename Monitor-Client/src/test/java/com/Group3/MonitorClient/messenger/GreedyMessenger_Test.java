@@ -1,10 +1,11 @@
-package com.Group3.MonitorClient.junitTests.Messenger;
+package com.Group3.monitorClient.messenger;
 
 import com.Group3.MonitorClient.Messenger.SynchronizedQueue;
-import com.Group3.MonitorClient.junitTests.TestClasses.GreedyMessenger_TestClass;
-import org.junit.Assert;
-import org.junit.Test;
+import com.Group3.monitorClient.testClasses.GreedyMessenger_TestClass;
 import com.Group3.MonitorClient.Messenger.GreedyMessenger;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.TimingMonitorData;
 
 public class GreedyMessenger_Test {
@@ -20,14 +21,14 @@ public class GreedyMessenger_Test {
         }
 
         /* Confirms no messages was send before the messenger was started */
-        Assert.assertEquals(5, queue.Size());
+        Assertions.assertEquals(5, queue.Size());
 
         messenger.Start();
         Thread.sleep(100);
         messenger.Pause();
 
         /* confirms the messenger is now sending messages */
-        Assert.assertTrue(queue.Size() < 5);
+        Assertions.assertTrue(queue.Size() < 5);
 
         int SizeOfQueueBefore = queue.Size();
 
@@ -36,7 +37,7 @@ public class GreedyMessenger_Test {
         }
 
         /* confirms that the messenger is paused, and is not sending messages */
-        Assert.assertEquals(SizeOfQueueBefore + 5, queue.Size());
+        Assertions.assertEquals(SizeOfQueueBefore + 5, queue.Size());
 
         SizeOfQueueBefore = queue.Size();
 
@@ -45,11 +46,11 @@ public class GreedyMessenger_Test {
         messenger.Stop();
 
         /* confirms the messenger was sending messages again after being resumed */
-        Assert.assertTrue(SizeOfQueueBefore > queue.Size());
+        Assertions.assertTrue(SizeOfQueueBefore > queue.Size());
 
         Thread.sleep(500);
         /* confirms that the messenger thread is now dead */
-        Assert.assertFalse(messenger.MessengerIsAlive());
+        Assertions.assertFalse(messenger.MessengerIsAlive());
     }
 
     /* Ensures the AddMonitorData() method works as intended */
@@ -60,7 +61,7 @@ public class GreedyMessenger_Test {
 
         messenger.AddMonitorData(new TimingMonitorData());
 
-        Assert.assertEquals(1, queue.Size());
+        Assertions.assertEquals(1, queue.Size());
     }
 }
 

@@ -1,11 +1,12 @@
-package com.Group3.MonitorClient.junitTests.Messenger;
+package com.Group3.monitorClient.messenger;
 
 import com.Group3.MonitorClient.Messenger.SynchronizedQueue;
+import com.Group3.monitorClient.testClasses.AddRemoveThread_TestClass;
+
 import java.util.Random;
 
-import com.Group3.MonitorClient.junitTests.TestClasses.AddRemoveThread_TestClass;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.TimingMonitorData;
 
 import java.util.LinkedList;
@@ -19,7 +20,7 @@ public class SynchronizedQueue_Test {
         Random random = new Random();
         int numOfThreads = random.nextInt(7) + 3;
 
-        Assert.assertEquals(syncQueue.Size(), 0);
+        Assertions.assertEquals(syncQueue.Size(), 0);
 
         List<Thread> ThreadList = new LinkedList<>();
         for(int x = 0; x < numOfThreads; x++){
@@ -36,7 +37,7 @@ public class SynchronizedQueue_Test {
             } catch (InterruptedException e) { e.printStackTrace(); }
         }
 
-        Assert.assertEquals(numOfThreads, syncQueue.Size());
+        Assertions.assertEquals(numOfThreads, syncQueue.Size());
     }
 
     /* tests the order of the queue is maintained after multiple threads take elements */
@@ -68,7 +69,7 @@ public class SynchronizedQueue_Test {
         TimingMonitorData TestCase = syncQueue.Take();
         long TestEventID = TestCase.getEventID();
 
-        Assert.assertEquals(5L, TestEventID);
+        Assertions.assertEquals(5L, TestEventID);
     }
 }
 
