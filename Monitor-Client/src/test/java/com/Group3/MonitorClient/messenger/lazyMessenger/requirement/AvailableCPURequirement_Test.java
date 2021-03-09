@@ -11,7 +11,7 @@ public class AvailableCPURequirement_Test {
     public void UnderLimit(){
         AvailableCPURequirement_TestClass testClass = new AvailableCPURequirement_TestClass(40);
 
-        Assertions.assertTrue(testClass.test());
+        Assertions.assertTrue(testClass.Test());
     }
 
     /* tests when the system usage is below the minimum required available memory*/
@@ -19,7 +19,7 @@ public class AvailableCPURequirement_Test {
     public void OverLimit(){
         AvailableCPURequirement_TestClass testClass = new AvailableCPURequirement_TestClass(60);
 
-        Assertions.assertFalse(testClass.test());
+        Assertions.assertFalse(testClass.Test());
     }
 }
 

@@ -101,7 +101,7 @@ public class LazyMessenger implements Messenger {
      */
     private boolean TestRequirements(){
         if(requirementList.size() > 0) {
-            return requirementList.stream().allMatch(x -> x.test());
+            return requirementList.stream().allMatch(x -> x.Test());
         } else {
             return true;
         }
@@ -114,7 +114,7 @@ public class LazyMessenger implements Messenger {
     /* while running continues to test the requirementList, and pauses or resumes the Messenger */
     @Override
     public void run() {
-        while(running){
+        RunningLoop: while(running){
             while(paused){
                 try {
                     synchronized (this) {
@@ -124,7 +124,7 @@ public class LazyMessenger implements Messenger {
                     e.printStackTrace();
                 }
                 if(!running){
-                    break;
+                    break RunningLoop;
                 }
             }
 

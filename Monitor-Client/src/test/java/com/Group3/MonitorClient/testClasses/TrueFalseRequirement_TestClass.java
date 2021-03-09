@@ -11,7 +11,7 @@ public class TrueFalseRequirement_TestClass implements Requirement {
     }
 
     @Override
-    public boolean test() {
+    public boolean Test() {
         return bool;
     }
 }

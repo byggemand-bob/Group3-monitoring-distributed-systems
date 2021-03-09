@@ -80,7 +80,8 @@ public class GreedyMessenger implements Messenger{
     /* while running continues to take and send MonitorData while the SynchronizedQueue is not empty */
     @Override
     public void run() {
-        while (running) {
+
+        RunningLoop: while (running) {
             while (paused) {
                 try {
                     synchronized(this) {
@@ -89,7 +90,7 @@ public class GreedyMessenger implements Messenger{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if(!running){ break; }
+                if(!running){ break RunningLoop; }
             }
 
             TimingMonitorData Data = messageQueue.Take();

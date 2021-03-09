@@ -13,14 +13,14 @@ public class AvailableCPURequirement implements Requirement {
     private OperatingSystemMXBean os = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
     /* Converts the minimum required available CPU percentage into an upper bound */
-    public AvailableCPURequirement(double minimumAvailableMemory){
-        if(minimumAvailableMemory > 0 && minimumAvailableMemory < 1){
-            limit = 1 - minimumAvailableMemory;
-        } else if(minimumAvailableMemory > 1 && minimumAvailableMemory < 100){
-            limit = 1 - minimumAvailableMemory/100;
+    public AvailableCPURequirement(double minimumAvailableCPU){
+        if(minimumAvailableCPU > 0 && minimumAvailableCPU < 1){
+            limit = 1 - minimumAvailableCPU;
+        } else if(minimumAvailableCPU > 1 && minimumAvailableCPU < 100){
+            limit = 1 - minimumAvailableCPU/100;
         } else {
             limit = 0.80;
-            System.out.println("minimumAvailableMemory in AvailableCPURequirement out of bounds, set to default 0.20");
+            System.out.println("minimumAvailableCPU in AvailableCPURequirement out of bounds, set to default 0.20");
         }
     }
 
@@ -32,7 +32,7 @@ public class AvailableCPURequirement implements Requirement {
 
     /* tests if the Systems CPU usage is above the limit */
     @Override
-    public boolean test() {
+    public boolean Test() {
         return SystemCpuUsage() < limit;
     }
 }
