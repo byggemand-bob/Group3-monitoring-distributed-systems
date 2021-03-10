@@ -28,3 +28,11 @@ files:
     templateType: SupportingFiles
     destinationFilename: MonitorConfigException.java
     folder: src/gen/java/main/com/Group3/monitor/exception
+
+  model_test.mustache:
+    templateType: ModelTests
+    destinationFilename: .java
+
+  test/api_test.mustache:
+    templateType: APITests
+    destinationFilename: .java
