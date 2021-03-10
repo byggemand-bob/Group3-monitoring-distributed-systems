@@ -99,3 +99,11 @@ files:
     templateType: SupportingFiles
     destinationFilename: TimingMonitorData.java
     folder: src/gen/java/main/com/Group3/client/model
+
+  api/controller/apiController.mustache:
+    templateType: API
+    destinationFilename: Controller.java
+  
+  api/api.mustache:
+    templateType: API
+    destinationFilename: .java
