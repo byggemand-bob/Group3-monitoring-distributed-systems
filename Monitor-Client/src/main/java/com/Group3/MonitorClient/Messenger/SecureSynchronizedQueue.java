@@ -1,4 +1,4 @@
-package com.Group3.MonitorClient.Messenger;
+package com.Group3.monitorClient.Messenger;
 
 /*
 * SecureSynchronizedQueue purpose is like its parent class to ensure only one thread has access to the queue.
@@ -19,9 +19,9 @@ public abstract class SecureSynchronizedQueue<T> extends SynchronizedQueue<T> {
         return data;
     }
 
-    /* Code stump for saving TimingMonitorData to secondary memory */
-    abstract protected void save(T monitorData);
+    /* Code stump for saving data to secondary memory */
+    abstract protected void save(T data);
 
-    /* Code stump for removing TimingMonitorData to secondary memory, after message been sent */
-    abstract protected void remove(T monitorData);
+    /* Code stump for removing data to secondary memory, after message been sent */
+    abstract protected void remove(T data);
 }

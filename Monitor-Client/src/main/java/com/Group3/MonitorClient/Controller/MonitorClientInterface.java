@@ -1,4 +1,4 @@
-package com.Group3.MonitorClient.Controller;
+package com.Group3.monitorClient.Controller;
 
 import org.openapitools.client.ApiException;
 import org.openapitools.client.model.TimingMonitorData;
@@ -7,9 +7,9 @@ import org.threeten.bp.OffsetDateTime;
 import javax.annotation.Nullable;
 import java.util.regex.Pattern;
 
-import com.Group3.MonitorClient.Messenger.LazyMessenger.LazyMessenger;
-import com.Group3.MonitorClient.Messenger.Messenger;
-import com.Group3.MonitorClient.Messenger.LazyMessenger.Requirements.AvailableCPURequirement;
+import com.Group3.monitorClient.Messenger.LazyMessenger.LazyMessenger;
+import com.Group3.monitorClient.Messenger.Messenger;
+import com.Group3.monitorClient.Messenger.LazyMessenger.Requirements.AvailableCPURequirement;
 
 public class MonitorClientInterface{
     private String monitorIP;

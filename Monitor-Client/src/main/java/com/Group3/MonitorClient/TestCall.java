@@ -1,10 +1,7 @@
-package com.Group3.MonitorClient;
+package com.Group3.monitorClient;
 
 
-import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
-import org.openapitools.client.api.MonitorApi;
-import org.openapitools.client.model.TimingMonitorData;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,8 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import com.Group3.MonitorClient.Controller.MonitorClientInterface;
-import org.threeten.bp.OffsetDateTime;
+import com.Group3.monitorClient.Controller.MonitorClientInterface;
 
 @SpringBootApplication
 public class TestCall {

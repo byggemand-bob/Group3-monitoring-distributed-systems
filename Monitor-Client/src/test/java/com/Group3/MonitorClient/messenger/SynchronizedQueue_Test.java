@@ -1,6 +1,6 @@
 package com.Group3.monitorClient.messenger;
 
-import com.Group3.MonitorClient.Messenger.SynchronizedQueue;
+import com.Group3.monitorClient.Messenger.SynchronizedQueue;
 import com.Group3.monitorClient.testClasses.AddRemoveThread_TestClass;
 
 import java.util.Random;

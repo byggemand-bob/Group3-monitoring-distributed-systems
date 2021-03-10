@@ -1,7 +1,7 @@
 package com.Group3.monitorClient.testClasses;
 
-import com.Group3.MonitorClient.Messenger.GreedyMessenger;
-import com.Group3.MonitorClient.Messenger.SynchronizedQueue;
+import com.Group3.monitorClient.Messenger.GreedyMessenger;
+import com.Group3.monitorClient.Messenger.SynchronizedQueue;
 import org.openapitools.client.model.TimingMonitorData;
 
 /*

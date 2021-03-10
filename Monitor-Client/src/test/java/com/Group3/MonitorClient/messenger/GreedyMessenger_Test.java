@@ -1,8 +1,8 @@
 package com.Group3.monitorClient.messenger;
 
-import com.Group3.MonitorClient.Messenger.SynchronizedQueue;
+import com.Group3.monitorClient.Messenger.SynchronizedQueue;
 import com.Group3.monitorClient.testClasses.GreedyMessenger_TestClass;
-import com.Group3.MonitorClient.Messenger.GreedyMessenger;
+import com.Group3.monitorClient.Messenger.GreedyMessenger;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
