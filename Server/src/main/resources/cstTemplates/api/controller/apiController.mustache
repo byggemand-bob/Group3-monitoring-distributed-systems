@@ -1,5 +1,16 @@
 package {{package}};
 
+
+// ask: These i have put in
+{{#jdk8}}
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import java.util.List;
+{{#imports}}import {{import}};
+{{/imports}}
+import com.Group3.monitorClient.controller.MonitorClientInterface;
+import com.Group3.monitor.model.TimingMonitorData.EventCodeEnum;
+{{/jdk8}}
 {{^jdk8}}
 {{#imports}}import {{import}};
 {{/imports}}
@@ -37,7 +48,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 {{/jdk8}}
 {{^jdk8}}
-import java.util.List;
+
 import java.util.Map;
     {{#async}}
 import java.util.concurrent.Callable;
@@ -50,6 +61,8 @@ import java.util.concurrent.Callable;
 <%={{ }}=%>
 {{#operations}}
 public class {{classname}}Controller implements {{classname}} {
+
+private MonitorClientInterface monitorClientInterface;
 {{#isDelegate}}
 
     private final {{classname}}Delegate delegate;
@@ -74,11 +87,11 @@ public class {{classname}}Controller implements {{classname}} {
 
     {{^jdk8}}
     {{/jdk8}}
-    private final NativeWebRequest request; // Hakuna Matata
+    private final NativeWebRequest request;
 
     @org.springframework.beans.factory.annotation.Autowired
     public {{classname}}Controller(NativeWebRequest request) {
-    // YELLOW
+    	monitorClientInterface = new MonitorClientInterface();
         this.request = request;
     }
     {{#jdk8}}
@@ -91,12 +104,58 @@ public class {{classname}}Controller implements {{classname}} {
     {{/reactive}}
 {{/isDelegate}}
 {{#jdk8}}
-// Apparently the jdk8 value is set!?
+{{#operation}}
+    /**
+     * {{httpMethod}} {{{path}}}{{#summary}} : {{.}}{{/summary}}
+    {{#notes}}
+     * {{.}}
+    {{/notes}}
+     *
+    {{#allParams}}
+     * @param {{paramName}} {{description}}{{#required}} (required){{/required}}{{^required}} (optional{{#defaultValue}}, default to {{.}}{{/defaultValue}}){{/required}}
+    {{/allParams}}
+     * @return {{#responses}}{{message}} (status code {{code}}){{^-last}}
+     *         or {{/-last}}{{/responses}}
+    {{#isDeprecated}}
+     * @deprecated
+    {{/isDeprecated}}
+    {{#externalDocs}}
+     * {{description}}
+     * @see <a href="{{url}}">{{summary}} Documentation</a>
+    {{/externalDocs}}
+     * @see {{classname}}#{{operationId}}
+     */
+    @Override
+    public {{#responseWrapper}}{{.}}<{{/responseWrapper}}ResponseEntity<{{>returnTypes}}>{{#responseWrapper}}>{{/responseWrapper}} {{operationId}}({{#allParams}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{>cookieParams}}{{^-last}},{{/-last}}{{/allParams}}{{#vendorExtensions.x-spring-paginated}}, @ApiIgnore final Pageable pageable{{/vendorExtensions.x-spring-paginated}}) {
+    {{^isDelegate}}
+        {{^async}}
+        {{!>methodBody}}
+        final long eventID = monitorClientInterface.queueMonitorData("", EventCodeEnum.RECEIVEREQUEST);
+        
+        // Implement controller logic here!
+        {{#responseWrapper}}{{.}}<{{/responseWrapper}}ResponseEntity<{{>returnTypes}}>{{#responseWrapper}}>{{/responseWrapper}} returnValue = {{classname}}.super.{{operationId}}({{#allParams}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{>cookieParams}}{{^-last}},{{/-last}}{{/allParams}});
+		
+		monitorClientInterface.queueMonitorData("{{{path}}}", EventCodeEnum.SENDRESPONSE);
+		return returnValue;
+        {{/async}}
+        {{#async}}
+        return new Callable<ResponseEntity<{{>returnTypes}}>>() {
+            @Override
+            public ResponseEntity<{{>returnTypes}}> call() {
+                {{!>methodBody}}
+            }
+        };
+        {{/async}}
+    {{/isDelegate}}
+    {{#isDelegate}}
+        return delegate.{{operationId}}({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}}{{#vendorExtensions.x-spring-paginated}}, pageable{{/vendorExtensions.x-spring-paginated}});
+    {{/isDelegate}}
+    }
+
+{{/operation}}
 {{/jdk8}}
-// Hello are you there!?
 {{^jdk8}}
 {{#operation}}
-	// Inside operation, Hello!
     /**
      * {{httpMethod}} {{{path}}}{{#summary}} : {{.}}{{/summary}}
     {{#notes}}
