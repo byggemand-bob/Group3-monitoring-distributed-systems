@@ -1,0 +1,91 @@
+package com.Group3.monitor.configuration;
+
+import com.Group3.monitor.exception.MonitorConfigException;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+public class ConfigurationManager {
+
+	private final String configFile = "configuration.properties";
+	private final String configPath = "./src/main/resources/";
+	private Properties props;
+	public static final String IDProp = "ID";
+	public static final String monitorServerAddressProp = "MonitorServerAddress";
+	private static ConfigurationManager instance = null;
+	private static String EMPTY = "";
+	private static final String[] requiredProperties = {IDProp};
+
+	public ConfigurationManager() {
+		if (props == null) {
+			initializeProperties();
+		}
+	}
+
+	private void initializeProperties() {
+		props = new Properties();
+
+		try (InputStream input = new FileInputStream(configPath+configFile)){
+			props.load(input);
+			validateRequiredProperties();
+		} catch (IOException e) {
+			System.out.println(String.format("Could not read properties from %s, please check...", getPropertiesPath()));
+
+			e.printStackTrace();
+		}
+	}
+
+	public String getProperty(String propertyName) {
+		return getProperty(propertyName, null);
+	}
+
+	public String getProperty(String propertyName, String defaultValue) {
+		String propertyValue = props.getProperty(propertyName, defaultValue);
+		if ((propertyValue != null && propertyValue.equals(EMPTY)) && (defaultValue == null || !defaultValue.equals(EMPTY))) {
+			return defaultValue;
+		}
+		return propertyValue;
+	}
+
+	public long getPropertyAsLong(String propertyName) {
+		String propValue = getProperty(propertyName);
+		return Long.parseLong(propValue);
+	}
+	private void validateRequiredProperties() {
+		List<String> msg = new ArrayList<>();
+
+		for (String req  :requiredProperties) {
+			if (props.containsKey(req)) {
+				if (props.getProperty(req) == null) {
+					msg.add("Required Property " + req + " has no value\n");
+				}
+			} else {
+				msg.add("Required Property " + req + " has not been defined\n");
+			}
+		}
+
+		if (!msg.isEmpty()) {
+			String errorString = "While validating properties in " + getPropertiesPath() + " the following errors have been found:\n";
+			for (String msgs : msg) {
+				errorString += msgs;
+			}
+			throw new MonitorConfigException(errorString);
+		}
+	}
+
+	public String getPropertiesPath() {
+		return new File(configPath+configFile).getAbsolutePath();
+	}
+	public static ConfigurationManager getInstance() {
+		if (instance == null) {
+			instance = new ConfigurationManager();
+		}
+		return instance;
+	}
+}

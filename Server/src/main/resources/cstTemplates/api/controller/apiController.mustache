@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 {{#imports}}import {{import}};
 {{/imports}}
-import com.Group3.monitorClient.controller.MonitorClientInterface;
+import com.Group3.monitor.client.MonitorClientInterface;
 import com.Group3.monitor.model.TimingMonitorData.EventCodeEnum;
 {{/jdk8}}
 {{^jdk8}}
@@ -130,12 +130,12 @@ private MonitorClientInterface monitorClientInterface;
     {{^isDelegate}}
         {{^async}}
         {{!>methodBody}}
-        final long eventID = monitorClientInterface.queueMonitorData("", EventCodeEnum.RECEIVEREQUEST);
+        final long eventID = monitorClientInterface.queueMonitorData("{{{path}}}", EventCodeEnum.RECEIVEREQUEST);
         
         // Implement controller logic here!
         {{#responseWrapper}}{{.}}<{{/responseWrapper}}ResponseEntity<{{>returnTypes}}>{{#responseWrapper}}>{{/responseWrapper}} returnValue = {{classname}}.super.{{operationId}}({{#allParams}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{>cookieParams}}{{^-last}},{{/-last}}{{/allParams}});
 		
-		monitorClientInterface.queueMonitorData("{{{path}}}", EventCodeEnum.SENDRESPONSE);
+		monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.SENDRESPONSE);
 		return returnValue;
         {{/async}}
         {{#async}}
