@@ -1,10 +1,9 @@
 package {{package}};
 
 
-// ask: These i have put in
+
 {{#jdk8}}
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import java.util.List;
 {{#imports}}import {{import}};
 {{/imports}}
@@ -54,6 +53,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
     {{/async}}
 {{/jdk8}}
+
 {{>generatedAnnotation}}
 @Controller
 {{=<% %>=}}
@@ -62,7 +62,7 @@ import java.util.concurrent.Callable;
 {{#operations}}
 public class {{classname}}Controller implements {{classname}} {
 
-private MonitorClientInterface monitorClientInterface;
+	private MonitorClientInterface monitorClientInterface;
 {{#isDelegate}}
 
     private final {{classname}}Delegate delegate;
@@ -143,6 +143,12 @@ private MonitorClientInterface monitorClientInterface;
             @Override
             public ResponseEntity<{{>returnTypes}}> call() {
                 {{!>methodBody}}
+                final long eventID = monitorClientInterface.queueMonitorData("{{{path}}}", EventCodeEnum.RECEIVEREQUEST);
+        
+		        // Implement controller logic here!
+        		{{#responseWrapper}}{{.}}<{{/responseWrapper}}ResponseEntity<{{>returnTypes}}>{{#responseWrapper}}>{{/responseWrapper}} returnValue = {{classname}}.super.{{operationId}}({{#allParams}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{>cookieParams}}{{^-last}},{{/-last}}{{/allParams}});
+		
+				monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.SENDRESPONSE);
             }
         };
         {{/async}}
