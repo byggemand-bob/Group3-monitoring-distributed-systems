@@ -10,7 +10,7 @@ import com.Group3.monitor.exception.MonitorConfigException;
 import com.Group3.monitor.test.AbstractMonitorTest;
 
 
-public class MonitorClientInterfaceTest extends AbstractMonitorTest{
+public class MonitorClientInterfaceTest extends AbstractMonitorTest {
 	private static String propertyNameID;
 	private static String propertyName;
 	
