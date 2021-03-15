@@ -7,9 +7,14 @@ import com.Group3.monitor.model.TimingMonitorData;
 import com.Group3.monitor.model.TimingMonitorData.EventCodeEnum;
 import com.Group3.monitor.exception.MonitorConfigException;
 import com.Group3.monitor.configuration.ConfigurationManager;
-import java.time.OffsetDateTime;
+
+import java.io.PrintStream;
+import org.threeten.bp.OffsetDateTime;
 
 import javax.annotation.Nullable;
+
+import org.springframework.http.HttpStatus;
+
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
@@ -58,10 +63,17 @@ public class MonitorClientInterface {
 		try {
     	    MonitorClient.addMonitorData(timingMonitorData);
 		} catch (ApiException e) {
-			// Intentionally left empty...
+			writeApiExceptionToStream(e, System.out);
 		}
     }
     
+    private void writeApiExceptionToStream(ApiException e, PrintStream out) {
+		out.println("Received ApiException while sending monitor data: ");
+		out.println("	HttpStatus: " + HttpStatus.valueOf(e.getCode()));
+		out.println("	Response: " + e.getResponseBody());
+		
+	}
+	
     public long queueMonitorData(@Nullable String targetEndPoint, EventCodeEnum eventCode)  {
     	long eventID = getNextEventID();
     	addMonitorData(eventID, targetEndPoint, eventCode);
