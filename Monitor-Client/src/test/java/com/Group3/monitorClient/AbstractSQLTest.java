@@ -1,27 +1,30 @@
 package com.Group3.monitorClient;
 
 import com.Group3.monitorClient.Messenger.messageQueue.SQLManager;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
 
 public class AbstractSQLTest {
     public static SQLManager sqlManager;// = new SQLManager("src/main/resources/sqlite/db/", "test.db");
 
-    @BeforeAll
-    public static void setup () {
+    @BeforeEach
+    public void setup () {
         sqlManager = new SQLManager("src/main/resources/sqlite/db/", "test.db");
     }
 
-
-    @AfterAll
-    public static void cleanUp() {
+    @AfterEach
+    public void cleanUp() {
         File db = new File(sqlManager.getPath()+sqlManager.getFileName());
+        sqlManager.CloseConnection();
         try {
-            db.delete();
+            if (!db.delete()) {
+                System.out.println("Could not access database file");
+            }
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }
