@@ -1,15 +1,15 @@
-package com.Group3.monitorClient.Messenger.messagequeue;
-
-import com.Group3.monitorClient.Messenger.MessageInterface;
+package com.Group3.monitorClient.Messenger.messageQueue;
 
 import java.sql.*;
 public class SQLManager {
-    private String url;
-    private String fileName;
+    private final String path;
+    private final String url;
+    private final String fileName;
     private Connection conn;
 
-    public SQLManager(String url, String fileName) {
-        this.url = url;
+    public SQLManager(String path, String fileName) {
+        this.path = path;
+        this.url = "jdbc:sqlite:" + path;
         this.fileName = fileName;
         conn = Connect();
     }
@@ -50,7 +50,6 @@ public class SQLManager {
         }
         sql = new StringBuilder(sql.substring(0,sql.length()-2)).append("\n");
         sql.append(");");
-        System.out.println(sql);
 
         try (Connection conn = DriverManager.getConnection(url+fileName);
              Statement stmt = conn.createStatement()) {
@@ -112,6 +111,25 @@ public class SQLManager {
              ResultSet rs    = stmt.executeQuery(sql)){
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public String getPath () {
+        return this.path;
+    }
+
+    public String getFileName () {
+        return this.fileName;
+    }
+
+    public ResultSet GenericSQLQuery(String query){
+        try (Connection conn = this.Connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(query)){
+            return rs;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
         }
     }
 

@@ -1,6 +1,6 @@
 package com.Group3.monitorClient.Messenger;
 
-import com.Group3.monitorClient.Messenger.messagequeue.SQLManager;
+import com.Group3.monitorClient.Messenger.messageQueue.SQLManager;
 import org.openapitools.client.api.MonitorApi;
 
 public interface MessageInterface {

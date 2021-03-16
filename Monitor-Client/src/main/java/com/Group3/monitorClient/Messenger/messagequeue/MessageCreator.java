@@ -1,4 +1,4 @@
-package com.Group3.monitorClient.Messenger.messagequeue;
+package com.Group3.monitorClient.Messenger.messageQueue;
 
 import com.Group3.monitorClient.Messenger.MessageInterface;
 import org.openapitools.client.model.TimingMonitorData;
