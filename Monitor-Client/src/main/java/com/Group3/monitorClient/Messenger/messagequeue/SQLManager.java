@@ -1,5 +1,7 @@
 package com.Group3.monitorClient.Messenger.messagequeue;
 
+import com.Group3.monitorClient.Messenger.MessageInterface;
+
 import java.sql.*;
 public class SQLManager {
     private String url;
@@ -59,17 +61,34 @@ public class SQLManager {
         }
     }
 
-    public void Insert(String name, double capacity) {
-        String sql = "INSERT INTO warehouses(name,capacity) VALUES(?,?)";
+    public void InsertMessage(long SenderID, int MessageType, String TimeStamp, String Message) {
+        //String sql = "INSERT INTO warehouses(name,capacity) VALUES(?,?)";
+        String sql = "INSERT INTO queue(SenderID, Timestamp, Message) VALUES(?,?,?)";
 
         try (Connection conn = this.Connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, name);
-            pstmt.setDouble(2, capacity);
+            pstmt.setLong(1, SenderID);
+            pstmt.setInt(2, MessageType);
+            pstmt.setString(3, TimeStamp);
+            pstmt.setString(4, Message);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public ResultSet takeMessage(){
+        String sql = "SELECT * FROM queue LIMIT 1";
+
+        try (Connection conn = this.Connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+            return rs;
+        } catch (SQLException e) {
+            System.out.println(e.getClass());
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     public boolean CheckIfExists(String tableName) {
@@ -96,14 +115,14 @@ public class SQLManager {
         }
     }
 
-    public void SendMessage (MessageInterface message){
-        String sqlMessage = message.CreateMessage();
-
-        try (Connection conn = this.Connect();
-             Statement stmt  = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(sqlMessage)){
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+//    public void SendMessage (MessageInterface message){
+//        String sqlMessage = message.CreateMessage();
+//
+//        try (Connection conn = this.Connect();
+//             Statement stmt  = conn.createStatement();
+//             ResultSet rs    = stmt.executeQuery(sqlMessage)){
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 }
