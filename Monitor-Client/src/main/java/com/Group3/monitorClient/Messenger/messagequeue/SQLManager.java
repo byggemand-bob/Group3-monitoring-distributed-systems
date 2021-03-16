@@ -6,12 +6,18 @@ public class SQLManager {
     private final String url;
     private final String fileName;
     private Connection conn;
+    private Statement stmt;
 
     public SQLManager(String path, String fileName) {
         this.path = path;
         this.url = "jdbc:sqlite:" + path;
         this.fileName = fileName;
         conn = Connect();
+        try {
+            stmt  = conn.createStatement();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     public Connection Connect() {
@@ -51,8 +57,7 @@ public class SQLManager {
         sql = new StringBuilder(sql.substring(0,sql.length()-2)).append("\n");
         sql.append(");");
 
-        try (Connection conn = DriverManager.getConnection(url+fileName);
-             Statement stmt = conn.createStatement()) {
+        try {
             // create a new table
             stmt.execute(sql.toString());
         } catch (SQLException e) {
@@ -79,9 +84,7 @@ public class SQLManager {
     public ResultSet takeMessage(){
         String sql = "SELECT * FROM queue LIMIT 1";
 
-        try (Connection conn = this.Connect();
-             Statement stmt  = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(sql)){
+        try (ResultSet rs    = stmt.executeQuery(sql)){
             return rs;
         } catch (SQLException e) {
             System.out.println(e.getClass());
@@ -93,9 +96,7 @@ public class SQLManager {
     public boolean CheckIfExists(String tableName) {
         String sql = "SELECT name FROM sqlite_master WHERE name = '" + tableName +"'";
 
-        try (Connection conn = this.Connect();
-             Statement stmt  = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(sql)){
+        try (ResultSet rs    = stmt.executeQuery(sql)){
             return rs.next();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -106,9 +107,7 @@ public class SQLManager {
     public void ResetAutoIncrement(String tableName) {
         String sql = "UPDATE sqlite_sequence SET seq = 0 WHERE name = " + tableName;
 
-        try (Connection conn = this.Connect();
-             Statement stmt  = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(sql)){
+        try (ResultSet rs    = stmt.executeQuery(sql)){
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -123,14 +122,16 @@ public class SQLManager {
     }
 
     public ResultSet GenericSQLQuery(String query){
-        try (Connection conn = this.Connect();
-             Statement stmt  = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(query)){
-            return rs;
+        try {
+            return stmt.executeQuery(query);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
         }
+    }
+
+    public void CloseConnection () {
+        try { conn.close(); } catch (Exception e) { /* Ignored */ }
     }
 
 //    public void SendMessage (MessageInterface message){
