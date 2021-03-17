@@ -6,8 +6,8 @@ import org.openapitools.client.api.MonitorApi;
 import org.openapitools.client.model.TimingMonitorData;
 
 public class TimingMonitorDataMessage implements MessageInterface {
-    TimingMonitorData timingMonitorData;
-    int messageTypeID;
+    private TimingMonitorData timingMonitorData;
+    private int messageTypeID;
 
     public TimingMonitorDataMessage(TimingMonitorData timingMonitorData, int messageTypeID){
         this.timingMonitorData = timingMonitorData;
@@ -26,6 +26,14 @@ public class TimingMonitorDataMessage implements MessageInterface {
     @Override
     public void MakeSQL(SQLManager sqlManager) {
         String blob = timingMonitorData.getTargetEndpoint() + "," + timingMonitorData.getEventID();
-        sqlManager.InsertMessage(timingMonitorData.getSenderID(), messageTypeID, timingMonitorData.getTimestamp().toString(), blob);
+        sqlManager.InsertMessage("queue", timingMonitorData.getSenderID(), messageTypeID, timingMonitorData.getTimestamp().toString(), blob);
+    }
+
+    public int getMessageTypeID () {
+        return this.messageTypeID;
+    }
+
+    public TimingMonitorData getTimingMonitorData () {
+        return this.timingMonitorData;
     }
 }
