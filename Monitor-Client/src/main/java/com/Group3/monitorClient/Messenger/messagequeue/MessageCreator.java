@@ -41,9 +41,9 @@ public class MessageCreator {
             timingMonitorData.setSenderID(sqlQuery.getLong("SenderID"));
 
             String dateTimeString = sqlQuery.getString("Timestamp");
-            timingMonitorData.setTimestamp(ConvertStringToDataTime(dateTimeString));
+            timingMonitorData.setTimestamp(ConvertStringToDateTime(dateTimeString));
 
-            String blob = sqlQuery.getBlob("Message").toString();
+            String blob = sqlQuery.getString("Message");
             String[] blobSplit = blob.split(",");
 
             timingMonitorData.setTargetEndpoint(blobSplit[0]);
@@ -57,7 +57,7 @@ public class MessageCreator {
         return message;
     }
 
-    private OffsetDateTime ConvertStringToDataTime(String string){
+    private OffsetDateTime ConvertStringToDateTime(String string){
         DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
         return OffsetDateTime.parse(string, formatter);
     }
