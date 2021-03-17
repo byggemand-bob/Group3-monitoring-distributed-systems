@@ -1,12 +1,12 @@
 package com.Group3.monitorClient.messenger.messageQueue;
 
 import com.Group3.monitorClient.AbstractSQLTest;
-import com.Group3.monitorClient.Messenger.messageQueue.SQLManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.openapitools.client.model.TimingMonitorData;
+import org.threeten.bp.OffsetDateTime;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 public class SQLManager_Test extends AbstractSQLTest {
@@ -26,7 +26,7 @@ public class SQLManager_Test extends AbstractSQLTest {
     public void testCreateNewTableTestPass () throws SQLException {
         //Setup
         String tableName = "test";
-        String[] args = {"id integer PRIMARY KEY", "name text NOT NULL", "capacity real"};
+        String[] args = {"id integer PRIMARY KEY", "name text NOT NULL", "capacity real DEFAULT 1"};
         sqlManager.CreateNewTable(tableName, args);
         ResultSet rs = sqlManager.GenericSQLQuery("PRAGMA table_info(" + tableName + ")");
         //Act
@@ -74,11 +74,48 @@ public class SQLManager_Test extends AbstractSQLTest {
         Assertions.assertEquals("capacity", row3[0]);
         Assertions.assertEquals("real", row3[1]);
         Assertions.assertEquals("0", row3[2]);
-        Assertions.assertEquals(null, row3[3]);
+        Assertions.assertEquals("1", row3[3]);
         Assertions.assertEquals("0", row3[4]);
-
-
     }
 
+    @Test
+    public void testInsertMessageAndTakeMessagePass () {
+        //Setup
+        long senderID_test = 0;
+        int messageType_test = 0;
+        String timeStamp_test = "0";
+        String message_test = "0";
+        String tableName = "test";
+        long senderID = 420;
+        int messageType = 1;
+        String timeStamp = OffsetDateTime.now().toString();
+        String message = "Goddag :^)";
+        sqlManager.CreateNewTable(tableName,
+                            "ID integer PRIMARY KEY AUTOINCREMENT",
+                            "MessageType integer NOT NULL",
+                            "SenderID integer NOT NULL",
+                            "Timestamp text NOT NULL",
+                            "Message BLOB");
+
+        //Act
+
+        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        ResultSet rs = sqlManager.SelectMessage(tableName);
+        try {
+            senderID_test = rs.getLong("senderID");
+            messageType_test = rs.getInt("messageType");
+            timeStamp_test = rs.getString("timeStamp");
+            message_test = rs.getString("message");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        //Assert
+        Assertions.assertEquals(senderID, senderID_test);
+        Assertions.assertEquals(messageType, messageType_test);
+        Assertions.assertEquals(timeStamp, timeStamp_test);
+        Assertions.assertEquals(message, message_test);
+
+    }
 
 }

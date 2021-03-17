@@ -6,6 +6,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class AbstractSQLTest {
     public static SQLManager sqlManager;// = new SQLManager("src/main/resources/sqlite/db/", "test.db");
@@ -21,7 +24,7 @@ public class AbstractSQLTest {
         sqlManager.CloseConnection();
         try {
             if (!db.delete()) {
-                System.out.println("Could not access database file");
+                System.out.println("Could not access database file and is therefore not deleted!");
             }
         } catch (Exception e) {
 
