@@ -1,7 +1,9 @@
 package com.Group3.monitorClient.Messenger;
 
+import com.Group3.monitorClient.Messenger.messageQueue.MessageCreator;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
+import org.openapitools.client.ApiResponse;
 import org.openapitools.client.api.MonitorApi;
 import org.openapitools.client.model.TimingMonitorData;
 
@@ -13,26 +15,27 @@ public class GreedyMessenger implements Messenger{
     protected MonitorApi monitorClient;
     private boolean running = true;
     private boolean paused = false;
-    private SynchronizedQueue<TimingMonitorData> messageQueue;
+    private QueueInterface<MessageInterface> messageQueue;
+    private MessageCreator messageCreator = new MessageCreator();
     private Thread thread;
 
     /*
      * specifies which SynchronizedQueue to utilize,
      * useful if multiple messengers should share the same queue.
      */
-    public GreedyMessenger(String monitorIP, SynchronizedQueue<TimingMonitorData> messageQueue){
+    public GreedyMessenger(String monitorIP, QueueInterface<MessageInterface> messageQueue){
         ApiClient client = new ApiClient();
         client.setBasePath(monitorIP);
         monitorClient = new MonitorApi(client);
         this.messageQueue = messageQueue;
     }
 
-    public GreedyMessenger(String monitorIP){
-        ApiClient client = new ApiClient();
-        client.setBasePath(monitorIP);
-        monitorClient = new MonitorApi(client);
-        messageQueue = new SynchronizedQueue<TimingMonitorData>();
-    }
+//    public GreedyMessenger(String monitorIP){
+//        ApiClient client = new ApiClient();
+//        client.setBasePath(monitorIP);
+//        monitorClient = new MonitorApi(client);
+//        messageQueue = new QueueInterface<TimingMonitorData>();
+//    }
 
     /* starts a thread running current class.run() */
     @Override
@@ -70,7 +73,7 @@ public class GreedyMessenger implements Messenger{
     /* Adds monitorData to the monitor queue, to be sent later when requirements allow. */
     @Override
     public void AddMonitorData(TimingMonitorData monitorData){
-        messageQueue.Add(monitorData);
+        messageQueue.Put(messageCreator.MakeMessage(monitorData));
     }
 
     public boolean MessengerIsAlive(){
@@ -80,7 +83,6 @@ public class GreedyMessenger implements Messenger{
     /* while running continues to take and send MonitorData while the SynchronizedQueue is not empty */
     @Override
     public void run() {
-
         RunningLoop: while (running) {
             while (paused) {
                 try {
@@ -93,12 +95,22 @@ public class GreedyMessenger implements Messenger{
                 if(!running){ break RunningLoop; }
             }
 
-            TimingMonitorData Data = messageQueue.Take();
+            MessageInterface message = messageQueue.Take();
 
-            if (Data != null) {
+            ApiResponse<Void> Response = null;
+
+            if (message != null) {
                 try {
-                    monitorClient.addMonitorData(Data);
-                } catch (ApiException e) {
+                    int Loop = 0;
+                    do{
+                        Response = message.send(monitorClient);
+                        Loop++;
+                    } while((Response == null || Response.getStatusCode() != 200) && Loop < 10);
+
+                    if(Response == null || Response.getStatusCode() != 200){
+                        //TODO: add handling if the response wasn't successfully send
+                    }
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {

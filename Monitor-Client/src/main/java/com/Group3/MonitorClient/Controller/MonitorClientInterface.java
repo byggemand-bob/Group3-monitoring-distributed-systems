@@ -17,7 +17,7 @@ public class MonitorClientInterface{
 
     public MonitorClientInterface(String MonitorIP) {
         SetMonitorIP(MonitorIP);
-        messenger = new LazyMessenger(monitorIP);
+        //messenger = new LazyMessenger(monitorIP);
         ((LazyMessenger)messenger).AddRequirement(new AvailableCPURequirement(40));
         messenger.Start();
     }

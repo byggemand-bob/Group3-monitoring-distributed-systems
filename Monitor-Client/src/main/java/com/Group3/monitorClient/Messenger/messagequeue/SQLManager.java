@@ -46,6 +46,21 @@ public class SQLManager {
 //        }
 //    }
 
+    public int TableSize(String TableName){
+        int size = -1;
+        String Quary = "SELECT COUNT(*) FROM " + TableName;
+        ResultSet rs = GenericSQLQuery(Quary);
+        try {
+            if(rs.next()){
+                size = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return size;
+    }
+
     public void CreateNewTable(String table, String... args) {
         StringBuilder sql = new StringBuilder();
         sql.append("CREATE TABLE IF NOT EXISTS ").append(table).append(" (\n");

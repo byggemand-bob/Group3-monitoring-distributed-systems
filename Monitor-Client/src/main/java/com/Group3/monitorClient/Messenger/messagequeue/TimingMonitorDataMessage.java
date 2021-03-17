@@ -2,6 +2,7 @@ package com.Group3.monitorClient.Messenger.messageQueue;
 
 import com.Group3.monitorClient.Messenger.MessageInterface;
 import org.openapitools.client.ApiException;
+import org.openapitools.client.ApiResponse;
 import org.openapitools.client.api.MonitorApi;
 import org.openapitools.client.model.TimingMonitorData;
 
@@ -15,12 +16,13 @@ public class TimingMonitorDataMessage implements MessageInterface {
     }
 
     @Override
-    public void send(MonitorApi MonitorClient) {
+    public ApiResponse<Void> send(MonitorApi MonitorClient) {
         try {
-            MonitorClient.addMonitorData(timingMonitorData);
+            return MonitorClient.addMonitorDataWithHttpInfo(timingMonitorData);
         } catch (ApiException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     @Override

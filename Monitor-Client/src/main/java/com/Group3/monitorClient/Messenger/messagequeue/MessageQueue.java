@@ -22,14 +22,19 @@ public class MessageQueue implements QueueInterface<MessageInterface> {
     }
 
     @Override
-    public void put(MessageInterface data) {
+    public void Put(MessageInterface data) {
         data.MakeSQL(sqlManager);
     }
 
     @Override
-    public MessageInterface take() {
+    public MessageInterface Take() {
         ResultSet rs = sqlManager.SelectMessage("queue");
         return messageCreator.CreateMessageFromSQL(rs);
+    }
+
+    @Override
+    public int Size() {
+        return sqlManager.TableSize("queue");
     }
 
     public void CloseConnection () {

@@ -1,9 +1,8 @@
 package com.Group3.monitorClient.Messenger.LazyMessenger;
 
+import com.Group3.monitorClient.Messenger.*;
 import com.Group3.monitorClient.Messenger.LazyMessenger.Requirements.Requirement;
-import com.Group3.monitorClient.Messenger.Messenger;
-import com.Group3.monitorClient.Messenger.GreedyMessenger;
-import com.Group3.monitorClient.Messenger.SynchronizedQueue;
+import com.Group3.monitorClient.Messenger.messageQueue.MessageCreator;
 import org.openapitools.client.model.TimingMonitorData;
 
 import java.util.LinkedList;
@@ -16,22 +15,23 @@ import java.util.List;
  */
 public class LazyMessenger implements Messenger {
     protected Messenger subMessenger;
-    private SynchronizedQueue<TimingMonitorData> messageQueue;
+    private MessageCreator messageCreator = new MessageCreator();
+    private QueueInterface<MessageInterface> messageQueue;
     private List<Requirement> requirementList = new LinkedList<Requirement>();
     private boolean running = true;
     private boolean paused = false;
     private Thread thread;
 
-    public LazyMessenger(String monitorIP){
-        messageQueue = new SynchronizedQueue<TimingMonitorData>();
-        subMessenger = new GreedyMessenger(monitorIP, messageQueue);
-    }
+//    public LazyMessenger(String monitorIP){
+//        messageQueue = new SynchronizedQueue<TimingMonitorData>();
+//        subMessenger = new GreedyMessenger(monitorIP, messageQueue);
+//    }
 
     /*
      * specifies which SynchronizedQueue to utilize,
      * useful if multiple messengers should share the same queue.
      */
-    public LazyMessenger(String monitorIP, SynchronizedQueue<TimingMonitorData> messageQueue){
+    public LazyMessenger(String monitorIP, QueueInterface<MessageInterface> messageQueue){
         subMessenger = new GreedyMessenger(monitorIP, messageQueue);
         this.messageQueue = messageQueue;
     }
@@ -92,7 +92,7 @@ public class LazyMessenger implements Messenger {
     /* Adds monitorData to the monitor queue, to be sent later when requirements allow. */
     @Override
     public void AddMonitorData(TimingMonitorData monitorData){
-        messageQueue.Add(monitorData);
+        messageQueue.Put(messageCreator.MakeMessage(monitorData));
     }
 
     /*
