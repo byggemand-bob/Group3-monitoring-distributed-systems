@@ -30,23 +30,21 @@ public class SQLManager {
         return conn;
     }
 
-    public ResultSet SelectAll(String table, String... args){
-        StringBuilder cols = new StringBuilder();
-        for (String arg: args){
-            cols.append(arg).append(",");
-        }
-        cols = new StringBuilder(cols.substring(0, cols.length() - 1));
-        String sql = "SELECT "+cols+" FROM "+table;
-
-        try (Connection conn = this.Connect();
-             Statement stmt  = conn.createStatement();
-             ResultSet rs    = stmt.executeQuery(sql)){
-            return rs;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-    }
+//    public ResultSet SelectAll(String table, String... args){
+//        StringBuilder cols = new StringBuilder();
+//        for (String arg: args){
+//            cols.append(arg).append(",");
+//        }
+//        cols = new StringBuilder(cols.substring(0, cols.length() - 1));
+//        String sql = "SELECT "+cols+" FROM "+table;
+//
+//        try (ResultSet rs    = stmt.executeQuery(sql)){
+//            return rs;
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//            return null;
+//        }
+//    }
 
     public void CreateNewTable(String table, String... args) {
         StringBuilder sql = new StringBuilder();
@@ -65,27 +63,26 @@ public class SQLManager {
         }
     }
 
-    public void InsertMessage(long SenderID, int MessageType, String TimeStamp, String Message) {
-        //String sql = "INSERT INTO warehouses(name,capacity) VALUES(?,?)";
-        String sql = "INSERT INTO queue(SenderID, Timestamp, Message) VALUES(?,?,?)";
+    public void InsertMessage(String tableName,long senderID, int messageType, String timeStamp, String message) {
+        String sql = "INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) VALUES(?,?,?,?)";
 
-        try (Connection conn = this.Connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setLong(1, SenderID);
-            pstmt.setInt(2, MessageType);
-            pstmt.setString(3, TimeStamp);
-            pstmt.setString(4, Message);
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1, senderID);
+            pstmt.setInt(2, messageType);
+            pstmt.setString(3, timeStamp);
+            pstmt.setString(4, message);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public ResultSet takeMessage(){
-        String sql = "SELECT * FROM queue LIMIT 1";
+    public ResultSet SelectMessage(String tableName){
+        String sql = "SELECT * FROM "+tableName+" LIMIT 1";
 
-        try (ResultSet rs    = stmt.executeQuery(sql)){
-            return rs;
+        try {
+            return stmt.executeQuery(sql);
         } catch (SQLException e) {
             System.out.println(e.getClass());
             System.out.println(e.getMessage());
@@ -120,7 +117,10 @@ public class SQLManager {
     public String getFileName () {
         return this.fileName;
     }
-
+    /*
+    * Made for testing
+    * Only Queries allowed
+     */
     public ResultSet GenericSQLQuery(String query){
         try {
             return stmt.executeQuery(query);
