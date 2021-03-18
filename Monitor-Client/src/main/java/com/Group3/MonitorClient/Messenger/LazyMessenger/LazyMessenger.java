@@ -22,11 +22,6 @@ public class LazyMessenger implements Messenger {
     private boolean paused = false;
     private Thread thread;
 
-//    public LazyMessenger(String monitorIP){
-//        messageQueue = new SynchronizedQueue<TimingMonitorData>();
-//        subMessenger = new GreedyMessenger(monitorIP, messageQueue);
-//    }
-
     /*
      * specifies which SynchronizedQueue to utilize,
      * useful if multiple messengers should share the same queue.
@@ -116,13 +111,7 @@ public class LazyMessenger implements Messenger {
     public void run() {
         RunningLoop: while(running){
             while(paused){
-                try {
-                    synchronized (this) {
-                        wait();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                ThreadWait(0);
                 if(!running){
                     break RunningLoop;
                 }
@@ -134,13 +123,18 @@ public class LazyMessenger implements Messenger {
                 subMessenger.Pause();
             }
 
-            try {
-                synchronized (this) {
-                    wait(5000);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            ThreadWait(5000);
+        }
+    }
+
+    /* waits for specified amount of MilliSeconds if 0, waits until another calls thread.notify() */
+    private void ThreadWait(int MilliSeconds){
+        try {
+            synchronized(this){
+                wait(MilliSeconds);
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

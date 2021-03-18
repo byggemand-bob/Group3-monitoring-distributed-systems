@@ -7,6 +7,7 @@ import org.openapitools.client.ApiResponse;
 import org.openapitools.client.api.MonitorApi;
 import org.openapitools.client.model.TimingMonitorData;
 
+import javax.annotation.Nullable;
 import java.net.SocketTimeoutException;
 
 /*
@@ -31,13 +32,6 @@ public class GreedyMessenger implements Messenger{
         monitorClient = new MonitorApi(client);
         this.messageQueue = messageQueue;
     }
-
-//    public GreedyMessenger(String monitorIP){
-//        ApiClient client = new ApiClient();
-//        client.setBasePath(monitorIP);
-//        monitorClient = new MonitorApi(client);
-//        messageQueue = new QueueInterface<TimingMonitorData>();
-//    }
 
     /* starts a thread running current class.run() */
     @Override
@@ -101,6 +95,10 @@ public class GreedyMessenger implements Messenger{
         ApiResponse<Void> Response = null;
 
         if (message != null) {
+            /*
+             * Attempts to send a given message 10 times until successful,
+             * Unless given a SocketTimeoutException, in which case it loops indefinitely
+             */
             int Loop = 0;
             do{
                 try {
@@ -127,7 +125,7 @@ public class GreedyMessenger implements Messenger{
     }
 
     /* Checks the Response of message.send() and takes the appropriate action */
-    private void CheckResponse(ApiResponse<Void> Response){
+    private void CheckResponse(@Nullable ApiResponse<Void> Response){
         if(Response != null && Response.getStatusCode() == 200){
             messageQueue.Delete();
         } else {
