@@ -31,11 +31,11 @@ public class AddRemoveThread_TestClass implements Runnable{
             }
 
             timingMonitorData = new TimingMonitorData();
-            syncQueue.Add(timingMonitorData);
+            syncQueue.Put(timingMonitorData);
         }
 
         for(int x = 0; x < takeNum; x++){
-            syncQueue.Take();
+            syncQueue.Delete();
         }
     }
 }

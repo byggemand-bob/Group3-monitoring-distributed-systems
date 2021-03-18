@@ -6,9 +6,9 @@ package com.Group3.monitorClient.Messenger;
 */
 public abstract class SecureSynchronizedQueue<T> extends SynchronizedQueue<T> {
     @Override
-    public synchronized void Add(T data){
+    public synchronized void Put(T data){
         save(data);
-        super.Add(data);
+        super.Put(data);
     }
 
     /* Takes first element of queue if there is any, otherwise returns null */

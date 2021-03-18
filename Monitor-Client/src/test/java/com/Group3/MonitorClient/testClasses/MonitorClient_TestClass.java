@@ -1,7 +1,10 @@
 package com.Group3.monitorClient.testClasses;
 
+import org.openapitools.client.ApiResponse;
 import org.openapitools.client.api.MonitorApi;
 import org.openapitools.client.model.TimingMonitorData;
+
+import java.util.HashMap;
 
 /*
  * class overwrites addMonitorData in MonitorApi to do nothing for testing purposes,
@@ -9,5 +12,7 @@ import org.openapitools.client.model.TimingMonitorData;
  */
 public class MonitorClient_TestClass extends MonitorApi {
     @Override
-    public void addMonitorData(TimingMonitorData Data){}
+    public ApiResponse<Void> addMonitorDataWithHttpInfo(TimingMonitorData Data){
+        return new ApiResponse<Void>(200, new HashMap<>());
+    }
 }

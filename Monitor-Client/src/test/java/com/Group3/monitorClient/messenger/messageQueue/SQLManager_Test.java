@@ -118,4 +118,34 @@ public class SQLManager_Test extends AbstractSQLTest {
 
     }
 
+    @Test
+    public void testDeleteFirstMessagePass(){
+        //Setup
+        String tableName = "test";
+        long senderID = 1L;
+        int messageType = 2;
+        String timeStamp = "test";
+        String message = "test";
+        sqlManager.CreateNewTable(tableName,
+                "ID integer PRIMARY KEY AUTOINCREMENT",
+                "MessageType integer NOT NULL",
+                "SenderID integer NOT NULL",
+                "Timestamp text NOT NULL",
+                "Message BLOB");
+
+        //Act
+        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+
+        int SizeBefore = sqlManager.TableSize("test");
+
+        sqlManager.DeleteFirstMessage("test");
+
+        int SizeAfter = sqlManager.TableSize("test");
+
+        //Assert
+        Assertions.assertEquals(3, SizeBefore);
+        Assertions.assertEquals(2, SizeAfter);
+    }
 }

@@ -125,6 +125,20 @@ public class SQLManager {
         }
     }
 
+    public void DeleteFirstMessage(String tableName){
+        try {
+            long ID = SelectMessage(tableName).getLong("ID");
+
+            String Quary = "DELETE FROM " + tableName + " WHERE ID = " + ID;
+
+            PreparedStatement pstmt = conn.prepareStatement(Quary);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+
+        }
+    }
+
     public String getPath () {
         return this.path;
     }

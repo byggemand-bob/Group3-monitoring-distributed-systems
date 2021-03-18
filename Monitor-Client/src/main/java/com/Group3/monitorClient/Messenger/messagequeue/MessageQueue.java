@@ -33,6 +33,11 @@ public class MessageQueue implements QueueInterface<MessageInterface> {
     }
 
     @Override
+    public void Delete() {
+        sqlManager.DeleteFirstMessage("queue");
+    }
+
+    @Override
     public int Size() {
         return sqlManager.TableSize("queue");
     }

@@ -1,6 +1,8 @@
 package com.Group3.monitorClient.messenger.lazyMessenger;
 
 import com.Group3.monitorClient.Messenger.LazyMessenger.LazyMessenger;
+import com.Group3.monitorClient.Messenger.MessageInterface;
+import com.Group3.monitorClient.Messenger.messageQueue.TimingMonitorDataMessage;
 import com.Group3.monitorClient.testClasses.LazyMessenger_TestClass;
 import com.Group3.monitorClient.testClasses.TrueFalseRequirement_TestClass;
 import com.Group3.monitorClient.Messenger.SynchronizedQueue;
@@ -13,14 +15,14 @@ public class LazyMessenger_Test {
     /* tests the control functions of the GreedyMessenger, Start(), Stop(), Pause() and Resume() */
     @Test
     public void ThreadControl() throws InterruptedException {
-        SynchronizedQueue<TimingMonitorData> queue = new SynchronizedQueue<TimingMonitorData>();
+        SynchronizedQueue<MessageInterface> queue = new SynchronizedQueue<MessageInterface>();
         LazyMessenger messenger = new LazyMessenger_TestClass("http://1.1.1.1:8080", queue);
 
         TrueFalseRequirement_TestClass trueRequirement = new TrueFalseRequirement_TestClass(true);
         messenger.AddRequirement(trueRequirement);
 
         for(int x = 0; x < 5; x++){
-            queue.Add(new TimingMonitorData());
+            queue.Put(new TimingMonitorDataMessage(new TimingMonitorData(), 0));
         }
 
         /* Confirms no messages was send before the messenger was started */
@@ -36,7 +38,7 @@ public class LazyMessenger_Test {
         int SizeOfQueueBefore = queue.Size();
 
         for(int x = 0; x < 5; x++){
-            queue.Add(new TimingMonitorData());
+            queue.Put(new TimingMonitorDataMessage(new TimingMonitorData(), 0));
         }
 
         /* confirms that the messenger is paused, and is not sending messages */
@@ -59,7 +61,7 @@ public class LazyMessenger_Test {
     /* Ensures the AddMonitorData() method works as intended */
     @Test
     public void AddDataTest(){
-        SynchronizedQueue<TimingMonitorData> queue = new SynchronizedQueue<TimingMonitorData>();
+        SynchronizedQueue<MessageInterface> queue = new SynchronizedQueue<MessageInterface>();
         LazyMessenger messenger = new LazyMessenger("1.1.1.1:8080", queue);
 
         messenger.AddMonitorData(new TimingMonitorData());
@@ -70,7 +72,7 @@ public class LazyMessenger_Test {
     /* tests if changing requirements between true and false, stops and runs message sending as intended */
     @Test
     public void RequirementsTest() throws InterruptedException {
-        SynchronizedQueue<TimingMonitorData> queue = new SynchronizedQueue<TimingMonitorData>();
+        SynchronizedQueue<MessageInterface> queue = new SynchronizedQueue<MessageInterface>();
         LazyMessenger messenger = new LazyMessenger_TestClass("http://1.1.1.1:8080", queue);
 
         TrueFalseRequirement_TestClass Requirement1 = new TrueFalseRequirement_TestClass(false);
@@ -82,7 +84,7 @@ public class LazyMessenger_Test {
         messenger.AddRequirement(Requirement3);
 
         for(int x = 0; x < 5; x++){
-            queue.Add(new TimingMonitorData());
+            queue.Put(new TimingMonitorDataMessage(new TimingMonitorData(), 0));
         }
 
         /* ensures the the messenger isn't sending messages before being started */

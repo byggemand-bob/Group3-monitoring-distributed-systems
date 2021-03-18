@@ -49,7 +49,7 @@ public class SynchronizedQueue_Test {
         for(long x = 0; x < 6; x++){
             TimingMonitorData timingMonitorData = new TimingMonitorData();
             timingMonitorData.setEventID(x);
-            syncQueue.Add(timingMonitorData);
+            syncQueue.Put(timingMonitorData);
         }
 
         for(int x = 0; x < 5; x++){

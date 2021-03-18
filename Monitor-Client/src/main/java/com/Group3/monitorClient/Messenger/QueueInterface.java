@@ -1,9 +1,15 @@
 package com.Group3.monitorClient.Messenger;
 
 public interface QueueInterface<T> {
-    public void Put(T data);
+    /* puts an element in the queue */
+    void Put(T data);
 
-    public T Take();
+    /* takes the first element in the queue */
+    T Take();
 
-    public int Size();
+    /* deletes the first element in the queue */
+    void Delete();
+
+    /* returns the size of the queue */
+    int Size();
 }

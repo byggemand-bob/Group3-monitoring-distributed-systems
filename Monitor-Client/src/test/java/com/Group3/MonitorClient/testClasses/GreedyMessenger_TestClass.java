@@ -1,6 +1,7 @@
 package com.Group3.monitorClient.testClasses;
 
 import com.Group3.monitorClient.Messenger.GreedyMessenger;
+import com.Group3.monitorClient.Messenger.MessageInterface;
 import com.Group3.monitorClient.Messenger.SynchronizedQueue;
 import org.openapitools.client.model.TimingMonitorData;
 
@@ -9,7 +10,7 @@ import org.openapitools.client.model.TimingMonitorData;
  * this removes the need for connecting to a server
  */
 public class GreedyMessenger_TestClass extends GreedyMessenger {
-    public GreedyMessenger_TestClass(String monitorIP, SynchronizedQueue<TimingMonitorData> messageQueue) {
+    public GreedyMessenger_TestClass(String monitorIP, SynchronizedQueue<MessageInterface> messageQueue) {
         super(monitorIP, messageQueue);
         monitorClient = new MonitorClient_TestClass();
     }

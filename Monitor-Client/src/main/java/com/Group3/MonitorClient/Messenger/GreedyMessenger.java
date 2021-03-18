@@ -107,7 +107,9 @@ public class GreedyMessenger implements Messenger{
                         Loop++;
                     } while((Response == null || Response.getStatusCode() != 200) && Loop < 10);
 
-                    if(Response == null || Response.getStatusCode() != 200){
+                    if(Response != null && Response.getStatusCode() == 200){
+                        messageQueue.Delete();
+                    } else {
                         //TODO: add handling if the response wasn't successfully send
                     }
                 } catch (Exception e) {
