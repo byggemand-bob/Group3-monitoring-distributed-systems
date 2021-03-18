@@ -1,8 +1,9 @@
 package com.Group3.monitorClient.Messenger;
 
+import com.Group3.monitorClient.Messenger.messages.MessageInterface;
 import org.openapitools.client.model.TimingMonitorData;
 
-public interface Messenger extends Runnable {
+public interface MessengerInterface extends Runnable {
     void Start();
 
     void Stop();
@@ -11,5 +12,5 @@ public interface Messenger extends Runnable {
 
     void Resume();
 
-    void AddMonitorData(TimingMonitorData monitorData);
+    void AddMessage(MessageInterface message);
 }

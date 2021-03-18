@@ -11,8 +11,21 @@ import java.util.HashMap;
  * this removes the need for connecting to a server
  */
 public class MonitorClient_TestClass extends MonitorApi {
+    int ResponseStatusCode = 200;
+
+    public MonitorClient_TestClass(){}
+
+    /* Specifies a different response code to return */
+    public MonitorClient_TestClass(int ResponseCode){
+        ResponseStatusCode = ResponseCode;
+    }
+
+    public void ChangeReturnedStatusCode(int StatusCode){
+        ResponseStatusCode = StatusCode;
+    }
+
     @Override
     public ApiResponse<Void> addMonitorDataWithHttpInfo(TimingMonitorData Data){
-        return new ApiResponse<Void>(200, new HashMap<>());
+        return new ApiResponse<Void>(ResponseStatusCode, new HashMap<>());
     }
 }

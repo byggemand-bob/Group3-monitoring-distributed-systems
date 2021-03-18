@@ -1,6 +1,7 @@
-package com.Group3.monitorClient.Messenger.messageQueue;
+package com.Group3.monitorClient.Messenger.messages;
 
 import java.sql.*;
+
 public class SQLManager {
     private final String path;
     private final String url;
@@ -20,7 +21,7 @@ public class SQLManager {
         }
     }
 
-    public Connection Connect() {
+    private Connection Connect() {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url+fileName);
@@ -46,6 +47,7 @@ public class SQLManager {
 //        }
 //    }
 
+    /* returns the number of elements in a specified table */
     public int TableSize(String TableName){
         int size = -1;
         String Quary = "SELECT COUNT(*) FROM " + TableName;
@@ -61,9 +63,10 @@ public class SQLManager {
         return size;
     }
 
-    public void CreateNewTable(String table, String... args) {
+    /* Creates a table with the given name, and columns as given by args */
+    public void CreateNewTable(String tableName, String... args) {
         StringBuilder sql = new StringBuilder();
-        sql.append("CREATE TABLE IF NOT EXISTS ").append(table).append(" (\n");
+        sql.append("CREATE TABLE IF NOT EXISTS ").append(tableName).append(" (\n");
         for (String arg: args){
             sql.append("\t").append(arg).append(",\n");
         }
@@ -78,7 +81,8 @@ public class SQLManager {
         }
     }
 
-    public void InsertMessage(String tableName,long senderID, int messageType, String timeStamp, String message) {
+    /* Inserts and Message element into the given table */
+    public void InsertMessage(String tableName, long senderID, int messageType, String timeStamp, String message) {
         String sql = "INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) VALUES(?,?,?,?)";
 
         try {
@@ -93,8 +97,9 @@ public class SQLManager {
         }
     }
 
-    public ResultSet SelectMessage(String tableName){
-        String sql = "SELECT * FROM "+tableName+" LIMIT 1";
+    /* returns the first element of tableName, as ordered by the first column */
+    public ResultSet SelectFirst(String tableName){
+        String sql = "SELECT * FROM "+tableName+" ORDER BY 1 LIMIT 1";
 
         try {
             return stmt.executeQuery(sql);
@@ -105,6 +110,7 @@ public class SQLManager {
         return null;
     }
 
+    /* Checks if a table with specified name exists in the database */
     public boolean CheckIfExists(String tableName) {
         String sql = "SELECT name FROM sqlite_master WHERE name = '" + tableName +"'";
 
@@ -116,6 +122,7 @@ public class SQLManager {
         }
     }
 
+    /* Resets the AutoIncrement to 0, Untested left for future development */
     public void ResetAutoIncrement(String tableName) {
         String sql = "UPDATE sqlite_sequence SET seq = 0 WHERE name = " + tableName;
 
@@ -125,9 +132,10 @@ public class SQLManager {
         }
     }
 
+    /* Deletes the first element of a message Table */
     public void DeleteFirstMessage(String tableName){
         try {
-            long ID = SelectMessage(tableName).getLong("ID");
+            long ID = SelectFirst(tableName).getLong("ID");
 
             String Quary = "DELETE FROM " + tableName + " WHERE ID = " + ID;
 
@@ -146,6 +154,7 @@ public class SQLManager {
     public String getFileName () {
         return this.fileName;
     }
+
     /*
     * Made for testing
     * Only Queries allowed
@@ -159,6 +168,7 @@ public class SQLManager {
         }
     }
 
+    /* Closes the connection to the database */
     public void CloseConnection () {
         try { conn.close(); } catch (Exception e) { /* Ignored */ }
     }

@@ -1,12 +1,8 @@
-package com.Group3.monitorClient.Messenger.messageQueue;
+package com.Group3.monitorClient.Messenger.messages;
 
-import com.Group3.monitorClient.Messenger.MessageInterface;
 import org.openapitools.client.ApiException;
-import org.openapitools.client.ApiResponse;
 import org.openapitools.client.api.MonitorApi;
 import org.openapitools.client.model.TimingMonitorData;
-
-import java.net.SocketTimeoutException;
 
 public class TimingMonitorDataMessage implements MessageInterface {
     private TimingMonitorData timingMonitorData;
@@ -18,8 +14,8 @@ public class TimingMonitorDataMessage implements MessageInterface {
     }
 
     @Override
-    public ApiResponse<Void> send(MonitorApi MonitorClient) throws ApiException {
-            return MonitorClient.addMonitorDataWithHttpInfo(timingMonitorData);
+    public int send(MonitorApi MonitorClient) throws ApiException {
+            return MonitorClient.addMonitorDataWithHttpInfo(timingMonitorData).getStatusCode();
     }
 
     @Override

@@ -1,9 +1,9 @@
 package com.Group3.monitorClient.messenger.messageQueue;
 
 import com.Group3.monitorClient.AbstractSQLTest;
-import com.Group3.monitorClient.Messenger.MessageInterface;
-import com.Group3.monitorClient.Messenger.messageQueue.MessageCreator;
-import com.Group3.monitorClient.Messenger.messageQueue.TimingMonitorDataMessage;
+import com.Group3.monitorClient.Messenger.messages.MessageInterface;
+import com.Group3.monitorClient.Messenger.messages.MessageCreator;
+import com.Group3.monitorClient.Messenger.messages.TimingMonitorDataMessage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.TimingMonitorData;
@@ -53,7 +53,7 @@ public class MessageCreator_Test extends AbstractSQLTest {
 
         message.MakeSQL(sqlManager);
 
-        ResultSet rs = sqlManager.SelectMessage(tableName);
+        ResultSet rs = sqlManager.SelectFirst(tableName);
 
         MessageInterface messageReturn = messageCreator.CreateMessageFromSQL(rs);
         TimingMonitorData tmdReturn = ((TimingMonitorDataMessage)messageReturn).getTimingMonitorData();

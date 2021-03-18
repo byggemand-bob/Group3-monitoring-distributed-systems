@@ -1,10 +1,10 @@
 package com.Group3.monitorClient.messenger.messageQueue;
 
 import com.Group3.monitorClient.AbstractSQLTest;
-import com.Group3.monitorClient.Messenger.MessageInterface;
-import com.Group3.monitorClient.Messenger.messageQueue.MessageCreator;
-import com.Group3.monitorClient.Messenger.messageQueue.MessageQueue;
-import com.Group3.monitorClient.Messenger.messageQueue.TimingMonitorDataMessage;
+import com.Group3.monitorClient.Messenger.messages.MessageInterface;
+import com.Group3.monitorClient.Messenger.messages.MessageCreator;
+import com.Group3.monitorClient.Messenger.Queue.PersistentSQLQueue;
+import com.Group3.monitorClient.Messenger.messages.TimingMonitorDataMessage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.TimingMonitorData;
@@ -13,7 +13,7 @@ import org.threeten.bp.OffsetDateTime;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class MessageQueue_Test extends AbstractSQLTest {
+public class PersistentSQLQueue_Test extends AbstractSQLTest {
     @Test
     public void testMakeMessageTimingMonitorDataPass () {
         //Setup
@@ -41,7 +41,7 @@ public class MessageQueue_Test extends AbstractSQLTest {
         String[] col4 = new String[0];
         String[] col5 = new String[0];
         String tableName = "queue";
-        MessageQueue messageQueue = new MessageQueue(sqlManager.getPath(), sqlManager.getFileName());
+        PersistentSQLQueue messageQueue = new PersistentSQLQueue(sqlManager.getPath(), sqlManager.getFileName());
 
         //Act
         ResultSet rs = sqlManager.GenericSQLQuery("PRAGMA table_info(" + tableName + ")");
@@ -124,6 +124,41 @@ public class MessageQueue_Test extends AbstractSQLTest {
         Assertions.assertEquals("0", col5[2]);
         Assertions.assertEquals(null, col5[3]);
         Assertions.assertEquals("0", col5[4]);
+
+        messageQueue.CloseConnection();
+    }
+
+    /* test if the message order of the queue is preserved */
+    @Test
+    public void testOrderPreservationPass(){
+        //setup
+        PersistentSQLQueue messageQueue = new PersistentSQLQueue(sqlManager.getPath(), sqlManager.getFileName());
+        TimingMonitorData timingMonitorData = new TimingMonitorData();
+        MessageCreator messageCreator = new MessageCreator();
+        OffsetDateTime offsetDateTime = OffsetDateTime.now();
+        timingMonitorData.setTimestamp(offsetDateTime);
+        timingMonitorData.setTargetEndpoint("/monitor");
+        timingMonitorData.setEventID(22L);
+
+        //Act
+        timingMonitorData.setSenderID(1L);
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+
+        timingMonitorData.setSenderID(2L);
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+
+        timingMonitorData.setSenderID(3L);
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+
+        MessageInterface firstMessage = messageQueue.Take();
+
+        messageQueue.Delete();
+
+        MessageInterface secondMessage = messageQueue.Take();
+
+        //Assert
+        Assertions.assertEquals(1L, ((TimingMonitorDataMessage)firstMessage).getTimingMonitorData().getSenderID());
+        Assertions.assertEquals(2L, ((TimingMonitorDataMessage)secondMessage).getTimingMonitorData().getSenderID());
 
         messageQueue.CloseConnection();
     }

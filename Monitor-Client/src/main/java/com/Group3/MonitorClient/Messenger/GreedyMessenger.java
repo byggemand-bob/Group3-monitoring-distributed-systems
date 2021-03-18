@@ -1,20 +1,17 @@
 package com.Group3.monitorClient.Messenger;
 
-import com.Group3.monitorClient.Messenger.messageQueue.MessageCreator;
+import com.Group3.monitorClient.Messenger.Queue.QueueInterface;
+import com.Group3.monitorClient.Messenger.messages.MessageCreator;
+import com.Group3.monitorClient.Messenger.messages.MessageInterface;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
-import org.openapitools.client.ApiResponse;
 import org.openapitools.client.api.MonitorApi;
-import org.openapitools.client.model.TimingMonitorData;
-
-import javax.annotation.Nullable;
-import java.net.SocketTimeoutException;
 
 /*
  * The GreedyMessenger class runs a continues thread sending TimingMonitorData from a SynchronizedQueue.
  * It Utilizes the MonitorApi and will indefinably probe the queue until stopped or paused.
  */
-public class GreedyMessenger implements Messenger{
+public class GreedyMessenger implements MessengerInterface {
     protected MonitorApi monitorClient;
     private boolean running = true;
     private boolean paused = false;
@@ -66,10 +63,10 @@ public class GreedyMessenger implements Messenger{
         }
     }
 
-    /* Adds monitorData to the monitor queue, to be sent later when requirements allow. */
+    /* Adds a message to the message-queue */
     @Override
-    public void AddMonitorData(TimingMonitorData monitorData){
-        messageQueue.Put(messageCreator.MakeMessage(monitorData));
+    public void AddMessage(MessageInterface message){
+        messageQueue.Put(message);
     }
 
     public boolean MessengerIsAlive(){
@@ -92,7 +89,7 @@ public class GreedyMessenger implements Messenger{
     /* Sends next message in the messageQueue */
     private void SendMessage(){
         MessageInterface message = messageQueue.Take();
-        ApiResponse<Void> Response = null;
+        int statusCode = -1;
 
         if (message != null) {
             /*
@@ -102,7 +99,7 @@ public class GreedyMessenger implements Messenger{
             int Loop = 0;
             do{
                 try {
-                    Response = message.send(monitorClient);
+                    statusCode = message.send(monitorClient);
                 } catch (ApiException e){
                     String exceptionString = e.toString();
 
@@ -116,25 +113,25 @@ public class GreedyMessenger implements Messenger{
                 }
                 Loop++;
                 if(!running || paused){ break; }
-            } while((Response == null || Response.getStatusCode() != 200) && Loop < 10);
+            } while(statusCode != 200 && Loop < 10);
 
-            CheckResponse(Response); //after 10 loops of none 200 response codes, check Response;
+            CheckResponse(statusCode); //after 10 loops of none 200 response codes, check Response;
         } else {
             ThreadWait(5000);
         }
     }
 
     /* Checks the Response of message.send() and takes the appropriate action */
-    private void CheckResponse(@Nullable ApiResponse<Void> Response){
-        if(Response != null && Response.getStatusCode() == 200){
+    private void CheckResponse(int Response){
+        if(Response == 200){
             messageQueue.Delete();
         } else {
             //TODO: add handling if the response wasn't successfully send
-            if(Response == null){
+            if(Response == -1){
                 if(running && !paused){
                     //A non SocketTimeoutException was thrown when sending the message
                 }
-            } else if(Response.getStatusCode() == 400){
+            } else if(Response == 400){
                 //if the last response code was 400
             }
         }

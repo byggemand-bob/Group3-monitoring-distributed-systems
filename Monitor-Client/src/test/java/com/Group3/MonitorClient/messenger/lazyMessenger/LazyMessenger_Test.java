@@ -1,11 +1,12 @@
 package com.Group3.monitorClient.messenger.lazyMessenger;
 
 import com.Group3.monitorClient.Messenger.LazyMessenger.LazyMessenger;
-import com.Group3.monitorClient.Messenger.MessageInterface;
-import com.Group3.monitorClient.Messenger.messageQueue.TimingMonitorDataMessage;
+import com.Group3.monitorClient.Messenger.messages.MessageCreator;
+import com.Group3.monitorClient.Messenger.messages.MessageInterface;
+import com.Group3.monitorClient.Messenger.messages.TimingMonitorDataMessage;
 import com.Group3.monitorClient.testClasses.LazyMessenger_TestClass;
 import com.Group3.monitorClient.testClasses.TrueFalseRequirement_TestClass;
-import com.Group3.monitorClient.Messenger.SynchronizedQueue;
+import com.Group3.monitorClient.Messenger.Queue.SynchronizedQueue;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -63,8 +64,9 @@ public class LazyMessenger_Test {
     public void AddDataTest(){
         SynchronizedQueue<MessageInterface> queue = new SynchronizedQueue<MessageInterface>();
         LazyMessenger messenger = new LazyMessenger("1.1.1.1:8080", queue);
+        MessageCreator messageCreator = new MessageCreator();
 
-        messenger.AddMonitorData(new TimingMonitorData());
+        messenger.AddMessage(messageCreator.MakeMessage(new TimingMonitorData()));
 
         Assertions.assertEquals(1, queue.Size());
     }

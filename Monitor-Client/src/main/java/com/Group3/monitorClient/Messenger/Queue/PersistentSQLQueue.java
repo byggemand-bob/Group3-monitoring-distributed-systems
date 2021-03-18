@@ -1,15 +1,16 @@
-package com.Group3.monitorClient.Messenger.messageQueue;
+package com.Group3.monitorClient.Messenger.Queue;
 
-import com.Group3.monitorClient.Messenger.MessageInterface;
-import com.Group3.monitorClient.Messenger.QueueInterface;
+import com.Group3.monitorClient.Messenger.messages.MessageInterface;
+import com.Group3.monitorClient.Messenger.messages.MessageCreator;
+import com.Group3.monitorClient.Messenger.messages.SQLManager;
 
 import java.sql.ResultSet;
 
-public class MessageQueue implements QueueInterface<MessageInterface> {
+public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
     private final MessageCreator messageCreator = new MessageCreator();
     private final SQLManager sqlManager;
 
-    public MessageQueue(String url, String fileName) {
+    public PersistentSQLQueue(String url, String fileName) {
         sqlManager = new SQLManager(url, fileName);
         if (!sqlManager.CheckIfExists("queue")) {
             sqlManager.CreateNewTable("queue",
@@ -28,7 +29,7 @@ public class MessageQueue implements QueueInterface<MessageInterface> {
 
     @Override
     public MessageInterface Take() {
-        ResultSet rs = sqlManager.SelectMessage("queue");
+        ResultSet rs = sqlManager.SelectFirst("queue");
         return messageCreator.CreateMessageFromSQL(rs);
     }
 

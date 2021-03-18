@@ -2,8 +2,9 @@ package com.Group3.monitorClient.Messenger.LazyMessenger;
 
 import com.Group3.monitorClient.Messenger.*;
 import com.Group3.monitorClient.Messenger.LazyMessenger.Requirements.Requirement;
-import com.Group3.monitorClient.Messenger.messageQueue.MessageCreator;
-import org.openapitools.client.model.TimingMonitorData;
+import com.Group3.monitorClient.Messenger.Queue.QueueInterface;
+import com.Group3.monitorClient.Messenger.messages.MessageCreator;
+import com.Group3.monitorClient.Messenger.messages.MessageInterface;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,8 +14,8 @@ import java.util.List;
  * It periodically checks Requirements added to the class,
  * then pauses or resumes the Messenger based on how the requirements tests
  */
-public class LazyMessenger implements Messenger {
-    protected Messenger subMessenger;
+public class LazyMessenger implements MessengerInterface {
+    protected MessengerInterface subMessenger;
     private MessageCreator messageCreator = new MessageCreator();
     private QueueInterface<MessageInterface> messageQueue;
     private List<Requirement> requirementList = new LinkedList<Requirement>();
@@ -84,10 +85,10 @@ public class LazyMessenger implements Messenger {
         requirementList.add(requirement);
     }
 
-    /* Adds monitorData to the monitor queue, to be sent later when requirements allow. */
+    /* Adds a message to the message-queue, to be sent later when requirements allow. */
     @Override
-    public void AddMonitorData(TimingMonitorData monitorData){
-        messageQueue.Put(messageCreator.MakeMessage(monitorData));
+    public void AddMessage(MessageInterface message){
+        messageQueue.Put(message);
     }
 
     /*

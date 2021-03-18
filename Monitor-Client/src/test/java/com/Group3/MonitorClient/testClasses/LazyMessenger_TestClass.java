@@ -1,9 +1,8 @@
 package com.Group3.monitorClient.testClasses;
 
 import com.Group3.monitorClient.Messenger.LazyMessenger.LazyMessenger;
-import com.Group3.monitorClient.Messenger.MessageInterface;
-import com.Group3.monitorClient.Messenger.SynchronizedQueue;
-import org.openapitools.client.model.TimingMonitorData;
+import com.Group3.monitorClient.Messenger.messages.MessageInterface;
+import com.Group3.monitorClient.Messenger.Queue.SynchronizedQueue;
 
 /*
  * Test class set subMessenger in LazyMessenger to GreedyMessenger_TestClass,

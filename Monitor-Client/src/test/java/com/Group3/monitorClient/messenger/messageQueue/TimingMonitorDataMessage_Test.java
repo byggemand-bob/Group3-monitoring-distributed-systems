@@ -1,18 +1,15 @@
 package com.Group3.monitorClient.messenger.messageQueue;
 
 import com.Group3.monitorClient.AbstractSQLTest;
-import com.Group3.monitorClient.Messenger.MessageInterface;
-import com.Group3.monitorClient.Messenger.messageQueue.SQLManager;
-import com.Group3.monitorClient.Messenger.messageQueue.TimingMonitorDataMessage;
+import com.Group3.monitorClient.Messenger.messages.MessageInterface;
+import com.Group3.monitorClient.Messenger.messages.TimingMonitorDataMessage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.TimingMonitorData;
 import org.threeten.bp.OffsetDateTime;
 
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 
 public class TimingMonitorDataMessage_Test extends AbstractSQLTest {
     @Test
@@ -41,7 +38,7 @@ public class TimingMonitorDataMessage_Test extends AbstractSQLTest {
                 "Timestamp text NOT NULL",
                 "Message BLOB");
         messageInterface.MakeSQL(sqlManager);
-        ResultSet rs = sqlManager.SelectMessage("queue");
+        ResultSet rs = sqlManager.SelectFirst("queue");
 
         try {
             String blob = rs.getString("Message");

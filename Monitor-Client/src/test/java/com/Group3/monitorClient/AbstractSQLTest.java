@@ -1,14 +1,10 @@
 package com.Group3.monitorClient;
 
-import com.Group3.monitorClient.Messenger.messageQueue.SQLManager;
+import com.Group3.monitorClient.Messenger.messages.SQLManager;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class AbstractSQLTest {
     public static SQLManager sqlManager;// = new SQLManager("src/main/resources/sqlite/db/", "test.db");

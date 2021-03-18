@@ -1,8 +1,9 @@
 package com.Group3.monitorClient.messenger;
 
-import com.Group3.monitorClient.Messenger.MessageInterface;
-import com.Group3.monitorClient.Messenger.SynchronizedQueue;
-import com.Group3.monitorClient.Messenger.messageQueue.TimingMonitorDataMessage;
+import com.Group3.monitorClient.Messenger.messages.MessageCreator;
+import com.Group3.monitorClient.Messenger.messages.MessageInterface;
+import com.Group3.monitorClient.Messenger.Queue.SynchronizedQueue;
+import com.Group3.monitorClient.Messenger.messages.TimingMonitorDataMessage;
 import com.Group3.monitorClient.testClasses.GreedyMessenger_TestClass;
 import com.Group3.monitorClient.Messenger.GreedyMessenger;
 
@@ -50,7 +51,7 @@ public class GreedyMessenger_Test {
         /* confirms the messenger was sending messages again after being resumed */
         Assertions.assertTrue(SizeOfQueueBefore > queue.Size());
 
-        Thread.sleep(500);
+        Thread.sleep(100);
         /* confirms that the messenger thread is now dead */
         Assertions.assertFalse(messenger.MessengerIsAlive());
     }
@@ -60,10 +61,28 @@ public class GreedyMessenger_Test {
     public void AddDataTest(){
         SynchronizedQueue<MessageInterface> queue = new SynchronizedQueue<MessageInterface>();
         GreedyMessenger messenger = new GreedyMessenger("1.1.1.1:8080", queue);
+        MessageCreator messageCreator = new MessageCreator();
 
-        messenger.AddMonitorData(new TimingMonitorData());
+        messenger.AddMessage(messageCreator.MakeMessage(new TimingMonitorData()));
 
         Assertions.assertEquals(1, queue.Size());
+    }
+
+    /* verifies that the messenger doesn't lose messages, when the return http status code isn't 200 */
+    @Test
+    public void UnsuccessfulMessageSendingHandling() throws InterruptedException {
+        SynchronizedQueue<MessageInterface> queue = new SynchronizedQueue<MessageInterface>();
+        GreedyMessenger messenger = new GreedyMessenger_TestClass("1.1.1.1:8080", queue, 400);
+
+        for(int x = 0; x < 5; x++){
+            queue.Put(new TimingMonitorDataMessage(new TimingMonitorData(), 0));
+        }
+
+        messenger.Resume();
+        Thread.sleep(100);
+        messenger.Stop();
+
+        Assertions.assertEquals(5, queue.Size());
     }
 }
 

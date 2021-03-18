@@ -3,7 +3,6 @@ package com.Group3.monitorClient.messenger.messageQueue;
 import com.Group3.monitorClient.AbstractSQLTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.openapitools.client.model.TimingMonitorData;
 import org.threeten.bp.OffsetDateTime;
 
 import java.sql.ResultSet;
@@ -100,7 +99,7 @@ public class SQLManager_Test extends AbstractSQLTest {
         //Act
 
         sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
-        ResultSet rs = sqlManager.SelectMessage(tableName);
+        ResultSet rs = sqlManager.SelectFirst(tableName);
         try {
             senderID_test = rs.getLong("senderID");
             messageType_test = rs.getInt("messageType");

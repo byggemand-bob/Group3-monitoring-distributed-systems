@@ -1,6 +1,5 @@
-package com.Group3.monitorClient.Messenger.messageQueue;
+package com.Group3.monitorClient.Messenger.messages;
 
-import com.Group3.monitorClient.Messenger.MessageInterface;
 import org.openapitools.client.model.TimingMonitorData;
 import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.format.DateTimeFormatter;

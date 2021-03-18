@@ -1,4 +1,4 @@
-package com.Group3.monitorClient.Messenger;
+package com.Group3.monitorClient.Messenger.Queue;
 
 import java.util.LinkedList;
 import java.util.Queue;
