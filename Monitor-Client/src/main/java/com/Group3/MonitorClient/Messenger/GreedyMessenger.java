@@ -7,6 +7,8 @@ import org.openapitools.client.ApiResponse;
 import org.openapitools.client.api.MonitorApi;
 import org.openapitools.client.model.TimingMonitorData;
 
+import java.net.SocketTimeoutException;
+
 /*
  * The GreedyMessenger class runs a continues thread sending TimingMonitorData from a SynchronizedQueue.
  * It Utilizes the MonitorApi and will indefinably probe the queue until stopped or paused.
@@ -85,47 +87,69 @@ public class GreedyMessenger implements Messenger{
     public void run() {
         RunningLoop: while (running) {
             while (paused) {
-                try {
-                    synchronized(this) {
-                        wait();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                ThreadWait(0);
                 if(!running){ break RunningLoop; }
             }
 
-            MessageInterface message = messageQueue.Take();
+            SendMessage();
+        }
+    }
 
-            ApiResponse<Void> Response = null;
+    /* Sends next message in the messageQueue */
+    private void SendMessage(){
+        MessageInterface message = messageQueue.Take();
+        ApiResponse<Void> Response = null;
 
-            if (message != null) {
+        if (message != null) {
+            int Loop = 0;
+            do{
                 try {
-                    int Loop = 0;
-                    do{
-                        Response = message.send(monitorClient);
-                        Loop++;
-                    } while((Response == null || Response.getStatusCode() != 200) && Loop < 10);
+                    Response = message.send(monitorClient);
+                } catch (ApiException e){
+                    String exceptionString = e.toString();
 
-                    if(Response != null && Response.getStatusCode() == 200){
-                        messageQueue.Delete();
+                    if(exceptionString.contains("java.net.SocketTimeoutException")){
+                        System.out.println("Cannot connect to monitor server, waiting 5 seconds and retrying");
+                        ThreadWait(5000);
+                        Loop--; //if the messenger can't connect to MonitorServer it will loop indefinitely until connection is established.
                     } else {
-                        //TODO: add handling if the response wasn't successfully send
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            } else {
-                try {
-                    synchronized(this){
-                        wait(5000);
-                    }
+                Loop++;
+                if(!running || paused){ break; }
+            } while((Response == null || Response.getStatusCode() != 200) && Loop < 10);
 
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            CheckResponse(Response); //after 10 loops of none 200 response codes, check Response;
+        } else {
+            ThreadWait(5000);
+        }
+    }
+
+    /* Checks the Response of message.send() and takes the appropriate action */
+    private void CheckResponse(ApiResponse<Void> Response){
+        if(Response != null && Response.getStatusCode() == 200){
+            messageQueue.Delete();
+        } else {
+            //TODO: add handling if the response wasn't successfully send
+            if(Response == null){
+                if(running && !paused){
+                    //A non SocketTimeoutException was thrown when sending the message
                 }
+            } else if(Response.getStatusCode() == 400){
+                //if the last response code was 400
             }
         }
     }
 
+    /* waits for specified amount of MilliSeconds if 0, waits until another calls thread.notify() */
+    private void ThreadWait(int MilliSeconds){
+        try {
+            synchronized(this){
+                wait(MilliSeconds);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

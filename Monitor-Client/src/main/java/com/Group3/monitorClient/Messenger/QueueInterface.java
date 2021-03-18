@@ -4,7 +4,7 @@ public interface QueueInterface<T> {
     /* puts an element in the queue */
     void Put(T data);
 
-    /* takes the first element in the queue */
+    /* takes the first element in the queue, but do not delete, and return null if empty */
     T Take();
 
     /* deletes the first element in the queue */

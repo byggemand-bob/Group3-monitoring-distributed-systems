@@ -6,6 +6,8 @@ import org.openapitools.client.ApiResponse;
 import org.openapitools.client.api.MonitorApi;
 import org.openapitools.client.model.TimingMonitorData;
 
+import java.net.SocketTimeoutException;
+
 public class TimingMonitorDataMessage implements MessageInterface {
     private TimingMonitorData timingMonitorData;
     private int messageTypeID;
@@ -16,13 +18,8 @@ public class TimingMonitorDataMessage implements MessageInterface {
     }
 
     @Override
-    public ApiResponse<Void> send(MonitorApi MonitorClient) {
-        try {
+    public ApiResponse<Void> send(MonitorApi MonitorClient) throws ApiException {
             return MonitorClient.addMonitorDataWithHttpInfo(timingMonitorData);
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @Override
