@@ -12,6 +12,7 @@ public class MessageCreator {
         TimingMonitorData
     }
 
+    /* receives a ResultSet, representing an message and converts it back into a message structure */
     public MessageInterface CreateMessageFromSQL(ResultSet SQLQuery){
         int TypeID = -1;
         try {
@@ -27,12 +28,12 @@ public class MessageCreator {
         return null;
     }
 
-
-
+    /* Converts TimingMonitorData into a Message format */
     public MessageInterface MakeMessage(TimingMonitorData timingMonitorData){
         return new TimingMonitorDataMessage(timingMonitorData, MessageTypeID.TimingMonitorData.ordinal());
     }
 
+    /* converts a sqlQuery representing a TimingMonitorData and reconstructs it into a message format */
     private MessageInterface CreateTimingMonitorData(ResultSet sqlQuery) {
         TimingMonitorData timingMonitorData = new TimingMonitorData();
         MessageInterface message = null;
@@ -56,8 +57,8 @@ public class MessageCreator {
         return message;
     }
 
+    /* Converts a given string into a Datetime data-structure */
     private OffsetDateTime ConvertStringToDateTime(String string){
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-        return OffsetDateTime.parse(string, formatter);
+        return OffsetDateTime.parse(string, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 }

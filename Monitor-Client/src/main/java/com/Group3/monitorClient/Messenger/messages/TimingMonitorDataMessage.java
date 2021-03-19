@@ -13,11 +13,13 @@ public class TimingMonitorDataMessage implements MessageInterface {
         this.messageTypeID = messageTypeID;
     }
 
+    /* Message sends itself using the given MonitorAPI */
     @Override
     public int send(MonitorApi MonitorClient) throws ApiException {
             return MonitorClient.addMonitorDataWithHttpInfo(timingMonitorData).getStatusCode();
     }
 
+    /* the message converts itself into an sql format, and saves itself using provided SQLManager */
     @Override
     public void MakeSQL(SQLManager sqlManager) {
         String blob = timingMonitorData.getTargetEndpoint() + "," + timingMonitorData.getEventID();

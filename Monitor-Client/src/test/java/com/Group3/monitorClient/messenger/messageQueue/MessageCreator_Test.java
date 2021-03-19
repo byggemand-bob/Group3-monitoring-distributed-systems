@@ -12,6 +12,7 @@ import org.threeten.bp.OffsetDateTime;
 import java.sql.ResultSet;
 
 public class MessageCreator_Test extends AbstractSQLTest {
+    /* Verifies the messageCreator is able to construct the message properly when given a TimingMonitorData instance */
     @Test
     public void testMakeMessageTimingMonitorDataPass () {
         //Setup
@@ -28,8 +29,13 @@ public class MessageCreator_Test extends AbstractSQLTest {
 
         //Assert
         Assertions.assertEquals(0, ((TimingMonitorDataMessage)message).getMessageTypeID());
+        Assertions.assertEquals(timingMonitorData, ((TimingMonitorDataMessage)message).getTimingMonitorData());
     }
 
+    /*
+     * verifies the MessageCreator is able to recreate an instance of
+     * TimingMonitorData after its been passed and returned as an sql ResultSet
+     */
     @Test
     public void testMakeMessageFromSQLPass () {
         //Setup

@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TimingMonitorDataMessage_Test extends AbstractSQLTest {
+    /* verifies the TimingMonitorDataMessage is able to save itself in an sql database */
     @Test
     public void testMakeSQLPass () {
         //setup

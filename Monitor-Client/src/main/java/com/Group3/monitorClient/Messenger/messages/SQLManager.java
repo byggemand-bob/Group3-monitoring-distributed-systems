@@ -122,11 +122,13 @@ public class SQLManager {
         }
     }
 
-    /* Resets the AutoIncrement to 0, Untested left for future development */
+    /* Resets the AutoIncrement to the highest number contained in the column */
     public void ResetAutoIncrement(String tableName) {
-        String sql = "UPDATE sqlite_sequence SET seq = 0 WHERE name = " + tableName;
+        String sql = "UPDATE sqlite_sequence SET seq = 0 WHERE name = '" + tableName + "'";
 
-        try (ResultSet rs    = stmt.executeQuery(sql)){
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

@@ -9,11 +9,13 @@ import java.io.File;
 public class AbstractSQLTest {
     public static SQLManager sqlManager;// = new SQLManager("src/main/resources/sqlite/db/", "test.db");
 
+    /* Creates a new sql database before each test */
     @BeforeEach
     public void setup () {
         sqlManager = new SQLManager("src/main/resources/sqlite/db/", "test.db");
     }
 
+    /* Deletes the sql database after each test */
     @AfterEach
     public void cleanUp() {
         File db = new File(sqlManager.getPath()+sqlManager.getFileName());

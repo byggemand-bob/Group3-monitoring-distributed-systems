@@ -14,24 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PersistentSQLQueue_Test extends AbstractSQLTest {
-    @Test
-    public void testMakeMessageTimingMonitorDataPass () {
-        //Setup
-        TimingMonitorData timingMonitorData = new TimingMonitorData();
-        MessageCreator messageCreator = new MessageCreator();
-        OffsetDateTime offsetDateTime = OffsetDateTime.now();
-        timingMonitorData.setSenderID(21L);
-        timingMonitorData.setTimestamp(offsetDateTime);
-        timingMonitorData.setTargetEndpoint("/monitor");
-        timingMonitorData.setEventID(22L);
-
-        //Act
-        MessageInterface message = messageCreator.MakeMessage(timingMonitorData);
-
-        //Assert
-        Assertions.assertEquals(0, ((TimingMonitorDataMessage)message).getMessageTypeID());
-    }
-
+    /* Verifies the queue constructs a message table if one doesn't already exist in the specified database */
     @Test
     public void testMessageQueueConstructorPass () {
         //Setup
@@ -98,31 +81,31 @@ public class PersistentSQLQueue_Test extends AbstractSQLTest {
         Assertions.assertEquals("ID", col1[0]);
         Assertions.assertEquals("integer", col1[1]);
         Assertions.assertEquals("0", col1[2]);
-        Assertions.assertEquals(null, col1[3]);
+        Assertions.assertNull(col1[3]);
         Assertions.assertEquals("1", col1[4]);
         //checks col2
         Assertions.assertEquals("MessageType", col2[0]);
         Assertions.assertEquals("integer", col2[1]);
         Assertions.assertEquals("1", col2[2]);
-        Assertions.assertEquals(null, col2[3]);
+        Assertions.assertNull(col2[3]);
         Assertions.assertEquals("0", col2[4]);
         //checks col3
         Assertions.assertEquals("SenderID", col3[0]);
         Assertions.assertEquals("integer", col3[1]);
         Assertions.assertEquals("1", col3[2]);
-        Assertions.assertEquals(null, col3[3]);
+        Assertions.assertNull(col3[3]);
         Assertions.assertEquals("0", col3[4]);
         //checks col4
         Assertions.assertEquals("Timestamp", col4[0]);
         Assertions.assertEquals("text", col4[1]);
         Assertions.assertEquals("1", col4[2]);
-        Assertions.assertEquals(null, col4[3]);
+        Assertions.assertNull(col4[3]);
         Assertions.assertEquals("0", col4[4]);
         //checks col5
         Assertions.assertEquals("Message", col5[0]);
         Assertions.assertEquals("BLOB", col5[1]);
         Assertions.assertEquals("0", col5[2]);
-        Assertions.assertEquals(null, col5[3]);
+        Assertions.assertNull(col5[3]);
         Assertions.assertEquals("0", col5[4]);
 
         messageQueue.CloseConnection();
