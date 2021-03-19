@@ -1,37 +1,33 @@
-package com.Group3.MonitorClient.Messenger;
+package com.Group3.monitorClient.Messenger;
 
+import com.Group3.monitorClient.Messenger.Queue.QueueInterface;
+import com.Group3.monitorClient.Messenger.messages.MessageCreator;
+import com.Group3.monitorClient.Messenger.messages.MessageInterface;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.api.MonitorApi;
-import org.openapitools.client.model.TimingMonitorData;
 
 /*
  * The GreedyMessenger class runs a continues thread sending TimingMonitorData from a SynchronizedQueue.
  * It Utilizes the MonitorApi and will indefinably probe the queue until stopped or paused.
  */
-public class GreedyMessenger implements Messenger{
+public class GreedyMessenger implements MessengerInterface {
     protected MonitorApi monitorClient;
     private boolean running = true;
     private boolean paused = false;
-    private SynchronizedQueue<TimingMonitorData> messageQueue;
+    private QueueInterface<MessageInterface> messageQueue;
+    private MessageCreator messageCreator = new MessageCreator();
     private Thread thread;
 
     /*
      * specifies which SynchronizedQueue to utilize,
      * useful if multiple messengers should share the same queue.
      */
-    public GreedyMessenger(String monitorIP, SynchronizedQueue<TimingMonitorData> messageQueue){
+    public GreedyMessenger(String monitorIP, QueueInterface<MessageInterface> messageQueue){
         ApiClient client = new ApiClient();
         client.setBasePath(monitorIP);
         monitorClient = new MonitorApi(client);
         this.messageQueue = messageQueue;
-    }
-
-    public GreedyMessenger(String monitorIP){
-        ApiClient client = new ApiClient();
-        client.setBasePath(monitorIP);
-        monitorClient = new MonitorApi(client);
-        messageQueue = new SynchronizedQueue<TimingMonitorData>();
     }
 
     /* starts a thread running current class.run() */
@@ -67,10 +63,10 @@ public class GreedyMessenger implements Messenger{
         }
     }
 
-    /* Adds monitorData to the monitor queue, to be sent later when requirements allow. */
+    /* Adds a message to the message-queue */
     @Override
-    public void AddMonitorData(TimingMonitorData monitorData){
-        messageQueue.Add(monitorData);
+    public void AddMessage(MessageInterface message){
+        messageQueue.Put(message);
     }
 
     public boolean MessengerIsAlive(){
@@ -80,38 +76,75 @@ public class GreedyMessenger implements Messenger{
     /* while running continues to take and send MonitorData while the SynchronizedQueue is not empty */
     @Override
     public void run() {
-
         RunningLoop: while (running) {
             while (paused) {
-                try {
-                    synchronized(this) {
-                        wait();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                ThreadWait(0);
                 if(!running){ break RunningLoop; }
             }
 
-            TimingMonitorData Data = messageQueue.Take();
+            SendMessage();
+        }
+    }
 
-            if (Data != null) {
+    /* Sends next message in the messageQueue */
+    private void SendMessage(){
+        MessageInterface message = messageQueue.Take();
+        int statusCode = -1;
+
+        if (message != null) {
+            /*
+             * Attempts to send a given message 10 times until successful,
+             * Unless given a SocketTimeoutException, in which case it loops indefinitely
+             */
+            int Loop = 0;
+            do{
                 try {
-                    monitorClient.addMonitorData(Data);
-                } catch (ApiException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
-                    synchronized(this){
-                        wait(5000);
+                    statusCode = message.send(monitorClient);
+                } catch (ApiException e){
+                    String exceptionString = e.toString();
+
+                    if(exceptionString.contains("java.net.SocketTimeoutException")){
+                        System.out.println("Cannot connect to monitor server, waiting 5 seconds and retrying");
+                        ThreadWait(5000);
+                        Loop--; //if the messenger can't connect to MonitorServer it will loop indefinitely until connection is established.
+                    } else {
+                        e.printStackTrace();
                     }
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
+                Loop++;
+                if(!running || paused){ break; }
+            } while(statusCode != 200 && Loop < 10);
+
+            CheckResponse(statusCode); //after 10 loops of none 200 response codes, check Response;
+        } else {
+            ThreadWait(5000);
+        }
+    }
+
+    /* Checks the Response of message.send() and takes the appropriate action */
+    private void CheckResponse(int Response){
+        if(Response == 200){
+            messageQueue.Delete();
+        } else {
+            //TODO: add handling if the response wasn't successfully send
+            if(Response == -1){
+                if(running && !paused){
+                    //A non SocketTimeoutException was thrown when sending the message
+                }
+            } else if(Response == 400){
+                //if the last response code was 400
             }
         }
     }
 
+    /* waits for specified amount of MilliSeconds if 0, waits until another calls thread.notify() */
+    private void ThreadWait(int MilliSeconds){
+        try {
+            synchronized(this){
+                wait(MilliSeconds);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

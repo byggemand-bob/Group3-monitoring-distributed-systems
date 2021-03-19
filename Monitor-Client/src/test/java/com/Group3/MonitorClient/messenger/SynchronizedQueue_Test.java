@@ -1,6 +1,6 @@
 package com.Group3.monitorClient.messenger;
 
-import com.Group3.MonitorClient.Messenger.SynchronizedQueue;
+import com.Group3.monitorClient.Messenger.Queue.SynchronizedQueue;
 import com.Group3.monitorClient.testClasses.AddRemoveThread_TestClass;
 
 import java.util.Random;
@@ -49,7 +49,7 @@ public class SynchronizedQueue_Test {
         for(long x = 0; x < 6; x++){
             TimingMonitorData timingMonitorData = new TimingMonitorData();
             timingMonitorData.setEventID(x);
-            syncQueue.Add(timingMonitorData);
+            syncQueue.Put(timingMonitorData);
         }
 
         for(int x = 0; x < 5; x++){

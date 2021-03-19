@@ -1,6 +1,6 @@
 package com.Group3.monitorClient.testClasses;
 
-import com.Group3.MonitorClient.Messenger.SynchronizedQueue;
+import com.Group3.monitorClient.Messenger.Queue.SynchronizedQueue;
 import org.openapitools.client.model.TimingMonitorData;
 
 import java.util.Random;
@@ -31,11 +31,11 @@ public class AddRemoveThread_TestClass implements Runnable{
             }
 
             timingMonitorData = new TimingMonitorData();
-            syncQueue.Add(timingMonitorData);
+            syncQueue.Put(timingMonitorData);
         }
 
         for(int x = 0; x < takeNum; x++){
-            syncQueue.Take();
+            syncQueue.Delete();
         }
     }
 }

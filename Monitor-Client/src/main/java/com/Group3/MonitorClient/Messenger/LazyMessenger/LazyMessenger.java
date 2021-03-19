@@ -1,10 +1,10 @@
-package com.Group3.MonitorClient.Messenger.LazyMessenger;
+package com.Group3.monitorClient.Messenger.LazyMessenger;
 
-import com.Group3.MonitorClient.Messenger.LazyMessenger.Requirements.Requirement;
-import com.Group3.MonitorClient.Messenger.Messenger;
-import com.Group3.MonitorClient.Messenger.GreedyMessenger;
-import com.Group3.MonitorClient.Messenger.SynchronizedQueue;
-import org.openapitools.client.model.TimingMonitorData;
+import com.Group3.monitorClient.Messenger.*;
+import com.Group3.monitorClient.Messenger.LazyMessenger.Requirements.Requirement;
+import com.Group3.monitorClient.Messenger.Queue.QueueInterface;
+import com.Group3.monitorClient.Messenger.messages.MessageCreator;
+import com.Group3.monitorClient.Messenger.messages.MessageInterface;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,24 +14,20 @@ import java.util.List;
  * It periodically checks Requirements added to the class,
  * then pauses or resumes the Messenger based on how the requirements tests
  */
-public class LazyMessenger implements Messenger {
-    protected Messenger subMessenger;
-    private SynchronizedQueue<TimingMonitorData> messageQueue;
+public class LazyMessenger implements MessengerInterface {
+    protected MessengerInterface subMessenger;
+    private MessageCreator messageCreator = new MessageCreator();
+    private QueueInterface<MessageInterface> messageQueue;
     private List<Requirement> requirementList = new LinkedList<Requirement>();
     private boolean running = true;
     private boolean paused = false;
     private Thread thread;
 
-    public LazyMessenger(String monitorIP){
-        messageQueue = new SynchronizedQueue<TimingMonitorData>();
-        subMessenger = new GreedyMessenger(monitorIP, messageQueue);
-    }
-
     /*
      * specifies which SynchronizedQueue to utilize,
      * useful if multiple messengers should share the same queue.
      */
-    public LazyMessenger(String monitorIP, SynchronizedQueue<TimingMonitorData> messageQueue){
+    public LazyMessenger(String monitorIP, QueueInterface<MessageInterface> messageQueue){
         subMessenger = new GreedyMessenger(monitorIP, messageQueue);
         this.messageQueue = messageQueue;
     }
@@ -89,10 +85,10 @@ public class LazyMessenger implements Messenger {
         requirementList.add(requirement);
     }
 
-    /* Adds monitorData to the monitor queue, to be sent later when requirements allow. */
+    /* Adds a message to the message-queue, to be sent later when requirements allow. */
     @Override
-    public void AddMonitorData(TimingMonitorData monitorData){
-        messageQueue.Add(monitorData);
+    public void AddMessage(MessageInterface message){
+        messageQueue.Put(message);
     }
 
     /*
@@ -116,13 +112,7 @@ public class LazyMessenger implements Messenger {
     public void run() {
         RunningLoop: while(running){
             while(paused){
-                try {
-                    synchronized (this) {
-                        wait();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                ThreadWait(0);
                 if(!running){
                     break RunningLoop;
                 }
@@ -134,13 +124,18 @@ public class LazyMessenger implements Messenger {
                 subMessenger.Pause();
             }
 
-            try {
-                synchronized (this) {
-                    wait(5000);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            ThreadWait(5000);
+        }
+    }
+
+    /* waits for specified amount of MilliSeconds if 0, waits until another calls thread.notify() */
+    private void ThreadWait(int MilliSeconds){
+        try {
+            synchronized(this){
+                wait(MilliSeconds);
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

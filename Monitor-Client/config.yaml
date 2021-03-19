@@ -1,0 +1,9 @@
+templateDir: src/main/resources/cstTemplates
+files:
+  model_test.mustache:
+    templateType: ModelTests
+    destinationFilename: .java
+
+  test/api_test.mustache:
+    templateType: APITests
+    destinationFilename: .java
