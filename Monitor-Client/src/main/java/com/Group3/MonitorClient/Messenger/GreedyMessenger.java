@@ -94,7 +94,7 @@ public class GreedyMessenger implements MessengerInterface {
         if (message != null) {
             /*
              * Attempts to send a given message 10 times until successful,
-             * Unless given a SocketTimeoutException, in which case it loops indefinitely
+             * Unless unable to connect to the server, in which case it loops indefinitely
              */
             int Loop = 0;
             do{
@@ -107,6 +107,7 @@ public class GreedyMessenger implements MessengerInterface {
                         System.out.println("Cannot connect to monitor server, waiting 5 seconds and retrying");
                         ThreadWait(5000);
                         Loop--; //if the messenger can't connect to MonitorServer it will loop indefinitely until connection is established.
+                        //TODO: insert connection error message in queue
                     } else {
                         e.printStackTrace();
                     }
