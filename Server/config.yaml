@@ -3,7 +3,7 @@ files:
   MonitorClientInterface.mustache:
     templateType: SupportingFiles
     destinationFilename: MonitorClientInterface.java
-    folder: src/gen/java/main/com/Group3/monitorClient/controller
+    folder: src/gen/java/main/com/Group3/monitor/client
 
   client/ApiCallback.mustache:
     templateType: SupportingFiles
@@ -95,7 +95,25 @@ files:
     destinationFilename: HttpBearerAuth.java
     folder: src/gen/java/main/com/Group3/client/auth
 
-  model/TimingMonitorData.mustache:
+  model/timingMonitorData.mustache:
     templateType: SupportingFiles
     destinationFilename: TimingMonitorData.java
-    folder: src/gen/java/main/com/Group3/client/model
+    folder: src/gen/java/main/com/Group3/monitor/model
+
+  api/controller/apiController.mustache:
+    templateType: API
+    destinationFilename: Controller.java
+  
+  api/api.mustache:
+    templateType: API
+    destinationFilename: .java
+
+  configuration/configManager.mustache:
+    templateType: SupportingFiles
+    destinationFilename: ConfigurationManager.java
+    folder: src/gen/java/main/com/Group3/monitor/configuration
+  
+  exception/monitorConfigException.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MonitorConfigException.java
+    folder: src/gen/java/main/com/Group3/monitor/exception

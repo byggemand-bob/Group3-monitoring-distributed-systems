@@ -253,11 +253,11 @@ public class {{classname}} {
     @Deprecated
     {{/isDeprecated}}
     public {{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}{{operationId}}({{#allParams}}{{{dataType}}} {{paramName}}{{^-last}}, {{/-last}}{{/allParams}}) throws ApiException {
-        final long eventID = monitorClientInterface.queueMonitorData("{{{path}}}", EventCodeEnum.SENDREQUEST);//TODO:FIX!
+        final long eventID = monitorClientInterface.queueMonitorData("{{{path}}}", EventCodeEnum.SENDREQUEST);
 
         {{#returnType}}ApiResponse<{{{returnType}}}> localVarResp = {{/returnType}}{{operationId}}WithHttpInfo({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}});{{#returnType}}
 
-        monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.RECEIVERESPONSE);//TODO:FIX!
+        monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.RECEIVERESPONSE);
         return localVarResp.getData();{{/returnType}}
     }
     {{/vendorExtensions.x-group-parameters}}
