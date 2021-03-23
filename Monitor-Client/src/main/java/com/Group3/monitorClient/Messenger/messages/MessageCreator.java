@@ -8,9 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MessageCreator {
-    private enum MessageTypeID{
-        TimingMonitorData
-    }
+
 
     /* receives a ResultSet, representing an message and converts it back into a message structure */
     public MessageInterface CreateMessageFromSQL(ResultSet SQLQuery){
@@ -30,7 +28,7 @@ public class MessageCreator {
 
     /* Converts TimingMonitorData into a Message format */
     public MessageInterface MakeMessage(TimingMonitorData timingMonitorData){
-        return new TimingMonitorDataMessage(timingMonitorData, MessageTypeID.TimingMonitorData.ordinal());
+        return new TimingMonitorDataMessage(timingMonitorData);
     }
 
     /* converts a sqlQuery representing a TimingMonitorData and reconstructs it into a message format */
@@ -44,7 +42,7 @@ public class MessageCreator {
             timingMonitorData.setTimestamp(ConvertStringToDateTime(dateTimeString));
 
             String blob = sqlQuery.getString("Message");
-            String[] blobSplit = blob.split(",");
+            String[] blobSplit = blob.split(MessageInterface.Separator);
 
             timingMonitorData.setTargetEndpoint(blobSplit[0]);
 

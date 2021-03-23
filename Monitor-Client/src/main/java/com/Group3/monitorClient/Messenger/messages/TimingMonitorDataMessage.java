@@ -8,9 +8,9 @@ public class TimingMonitorDataMessage implements MessageInterface {
     private TimingMonitorData timingMonitorData;
     private int messageTypeID;
 
-    public TimingMonitorDataMessage(TimingMonitorData timingMonitorData, int messageTypeID){
+    public TimingMonitorDataMessage(TimingMonitorData timingMonitorData){
         this.timingMonitorData = timingMonitorData;
-        this.messageTypeID = messageTypeID;
+        this.messageTypeID = MessageTypeID.TimingMonitorData.ordinal();
     }
 
     /* Message sends itself using the given MonitorAPI */
@@ -22,7 +22,7 @@ public class TimingMonitorDataMessage implements MessageInterface {
     /* the message converts itself into an sql format, and saves itself using provided SQLManager */
     @Override
     public void MakeSQL(SQLManager sqlManager) {
-        String blob = timingMonitorData.getTargetEndpoint() + "," + timingMonitorData.getEventID();
+        String blob = timingMonitorData.getTargetEndpoint() + Separator + timingMonitorData.getEventID();
         sqlManager.InsertMessage("queue", timingMonitorData.getSenderID(), messageTypeID, timingMonitorData.getTimestamp().toString(), blob);
     }
 
