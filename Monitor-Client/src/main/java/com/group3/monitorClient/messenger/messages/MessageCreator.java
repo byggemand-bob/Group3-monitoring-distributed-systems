@@ -1,5 +1,6 @@
 package com.group3.monitorClient.messenger.messages;
 
+import org.openapitools.client.model.ErrorData;
 import org.openapitools.client.model.TimingMonitorData;
 import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -11,16 +12,18 @@ public class MessageCreator {
 
 
     /* receives a ResultSet, representing an message and converts it back into a message structure */
-    public MessageInterface CreateMessageFromSQL(ResultSet SQLQuery){
+    public MessageInterface CreateMessageFromSQL(ResultSet rs){
         int TypeID = -1;
         try {
-            TypeID = SQLQuery.getInt("MessageType");
+            TypeID = rs.getInt("MessageType");
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         if(TypeID == MessageTypeID.TimingMonitorData.ordinal()){
-            return CreateTimingMonitorData(SQLQuery);
+            return CreateTimingMonitorData(rs);
+        } else if (TypeID == MessageTypeID.ErrorData.ordinal()){
+            return CreateErrorData(rs);
         }
 
         return null;
@@ -31,18 +34,22 @@ public class MessageCreator {
         return new TimingMonitorDataMessage(timingMonitorData);
     }
 
-    /* converts a sqlQuery representing a TimingMonitorData and reconstructs it into a message format */
-    private MessageInterface CreateTimingMonitorData(ResultSet sqlQuery) {
+    public MessageInterface MakeMessage(ErrorData errorData) {
+        return new ErrorDataMessage(errorData);
+    }
+
+    /* converts a resultSet representing a TimingMonitorData and reconstructs it into a message format */
+    private MessageInterface CreateTimingMonitorData(ResultSet rs) {
         TimingMonitorData timingMonitorData = new TimingMonitorData();
         MessageInterface message = null;
         try {
-            timingMonitorData.setSenderID(sqlQuery.getLong("SenderID"));
+            timingMonitorData.setSenderID(rs.getLong("SenderID"));
 
-            String dateTimeString = sqlQuery.getString("Timestamp");
+            String dateTimeString = rs.getString("Timestamp");
             timingMonitorData.setTimestamp(ConvertStringToDateTime(dateTimeString));
 
-            String blob = sqlQuery.getString("Message");
-            String[] blobSplit = blob.split(MessageInterface.Separator);
+            String blob = rs.getString("Message");
+            String[] blobSplit = blob.split(MessageInterface.separator);
 
             timingMonitorData.setTargetEndpoint(blobSplit[0]);
 
@@ -55,8 +62,34 @@ public class MessageCreator {
         return message;
     }
 
+    /* converts a resultSet representing a ErrorData and reconstructs it into a message format */
+    private MessageInterface CreateErrorData(ResultSet rs) {
+        ErrorData errorData = new ErrorData();
+        MessageInterface message = null;
+        try {
+            errorData.setSenderID(rs.getLong("SenderID"));
+            String dateTimeString = rs.getString("Timestamp");
+            errorData.setTimestamp(ConvertStringToDateTime(dateTimeString));
+
+            String blob = rs.getString("Message");
+            String[] blobSplit = blob.split(MessageInterface.separator);
+
+            errorData.setHttpResponse(Integer.parseInt(blobSplit[0]));
+
+            errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.values()[Integer.parseInt(blobSplit[1])]);
+
+            errorData.setComment(blobSplit[2]);
+
+            message = MakeMessage(errorData);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return message;
+    }
+
     /* Converts a given string into a Datetime data-structure */
     private OffsetDateTime ConvertStringToDateTime(String string){
         return OffsetDateTime.parse(string, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
+
 }

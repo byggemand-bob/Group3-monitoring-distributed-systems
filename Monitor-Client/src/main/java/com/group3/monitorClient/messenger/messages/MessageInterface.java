@@ -1,13 +1,14 @@
 package com.group3.monitorClient.messenger.messages;
 
+import com.group3.monitorClient.controller.MonitorClientInterface;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.api.MonitorApi;
 
 public interface MessageInterface {
-    String Separator = ",";
+    String separator = ",";
 
     /* Send message to MonitorServer, and returns http status code */
-    int send(MonitorApi MonitorClient) throws ApiException;
+    int send(MonitorClientInterface monitorClientInterface) throws ApiException;
 
     /*
      * Create SQL-query to save message data in SQL database

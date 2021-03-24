@@ -31,7 +31,7 @@ paths:
         - "Error"
       summary: "Wrap the failing messages in errors"
       description: "Create an error message"
-      operationId: "sendError"
+      operationId: "addErrorData"
       requestBody:
         content:
           "application/json":

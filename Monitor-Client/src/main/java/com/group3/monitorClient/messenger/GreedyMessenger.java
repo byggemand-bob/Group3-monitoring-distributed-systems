@@ -1,5 +1,6 @@
 package com.group3.monitorClient.messenger;
 
+import com.group3.monitorClient.controller.MonitorClientInterface;
 import com.group3.monitorClient.messenger.queue.QueueInterface;
 import com.group3.monitorClient.messenger.messages.MessageCreator;
 import com.group3.monitorClient.messenger.messages.MessageInterface;
@@ -12,6 +13,7 @@ import org.openapitools.client.api.MonitorApi;
  * It Utilizes the MonitorApi and will indefinably probe the queue until stopped or paused.
  */
 public class GreedyMessenger implements MessengerInterface {
+    protected MonitorClientInterface monitorClientInterface;
     protected MonitorApi monitorClient;
     private boolean running = true;
     private boolean paused = false;
@@ -24,9 +26,7 @@ public class GreedyMessenger implements MessengerInterface {
      * useful if multiple messengers should share the same queue.
      */
     public GreedyMessenger(String monitorIP, QueueInterface<MessageInterface> messageQueue){
-        ApiClient client = new ApiClient();
-        client.setBasePath(monitorIP);
-        monitorClient = new MonitorApi(client);
+        monitorClientInterface = new MonitorClientInterface(monitorIP);
         this.messageQueue = messageQueue;
     }
 
@@ -99,7 +99,7 @@ public class GreedyMessenger implements MessengerInterface {
             int Loop = 0;
             do{
                 try {
-                    statusCode = message.send(monitorClient);
+                    statusCode = message.send(monitorClientInterface);
                 } catch (ApiException e){
                     String exceptionString = e.toString();
 
