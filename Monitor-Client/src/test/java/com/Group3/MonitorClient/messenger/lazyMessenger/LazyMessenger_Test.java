@@ -23,7 +23,7 @@ public class LazyMessenger_Test {
         messenger.AddRequirement(trueRequirement);
 
         for(int x = 0; x < 5; x++){
-            queue.Put(new TimingMonitorDataMessage(new TimingMonitorData(), 0));
+            queue.Put(new TimingMonitorDataMessage(new TimingMonitorData()));
         }
 
         /* Confirms no messages was send before the messenger was started */
@@ -39,7 +39,7 @@ public class LazyMessenger_Test {
         int SizeOfQueueBefore = queue.Size();
 
         for(int x = 0; x < 5; x++){
-            queue.Put(new TimingMonitorDataMessage(new TimingMonitorData(), 0));
+            queue.Put(new TimingMonitorDataMessage(new TimingMonitorData()));
         }
 
         /* confirms that the messenger is paused, and is not sending messages */
@@ -86,7 +86,7 @@ public class LazyMessenger_Test {
         messenger.AddRequirement(Requirement3);
 
         for(int x = 0; x < 5; x++){
-            queue.Put(new TimingMonitorDataMessage(new TimingMonitorData(), 0));
+            queue.Put(new TimingMonitorDataMessage(new TimingMonitorData()));
         }
 
         /* ensures the the messenger isn't sending messages before being started */

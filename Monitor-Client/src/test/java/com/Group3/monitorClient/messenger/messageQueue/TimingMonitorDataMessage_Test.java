@@ -22,14 +22,13 @@ public class TimingMonitorDataMessage_Test extends AbstractSQLTest {
         long senderID_test = 0L;
         String timeStamp_test = "0";
         int messageType_test = 0;
-        int messageType = 1;
         TimingMonitorData timingMonitorData = new TimingMonitorData();
         OffsetDateTime offsetDateTime = OffsetDateTime.now();
         timingMonitorData.setSenderID(21L);
         timingMonitorData.setTimestamp(offsetDateTime);
         timingMonitorData.setTargetEndpoint("/monitor");
         timingMonitorData.setEventID(22L);
-        MessageInterface messageInterface = new TimingMonitorDataMessage(timingMonitorData, messageType);
+        MessageInterface messageInterface = new TimingMonitorDataMessage(timingMonitorData);
 
         //Act
         sqlManager.CreateNewTable(tableName,
@@ -57,6 +56,6 @@ public class TimingMonitorDataMessage_Test extends AbstractSQLTest {
         Assertions.assertEquals(timingMonitorData.getSenderID(), senderID_test);
         Assertions.assertEquals(timingMonitorData.getTimestamp().toString(), timeStamp_test);
         Assertions.assertEquals(timingMonitorData.getTargetEndpoint(), targetEndpoint_test);
-        Assertions.assertEquals(messageType, messageType_test);
+        Assertions.assertEquals(0, messageType_test);
     }
 }
