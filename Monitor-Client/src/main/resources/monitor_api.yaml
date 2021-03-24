@@ -61,7 +61,7 @@ components:
           type: integer
           format: int32
           description: "HttpResponse gotten when the error occurred"
-          example: 200
+          example: 404
         ErrorMessageType:
           type: string
           enum:
@@ -69,14 +69,15 @@ components:
             - HttpError
             - notRecognised
           description: "Error message type for when fx connection is lost"
-          example: noConnection
+          example: HttpError
         Comment:
           type: string
-          description: "For futher elaboration about a given error"
-          example: ""
+          description: "For further elaboration about a given error"
+          example: "Trying to contact node 3, error code 404 was received"
       required:
         - Timestamp
         - SenderID
+        - ErrorMessageType
 
     TimingMonitorData:
       type: object
