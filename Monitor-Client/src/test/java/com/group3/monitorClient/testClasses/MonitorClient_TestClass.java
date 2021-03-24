@@ -10,6 +10,7 @@ import java.util.HashMap;
  * class overwrites addMonitorData in MonitorApi to do nothing for testing purposes,
  * this removes the need for connecting to a server
  */
+//TODO: If not used in the end delete file
 public class MonitorClient_TestClass extends MonitorApi {
     int ResponseStatusCode = 200;
 

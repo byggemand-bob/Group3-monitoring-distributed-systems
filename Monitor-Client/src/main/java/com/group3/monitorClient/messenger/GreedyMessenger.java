@@ -14,7 +14,6 @@ import org.openapitools.client.api.MonitorApi;
  */
 public class GreedyMessenger implements MessengerInterface {
     protected MonitorClientInterface monitorClientInterface;
-    protected MonitorApi monitorClient;
     private boolean running = true;
     private boolean paused = false;
     private QueueInterface<MessageInterface> messageQueue;
