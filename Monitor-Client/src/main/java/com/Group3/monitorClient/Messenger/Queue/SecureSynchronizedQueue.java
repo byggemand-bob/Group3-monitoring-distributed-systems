@@ -1,4 +1,4 @@
-package com.Group3.monitorClient.messenger.queue;
+package com.group3.monitorClient.messenger.queue;
 
 /*
 * SecureSynchronizedQueue purpose is like its parent class to ensure only one thread has access to the queue.

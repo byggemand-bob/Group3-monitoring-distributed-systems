@@ -1,4 +1,4 @@
-package com.Group3.monitorClient;
+package com.group3.monitorClient;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.sql.*;

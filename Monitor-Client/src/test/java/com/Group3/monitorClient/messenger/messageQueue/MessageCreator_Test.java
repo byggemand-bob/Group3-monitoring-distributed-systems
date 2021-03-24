@@ -1,9 +1,9 @@
-package com.Group3.monitorClient.messenger.messageQueue;
+package com.group3.monitorClient.messenger.messageQueue;
 
-import com.Group3.monitorClient.AbstractSQLTest;
-import com.Group3.monitorClient.messenger.messages.MessageInterface;
-import com.Group3.monitorClient.messenger.messages.MessageCreator;
-import com.Group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
+import com.group3.monitorClient.AbstractSQLTest;
+import com.group3.monitorClient.messenger.messages.MessageInterface;
+import com.group3.monitorClient.messenger.messages.MessageCreator;
+import com.group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.TimingMonitorData;

@@ -1,10 +1,10 @@
-package com.Group3.monitorClient.messenger;
+package com.group3.monitorClient.messenger;
 
-import com.Group3.monitorClient.messenger.messages.MessageCreator;
-import com.Group3.monitorClient.messenger.messages.MessageInterface;
-import com.Group3.monitorClient.messenger.queue.SynchronizedQueue;
-import com.Group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
-import com.Group3.monitorClient.testClasses.GreedyMessenger_TestClass;
+import com.group3.monitorClient.messenger.messages.MessageCreator;
+import com.group3.monitorClient.messenger.messages.MessageInterface;
+import com.group3.monitorClient.messenger.queue.SynchronizedQueue;
+import com.group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
+import com.group3.monitorClient.testClasses.GreedyMessenger_TestClass;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

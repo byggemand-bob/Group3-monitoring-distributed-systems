@@ -1,4 +1,4 @@
-package com.Group3.monitorClient.controller;
+package com.group3.monitorClient.controller;
 
 public class MonitorClientInterface{
 //    private String monitorIP;

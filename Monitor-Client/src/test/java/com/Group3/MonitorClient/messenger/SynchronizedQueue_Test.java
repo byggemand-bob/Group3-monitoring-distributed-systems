@@ -1,7 +1,7 @@
-package com.Group3.monitorClient.messenger;
+package com.group3.monitorClient.messenger;
 
-import com.Group3.monitorClient.messenger.queue.SynchronizedQueue;
-import com.Group3.monitorClient.testClasses.AddRemoveThread_TestClass;
+import com.group3.monitorClient.messenger.queue.SynchronizedQueue;
+import com.group3.monitorClient.testClasses.AddRemoveThread_TestClass;
 
 import java.util.Random;
 

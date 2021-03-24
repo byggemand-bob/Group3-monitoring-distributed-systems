@@ -1,4 +1,4 @@
-package com.Group3.monitorClient.messenger.messages;
+package com.group3.monitorClient.messenger.messages;
 
 public enum MessageTypeID {
     TimingMonitorData,

@@ -1,6 +1,6 @@
-package com.Group3.monitorClient.messenger;
+package com.group3.monitorClient.messenger;
 
-import com.Group3.monitorClient.messenger.messages.MessageInterface;
+import com.group3.monitorClient.messenger.messages.MessageInterface;
 
 public interface MessengerInterface extends Runnable {
     void Start();

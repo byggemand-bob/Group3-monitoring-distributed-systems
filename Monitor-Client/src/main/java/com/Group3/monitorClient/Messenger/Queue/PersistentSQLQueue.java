@@ -1,8 +1,8 @@
-package com.Group3.monitorClient.messenger.queue;
+package com.group3.monitorClient.messenger.queue;
 
-import com.Group3.monitorClient.messenger.messages.MessageCreator;
-import com.Group3.monitorClient.messenger.messages.MessageInterface;
-import com.Group3.monitorClient.messenger.messages.SQLManager;
+import com.group3.monitorClient.messenger.messages.MessageCreator;
+import com.group3.monitorClient.messenger.messages.MessageInterface;
+import com.group3.monitorClient.messenger.messages.SQLManager;
 
 import java.sql.ResultSet;
 

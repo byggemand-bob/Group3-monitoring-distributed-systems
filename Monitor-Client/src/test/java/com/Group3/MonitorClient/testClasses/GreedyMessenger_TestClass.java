@@ -1,8 +1,8 @@
-package com.Group3.monitorClient.testClasses;
+package com.group3.monitorClient.testClasses;
 
-import com.Group3.monitorClient.messenger.GreedyMessenger;
-import com.Group3.monitorClient.messenger.messages.MessageInterface;
-import com.Group3.monitorClient.messenger.queue.SynchronizedQueue;
+import com.group3.monitorClient.messenger.GreedyMessenger;
+import com.group3.monitorClient.messenger.messages.MessageInterface;
+import com.group3.monitorClient.messenger.queue.SynchronizedQueue;
 
 /*
  * Test class set monitorClient in GreedyMessenger to MonitorClient_TestClass,

@@ -1,4 +1,4 @@
-package com.Group3.monitorClient.testClasses;
+package com.group3.monitorClient.testClasses;
 
 import org.openapitools.client.ApiResponse;
 import org.openapitools.client.api.MonitorApi;

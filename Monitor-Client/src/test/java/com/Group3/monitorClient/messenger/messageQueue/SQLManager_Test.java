@@ -1,6 +1,6 @@
-package com.Group3.monitorClient.messenger.messageQueue;
+package com.group3.monitorClient.messenger.messageQueue;
 
-import com.Group3.monitorClient.AbstractSQLTest;
+import com.group3.monitorClient.AbstractSQLTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.threeten.bp.OffsetDateTime;

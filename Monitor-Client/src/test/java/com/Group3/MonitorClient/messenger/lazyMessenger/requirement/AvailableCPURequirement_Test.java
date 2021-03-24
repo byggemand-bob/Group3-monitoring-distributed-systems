@@ -1,9 +1,9 @@
-package com.Group3.monitorClient.messenger.lazyMessenger.requirement;
+package com.group3.monitorClient.messenger.lazyMessenger.requirement;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.Group3.monitorClient.testClasses.AvailableCPURequirement_TestClass;
+import com.group3.monitorClient.testClasses.AvailableCPURequirement_TestClass;
 
 public class AvailableCPURequirement_Test {
     /* tests when the system usage is above the minimum required available memory*/
