@@ -1,6 +1,6 @@
 package com.Group3.monitorClient.testClasses;
 
-import com.Group3.monitorClient.Messenger.Queue.SynchronizedQueue;
+import com.Group3.monitorClient.messenger.queue.SynchronizedQueue;
 import org.openapitools.client.model.TimingMonitorData;
 
 import java.util.Random;

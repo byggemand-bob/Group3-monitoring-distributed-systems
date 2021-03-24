@@ -1,8 +1,8 @@
-package com.Group3.monitorClient.Messenger;
+package com.Group3.monitorClient.messenger;
 
-import com.Group3.monitorClient.Messenger.Queue.QueueInterface;
-import com.Group3.monitorClient.Messenger.messages.MessageCreator;
-import com.Group3.monitorClient.Messenger.messages.MessageInterface;
+import com.Group3.monitorClient.messenger.queue.QueueInterface;
+import com.Group3.monitorClient.messenger.messages.MessageCreator;
+import com.Group3.monitorClient.messenger.messages.MessageInterface;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.api.MonitorApi;

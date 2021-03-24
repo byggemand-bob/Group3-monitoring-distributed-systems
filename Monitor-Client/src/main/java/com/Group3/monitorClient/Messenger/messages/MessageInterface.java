@@ -1,6 +1,5 @@
-package com.Group3.monitorClient.Messenger.messages;
+package com.Group3.monitorClient.messenger.messages;
 
-import com.Group3.monitorClient.Messenger.messages.SQLManager;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.api.MonitorApi;
 

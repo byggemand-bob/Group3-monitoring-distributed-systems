@@ -1,12 +1,11 @@
 package com.Group3.monitorClient.messenger.lazyMessenger;
 
-import com.Group3.monitorClient.Messenger.LazyMessenger.LazyMessenger;
-import com.Group3.monitorClient.Messenger.messages.MessageCreator;
-import com.Group3.monitorClient.Messenger.messages.MessageInterface;
-import com.Group3.monitorClient.Messenger.messages.TimingMonitorDataMessage;
+import com.Group3.monitorClient.messenger.messages.MessageCreator;
+import com.Group3.monitorClient.messenger.messages.MessageInterface;
+import com.Group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
 import com.Group3.monitorClient.testClasses.LazyMessenger_TestClass;
 import com.Group3.monitorClient.testClasses.TrueFalseRequirement_TestClass;
-import com.Group3.monitorClient.Messenger.Queue.SynchronizedQueue;
+import com.Group3.monitorClient.messenger.queue.SynchronizedQueue;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

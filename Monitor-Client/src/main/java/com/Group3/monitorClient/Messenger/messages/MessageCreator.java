@@ -1,4 +1,4 @@
-package com.Group3.monitorClient.Messenger.messages;
+package com.Group3.monitorClient.messenger.messages;
 
 import org.openapitools.client.model.TimingMonitorData;
 import org.threeten.bp.OffsetDateTime;

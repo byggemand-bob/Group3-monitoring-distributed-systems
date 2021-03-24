@@ -1,6 +1,6 @@
 package com.Group3.monitorClient;
 
-import com.Group3.monitorClient.Messenger.messages.SQLManager;
+import com.Group3.monitorClient.messenger.messages.SQLManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 

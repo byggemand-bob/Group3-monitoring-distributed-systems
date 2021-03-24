@@ -1,7 +1,6 @@
-package com.Group3.monitorClient.Messenger;
+package com.Group3.monitorClient.messenger;
 
-import com.Group3.monitorClient.Messenger.messages.MessageInterface;
-import org.openapitools.client.model.TimingMonitorData;
+import com.Group3.monitorClient.messenger.messages.MessageInterface;
 
 public interface MessengerInterface extends Runnable {
     void Start();

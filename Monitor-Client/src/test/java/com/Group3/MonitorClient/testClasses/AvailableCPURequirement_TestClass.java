@@ -1,6 +1,6 @@
 package com.Group3.monitorClient.testClasses;
 
-import com.Group3.monitorClient.Messenger.LazyMessenger.Requirements.AvailableCPURequirement;
+import com.Group3.monitorClient.messenger.lazyMessenger.requirements.AvailableCPURequirement;
 
 /* Test class that overrides the SystemCpuUsage() method to return a constant predictable value for testing */
 public class AvailableCPURequirement_TestClass extends AvailableCPURequirement {

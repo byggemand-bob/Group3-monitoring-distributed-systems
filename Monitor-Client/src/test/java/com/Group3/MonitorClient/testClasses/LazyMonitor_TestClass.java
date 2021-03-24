@@ -1,8 +1,8 @@
 package com.Group3.monitorClient.testClasses;
 
-import com.Group3.monitorClient.Messenger.LazyMessenger.LazyMessenger;
-import com.Group3.monitorClient.Messenger.messages.MessageInterface;
-import com.Group3.monitorClient.Messenger.Queue.SynchronizedQueue;
+import com.Group3.monitorClient.messenger.lazyMessenger.LazyMessenger;
+import com.Group3.monitorClient.messenger.messages.MessageInterface;
+import com.Group3.monitorClient.messenger.queue.SynchronizedQueue;
 
 /*
  * Replaces the subMessenger with GreedyMessenger_TestClass,

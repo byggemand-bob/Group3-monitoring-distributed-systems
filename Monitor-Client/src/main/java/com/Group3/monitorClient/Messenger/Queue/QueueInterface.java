@@ -1,4 +1,4 @@
-package com.Group3.monitorClient.Messenger.Queue;
+package com.Group3.monitorClient.messenger.queue;
 
 public interface QueueInterface<T> {
     /* puts an element in the queue */

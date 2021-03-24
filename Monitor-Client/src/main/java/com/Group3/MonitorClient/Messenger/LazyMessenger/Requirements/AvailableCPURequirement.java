@@ -1,4 +1,4 @@
-package com.Group3.monitorClient.Messenger.LazyMessenger.Requirements;
+package com.Group3.monitorClient.messenger.lazyMessenger.requirements;
 
 import com.sun.management.OperatingSystemMXBean;
 import java.lang.management.ManagementFactory;

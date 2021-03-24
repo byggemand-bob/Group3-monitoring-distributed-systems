@@ -1,6 +1,6 @@
 package com.Group3.monitorClient.testClasses;
 
-import com.Group3.monitorClient.Messenger.LazyMessenger.Requirements.Requirement;
+import com.Group3.monitorClient.messenger.lazyMessenger.requirements.Requirement;
 
 /* test requirement class, simulates a requirement returning either true or false for testing purposes */
 public class TrueFalseRequirement_TestClass implements Requirement {

@@ -1,7 +1,6 @@
 package com.Group3.monitorClient;
 
 
-import org.hamcrest.core.IsInstanceOf;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.ApiResponse;
@@ -16,7 +15,6 @@ import java.io.InputStreamReader;
 
 import java.net.SocketTimeoutException;
 
-import com.Group3.monitorClient.Controller.MonitorClientInterface;
 import org.threeten.bp.OffsetDateTime;
 
 @SpringBootApplication

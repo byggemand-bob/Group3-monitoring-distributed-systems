@@ -1,10 +1,10 @@
-package com.Group3.monitorClient.Messenger.LazyMessenger;
+package com.Group3.monitorClient.messenger.lazyMessenger;
 
-import com.Group3.monitorClient.Messenger.*;
-import com.Group3.monitorClient.Messenger.LazyMessenger.Requirements.Requirement;
-import com.Group3.monitorClient.Messenger.Queue.QueueInterface;
-import com.Group3.monitorClient.Messenger.messages.MessageCreator;
-import com.Group3.monitorClient.Messenger.messages.MessageInterface;
+import com.Group3.monitorClient.messenger.lazyMessenger.requirements.Requirement;
+import com.Group3.monitorClient.messenger.queue.QueueInterface;
+import com.Group3.monitorClient.messenger.messages.MessageCreator;
+import com.Group3.monitorClient.messenger.messages.MessageInterface;
+import com.Group3.monitorClient.messenger.*;
 
 import java.util.LinkedList;
 import java.util.List;
