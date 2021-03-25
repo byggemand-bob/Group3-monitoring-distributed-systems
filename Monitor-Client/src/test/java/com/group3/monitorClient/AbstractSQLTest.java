@@ -2,12 +2,21 @@ package com.group3.monitorClient;
 
 import com.group3.monitorClient.messenger.messages.SQLManager;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
 
 public class AbstractSQLTest {
     public static SQLManager sqlManager;// = new SQLManager("src/main/resources/sqlite/db/", "test.db");
+
+    @BeforeAll
+    static void setupDir() {
+        File path = new File("src/main/resources/sqlite/db/");
+        if (!path.exists()) {
+            path.mkdirs();
+        }
+    }
 
     /* Creates a new sql database before each test */
     @BeforeEach
