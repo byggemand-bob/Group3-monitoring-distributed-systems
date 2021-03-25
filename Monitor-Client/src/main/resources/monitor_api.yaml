@@ -67,7 +67,7 @@ components:
           enum:
             - noConnection
             - HttpError
-            - notRecognised
+            - unknownError
           description: "Error message type for when fx connection is lost"
           example: HttpError
         Comment:
