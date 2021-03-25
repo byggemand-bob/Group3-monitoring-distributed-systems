@@ -92,17 +92,16 @@ public class GreedyMessenger implements MessengerInterface {
     /* Sends next message in the messageQueue */
     private void SendMessage(){
         MessageInterface message = messageQueue.Take();
-        int statusCode = -1;
 
         if (message != null) {
+            int loop = 0, statusCode = -1;
+            boolean socketTimeout = false;
+            ErrorData errorData = null;
+
             /*
              * Attempts to send a given message 10 times until successful,
              * Unless unable to connect to the server, in which case it loops indefinitely
              */
-            int loop = 0;
-            boolean socketTimeout = false;
-            ErrorData errorData = null;
-
             do{
                 boolean errorOccurrence = false;
                 try {
@@ -116,6 +115,7 @@ public class GreedyMessenger implements MessengerInterface {
                         ThreadWait(5000);
                         loop--; //if the messenger can't connect to MonitorServer it will loop indefinitely until connection is established.
 
+                        /* Create a noConnection error, but only one at a time */
                         if (!socketTimeout) {
                             socketTimeout = true;
                             errorData = new ErrorData();
@@ -129,6 +129,7 @@ public class GreedyMessenger implements MessengerInterface {
                     }
                 }
 
+                /* If a SocketTimeout occurred and connection is re-established, complete the noConnection message and queue it */
                 if (socketTimeout && !errorOccurrence) {
                     errorData.setComment(errorData.getComment() + "Connection re-established: " + OffsetDateTime.now().toString());
                     MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
@@ -146,8 +147,6 @@ public class GreedyMessenger implements MessengerInterface {
         }
     }
 
-
-
     /* Checks the Response of message.send() and takes the appropriate action */
     private void CheckResponse(int response){
         if(response >= 200 && response < 300){
@@ -155,7 +154,7 @@ public class GreedyMessenger implements MessengerInterface {
         } else {
             ErrorData errorData = new ErrorData();
             if(response == -1){
-                if(running && !paused){ //TODO: change - preferably figure out what unknown error is supposed to be
+                if(running && !paused){ //TODO: change - preferably change from UnknownError to a defined error
                     //A non-SocketTimeoutException was thrown when sending the message
                     errorData.setTimestamp(OffsetDateTime.now());
                     errorData.setSenderID(senderID);
