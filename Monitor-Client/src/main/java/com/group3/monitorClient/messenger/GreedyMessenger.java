@@ -1,12 +1,15 @@
 package com.group3.monitorClient.messenger;
 
 import com.group3.monitorClient.controller.MonitorClientInterface;
+import com.group3.monitorClient.messenger.messages.ErrorDataMessage;
 import com.group3.monitorClient.messenger.queue.QueueInterface;
 import com.group3.monitorClient.messenger.messages.MessageCreator;
 import com.group3.monitorClient.messenger.messages.MessageInterface;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.api.MonitorApi;
+import org.openapitools.client.model.ErrorData;
+import org.threeten.bp.OffsetDateTime;
 
 /*
  * The GreedyMessenger class runs a continues thread sending TimingMonitorData from a SynchronizedQueue.
@@ -16,9 +19,10 @@ public class GreedyMessenger implements MessengerInterface {
     protected MonitorClientInterface monitorClientInterface;
     private boolean running = true;
     private boolean paused = false;
-    private QueueInterface<MessageInterface> messageQueue;
-    private MessageCreator messageCreator = new MessageCreator();
+    private final QueueInterface<MessageInterface> messageQueue;
+    private final MessageCreator messageCreator = new MessageCreator();
     private Thread thread;
+    private long senderID = 1L;//TODO: add real sender id instead of dummy data
 
     /*
      * specifies which SynchronizedQueue to utilize,
@@ -95,25 +99,46 @@ public class GreedyMessenger implements MessengerInterface {
              * Attempts to send a given message 10 times until successful,
              * Unless unable to connect to the server, in which case it loops indefinitely
              */
-            int Loop = 0;
+            int loop = 0;
+            boolean socketTimeout = false;
+            ErrorData errorData = null;
+
             do{
+                boolean errorOccurrence = false;
                 try {
                     statusCode = message.send(monitorClientInterface);
                 } catch (ApiException e){
                     String exceptionString = e.toString();
 
                     if(exceptionString.contains("java.net.SocketTimeoutException")){
+                        errorOccurrence = true;
                         System.out.println("Cannot connect to monitor server, waiting 5 seconds and retrying");
                         ThreadWait(5000);
-                        Loop--; //if the messenger can't connect to MonitorServer it will loop indefinitely until connection is established.
-                        //TODO: insert connection error message in queue
+                        loop--; //if the messenger can't connect to MonitorServer it will loop indefinitely until connection is established.
+
+                        if (!socketTimeout) {
+                            socketTimeout = true;
+                            errorData = new ErrorData();
+                            errorData.setTimestamp(OffsetDateTime.now());
+                            errorData.setSenderID(senderID);
+                            errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.NOCONNECTION);
+                            errorData.setComment("No connection to monitor server - start: " + errorData.getTimestamp().toString() + "\n");
+                        }
                     } else {
                         e.printStackTrace();
                     }
                 }
-                Loop++;
+
+                if (socketTimeout && !errorOccurrence) {
+                    errorData.setComment(errorData.getComment() + "Connection re-established: " + OffsetDateTime.now().toString());
+                    MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
+                    messageQueue.Put(errorDataMessage);
+                    socketTimeout = false;
+                }
+
+                loop++;
                 if(!running || paused){ break; }
-            } while(statusCode != 200 && Loop < 10);
+            } while(statusCode >= 200 && statusCode < 300 && loop < 10);
 
             CheckResponse(statusCode); //after 10 loops of none 200 response codes, check Response;
         } else {
@@ -121,18 +146,31 @@ public class GreedyMessenger implements MessengerInterface {
         }
     }
 
+
+
     /* Checks the Response of message.send() and takes the appropriate action */
-    private void CheckResponse(int Response){
-        if(Response == 200){
+    private void CheckResponse(int response){
+        if(response >= 200 && response < 300){
             messageQueue.Delete();
         } else {
-            //TODO: add handling if the response wasn't successfully send
-            if(Response == -1){
-                if(running && !paused){
-                    //A non SocketTimeoutException was thrown when sending the message
+            ErrorData errorData = new ErrorData();
+            if(response == -1){
+                if(running && !paused){ //TODO: change - preferably figure out what unknown error is supposed to be
+                    //A non-SocketTimeoutException was thrown when sending the message
+                    errorData.setTimestamp(OffsetDateTime.now());
+                    errorData.setSenderID(senderID);
+                    errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.UNKNOWNERROR);
+                    MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
+                    messageQueue.Put(errorDataMessage);
                 }
-            } else if(Response == 400){
-                //if the last response code was 400
+            } else {
+                //if a non-200 http response is gotten - add it to the message
+                errorData.setTimestamp(OffsetDateTime.now());
+                errorData.setSenderID(senderID);
+                errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.HTTPERROR);
+                errorData.setHttpResponse(response);
+                MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
+                messageQueue.Put(errorDataMessage);
             }
         }
     }
