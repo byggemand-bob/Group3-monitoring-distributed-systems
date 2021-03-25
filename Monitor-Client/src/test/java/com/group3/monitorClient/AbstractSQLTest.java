@@ -13,9 +13,7 @@ public class AbstractSQLTest {
     @BeforeAll
     static void setupDir() {
         File path = new File("src/main/resources/sqlite/db/");
-        if (!path.exists()) {
-            path.mkdirs();
-        }
+        path.mkdirs();
     }
 
     /* Creates a new sql database before each test */
