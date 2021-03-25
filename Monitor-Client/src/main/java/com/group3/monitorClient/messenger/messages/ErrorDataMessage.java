@@ -5,7 +5,7 @@ import org.openapitools.client.ApiException;
 import org.openapitools.client.model.ErrorData;
 
 public class ErrorDataMessage implements MessageInterface{
-
+    //TODO: Make tests
     private ErrorData errorData;
     private int messageTypeID;
 
@@ -14,11 +14,13 @@ public class ErrorDataMessage implements MessageInterface{
         this.messageTypeID = MessageTypeID.ErrorData.ordinal();
     }
 
+    /* Message sends itself using the given MonitorClientInterface */
     @Override
     public int send(MonitorClientInterface monitorClientInterface) throws ApiException {
         return monitorClientInterface.addErrorData(errorData);
     }
 
+    /* the message converts itself into an sql format, and saves itself using provided SQLManager */
     @Override
     public void MakeSQL(SQLManager sqlManager) {
         String blob = errorData.getHttpResponse() + separator + errorData.getErrorMessageType() + separator + errorData.getComment();

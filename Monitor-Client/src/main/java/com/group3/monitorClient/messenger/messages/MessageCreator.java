@@ -34,6 +34,7 @@ public class MessageCreator {
         return new TimingMonitorDataMessage(timingMonitorData);
     }
 
+    /* Converts ErrorData into a Message format */
     public MessageInterface MakeMessage(ErrorData errorData) {
         return new ErrorDataMessage(errorData);
     }
