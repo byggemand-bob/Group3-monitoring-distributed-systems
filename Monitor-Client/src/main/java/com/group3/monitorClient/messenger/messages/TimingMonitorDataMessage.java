@@ -13,7 +13,7 @@ public class TimingMonitorDataMessage implements MessageInterface {
         this.messageTypeID = MessageTypeID.TimingMonitorData.ordinal();
     }
 
-    /* Message sends itself using the given MonitorAPI */
+    /* Message sends itself using the given MonitorClientInterface */
     @Override
     public int send(MonitorClientInterface monitorClientInterface) throws ApiException {
             return monitorClientInterface.addMonitorData(timingMonitorData);
