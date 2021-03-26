@@ -3,6 +3,7 @@ package com.group3.monitorClient.messenger.messages;
 import com.group3.monitorClient.controller.MonitorClientInterface;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.model.TimingMonitorData;
+import org.threeten.bp.OffsetDateTime;
 
 public class TimingMonitorDataMessage implements MessageInterface {
     private TimingMonitorData timingMonitorData;
@@ -23,7 +24,21 @@ public class TimingMonitorDataMessage implements MessageInterface {
     @Override
     public void MakeSQL(SQLManager sqlManager) {
         String blob = timingMonitorData.getTargetEndpoint() + separator + timingMonitorData.getEventID();
-        sqlManager.InsertMessage("queue", timingMonitorData.getSenderID(), messageTypeID, timingMonitorData.getTimestamp().toString(), blob);
+        //TODO: maybe change to something unique to tell that it was not specified.
+        if (timingMonitorData.getSenderID() == null) {
+            timingMonitorData.setSenderID(-1L);
+        }
+
+        String timestamp = "";
+
+        if (timingMonitorData.getTimestamp() == null) {
+            timestamp = "not specified";
+
+        } else {
+            timestamp = timingMonitorData.getTimestamp().toString();
+        }
+
+        sqlManager.InsertMessage("queue", timingMonitorData.getSenderID(), messageTypeID, timestamp, blob);
     }
 
     public int getMessageTypeID () {
