@@ -203,4 +203,79 @@ public class PersistentSQLQueue_Test extends AbstractSQLTest {
 
         messageQueue.CloseConnection();
     }
+
+
+    @Test
+    public void testDeleteFailedPass () {
+        PersistentSQLQueue messageQueue = new PersistentSQLQueue(sqlManager.getPath(), sqlManager.getFileName());
+        TimingMonitorData timingMonitorData = new TimingMonitorData();
+        MessageCreator messageCreator = new MessageCreator();
+        OffsetDateTime offsetDateTime = OffsetDateTime.now();
+        timingMonitorData.setTimestamp(offsetDateTime);
+        timingMonitorData.setTargetEndpoint("/monitor");
+        timingMonitorData.setEventID(22L);
+
+        timingMonitorData.setSenderID(1L);
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+
+        timingMonitorData.setSenderID(2L);
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+
+        timingMonitorData.setSenderID(3L);
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+
+        messageQueue.Failed();
+        messageQueue.Failed();
+        messageQueue.Failed();
+
+        //Act
+        int sizeBefore = messageQueue.SizeFailed();
+
+        messageQueue.DeleteFailed();
+
+        int sizeAfter = messageQueue.SizeFailed();
+
+        //Assert
+        Assertions.assertEquals(3, sizeBefore);
+        Assertions.assertEquals(2, sizeAfter);
+
+        messageQueue.CloseConnection();
+    }
+
+    @Test
+    public void testDeleteAllFailedPass () {
+        PersistentSQLQueue messageQueue = new PersistentSQLQueue(sqlManager.getPath(), sqlManager.getFileName());
+        TimingMonitorData timingMonitorData = new TimingMonitorData();
+        MessageCreator messageCreator = new MessageCreator();
+        OffsetDateTime offsetDateTime = OffsetDateTime.now();
+        timingMonitorData.setTimestamp(offsetDateTime);
+        timingMonitorData.setTargetEndpoint("/monitor");
+        timingMonitorData.setEventID(22L);
+
+        timingMonitorData.setSenderID(1L);
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+
+        timingMonitorData.setSenderID(2L);
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+
+        timingMonitorData.setSenderID(3L);
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+
+        messageQueue.Failed();
+        messageQueue.Failed();
+        messageQueue.Failed();
+
+        //Act
+        int sizeBefore = messageQueue.SizeFailed();
+
+        messageQueue.DeleteAllFailed();
+
+        int sizeAfter = messageQueue.SizeFailed();
+
+        //Assert
+        Assertions.assertEquals(3, sizeBefore);
+        Assertions.assertEquals(0, sizeAfter);
+
+        messageQueue.CloseConnection();
+    }
 }
