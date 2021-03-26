@@ -85,4 +85,12 @@ public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
     public void CloseConnection () {
         sqlManager.CloseConnection();
     }
+
+    public String getPath () {
+        return sqlManager.getPath();
+    }
+
+    public String getFileName () {
+        return sqlManager.getFileName();
+    }
 }
