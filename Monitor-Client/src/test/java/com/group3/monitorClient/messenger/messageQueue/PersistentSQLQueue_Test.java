@@ -1,8 +1,10 @@
 package com.group3.monitorClient.messenger.messageQueue;
 
+import com.group3.monitorClient.AbstractPersistentSQLQueueTest;
 import com.group3.monitorClient.AbstractSQLTest;
 import com.group3.monitorClient.messenger.messages.MessageInterface;
 import com.group3.monitorClient.messenger.messages.MessageCreator;
+import com.group3.monitorClient.messenger.messages.SQLManager;
 import com.group3.monitorClient.messenger.queue.PersistentSQLQueue;
 import com.group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +15,7 @@ import org.threeten.bp.OffsetDateTime;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PersistentSQLQueue_Test extends AbstractSQLTest {
+public class PersistentSQLQueue_Test extends AbstractPersistentSQLQueueTest {
     /* Verifies the queue constructs a message table if one doesn't already exist in the specified database */
     @Test
     public void testMessageQueueConstructorPass () {
@@ -25,7 +27,7 @@ public class PersistentSQLQueue_Test extends AbstractSQLTest {
         String[] col5 = new String[0];
         String[] col6 = new String[0];
         String tableName = "queue";
-        PersistentSQLQueue messageQueue = new PersistentSQLQueue(sqlManager.getPath(), sqlManager.getFileName());
+        SQLManager sqlManager = new SQLManager(messageQueue.getPath(), messageQueue.getFileName());
 
         //Act
         ResultSet rs = sqlManager.GenericStmt("PRAGMA table_info(" + tableName + ")");
@@ -122,15 +124,12 @@ public class PersistentSQLQueue_Test extends AbstractSQLTest {
         Assertions.assertEquals("0", col6[2]);
         Assertions.assertNull(col6[3]);
         Assertions.assertEquals("0", col6[4]);
-
-        messageQueue.CloseConnection();
     }
 
     /* test if the message order of the queue is preserved */
     @Test
     public void testOrderPreservationPass(){
         //setup
-        PersistentSQLQueue messageQueue = new PersistentSQLQueue(sqlManager.getPath(), sqlManager.getFileName());
         TimingMonitorData timingMonitorData = new TimingMonitorData();
         MessageCreator messageCreator = new MessageCreator();
         OffsetDateTime offsetDateTime = OffsetDateTime.now();
@@ -157,13 +156,10 @@ public class PersistentSQLQueue_Test extends AbstractSQLTest {
         //Assert
         Assertions.assertEquals(1L, ((TimingMonitorDataMessage)firstMessage).getTimingMonitorData().getSenderID());
         Assertions.assertEquals(2L, ((TimingMonitorDataMessage)secondMessage).getTimingMonitorData().getSenderID());
-
-        messageQueue.CloseConnection();
     }
 
     @Test
     public void testFailQueuePass(){
-        PersistentSQLQueue messageQueue = new PersistentSQLQueue(sqlManager.getPath(), sqlManager.getFileName());
         TimingMonitorData timingMonitorData = new TimingMonitorData();
         MessageCreator messageCreator = new MessageCreator();
         OffsetDateTime offsetDateTime = OffsetDateTime.now();
@@ -200,14 +196,11 @@ public class PersistentSQLQueue_Test extends AbstractSQLTest {
         Assertions.assertEquals(2, SizeOfQueueAfter);
         Assertions.assertEquals(0, SizeOfFailedQueueBefore);
         Assertions.assertEquals(1, SizeOfFailedQueueAfter);
-
-        messageQueue.CloseConnection();
     }
 
 
     @Test
     public void testDeleteFailedPass () {
-        PersistentSQLQueue messageQueue = new PersistentSQLQueue(sqlManager.getPath(), sqlManager.getFileName());
         TimingMonitorData timingMonitorData = new TimingMonitorData();
         MessageCreator messageCreator = new MessageCreator();
         OffsetDateTime offsetDateTime = OffsetDateTime.now();
@@ -238,13 +231,10 @@ public class PersistentSQLQueue_Test extends AbstractSQLTest {
         //Assert
         Assertions.assertEquals(3, sizeBefore);
         Assertions.assertEquals(2, sizeAfter);
-
-        messageQueue.CloseConnection();
     }
 
     @Test
     public void testDeleteAllFailedPass () {
-        PersistentSQLQueue messageQueue = new PersistentSQLQueue(sqlManager.getPath(), sqlManager.getFileName());
         TimingMonitorData timingMonitorData = new TimingMonitorData();
         MessageCreator messageCreator = new MessageCreator();
         OffsetDateTime offsetDateTime = OffsetDateTime.now();
@@ -275,7 +265,5 @@ public class PersistentSQLQueue_Test extends AbstractSQLTest {
         //Assert
         Assertions.assertEquals(3, sizeBefore);
         Assertions.assertEquals(0, sizeAfter);
-
-        messageQueue.CloseConnection();
     }
 }
