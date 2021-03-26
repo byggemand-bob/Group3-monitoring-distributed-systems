@@ -1,7 +1,10 @@
 package com.group3.monitorClient.messenger;
 
+import com.group3.monitorClient.AbstractPersistentSQLQueueTest;
+import com.group3.monitorClient.AbstractSQLTest;
 import com.group3.monitorClient.messenger.messages.MessageCreator;
 import com.group3.monitorClient.messenger.messages.MessageInterface;
+import com.group3.monitorClient.messenger.queue.PersistentSQLQueue;
 import com.group3.monitorClient.messenger.queue.SynchronizedQueue;
 import com.group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
 import com.group3.monitorClient.testClasses.GreedyMessenger_TestClass;
@@ -10,11 +13,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.TimingMonitorData;
 
-public class GreedyMessenger_Test {
+public class GreedyMessenger_Test extends AbstractPersistentSQLQueueTest {
 
     /* tests the control functions of the GreedyMessenger, Start(), Stop(), Pause() and Resume() */
     @Test
-    public void ThreadControl() throws InterruptedException {
+    public void testThreadControl() throws InterruptedException {
         SynchronizedQueue<MessageInterface> queue = new SynchronizedQueue<MessageInterface>();
         GreedyMessenger messenger = new GreedyMessenger_TestClass("1.1.1.1:8080", queue);
 
@@ -57,31 +60,22 @@ public class GreedyMessenger_Test {
 
     /* Ensures the AddMonitorData() method works as intended */
     @Test
-    public void AddDataTest(){
-        SynchronizedQueue<MessageInterface> queue = new SynchronizedQueue<MessageInterface>();
-        GreedyMessenger messenger = new GreedyMessenger("1.1.1.1:8080", queue);
+    public void testAddDataTest(){
+        GreedyMessenger messenger = new GreedyMessenger("1.1.1.1:8080", messageQueue);
         MessageCreator messageCreator = new MessageCreator();
 
         messenger.AddMessage(messageCreator.MakeMessage(new TimingMonitorData()));
 
-        Assertions.assertEquals(1, queue.Size());
+        Assertions.assertEquals(1, messageQueue.Size());
     }
 
-    /* verifies that the messenger doesn't lose messages, when the return http status code isn't 200 */
     @Test
-    public void UnsuccessfulMessageSendingHandling() throws InterruptedException {
-        SynchronizedQueue<MessageInterface> queue = new SynchronizedQueue<MessageInterface>();
-        GreedyMessenger messenger = new GreedyMessenger_TestClass("1.1.1.1:8080", queue, 400);
+    public void testCheckResponsePass () {
+        //Setup
 
-        for(int x = 0; x < 5; x++){
-            queue.Put(new TimingMonitorDataMessage(new TimingMonitorData()));
-        }
+        //Act
 
-        messenger.Resume();
-        Thread.sleep(100);
-        messenger.Stop();
-
-        Assertions.assertEquals(5, queue.Size());
+        //Assert
     }
 }
 
