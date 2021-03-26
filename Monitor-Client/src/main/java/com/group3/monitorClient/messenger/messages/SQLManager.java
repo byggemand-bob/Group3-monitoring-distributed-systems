@@ -99,7 +99,7 @@ public class SQLManager {
 
     /* returns the first element of tableName, as ordered by the first column */
     public ResultSet SelectFirst(String tableName){
-        String sql = "SELECT * FROM "+tableName+" ORDER BY 1 LIMIT 1";
+        String sql = "SELECT * FROM "+tableName+" WHERE ToBeSent = 1 ORDER BY 1 LIMIT 1";
 
         try {
             return stmt.executeQuery(sql);
@@ -167,6 +167,22 @@ public class SQLManager {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
+        }
+    }
+
+    public void ChangeStatusOfFirstToBeSentElement (String tableName) {
+        String sql = "SELECT * FROM "+tableName+" WHERE ToBeSent = 1 ORDER BY 1 LIMIT 1";
+
+        try {
+            Long ID = stmt.executeQuery(sql).getLong(1);
+
+            String Quary = "UPDATE " + tableName + " SET ToBeSent = 0 WHERE ID = '" + ID + "'";
+
+            PreparedStatement pstmt = conn.prepareStatement(Quary);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getClass());
+            System.out.println(e.getMessage());
         }
     }
 
