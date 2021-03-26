@@ -23,6 +23,7 @@ public class PersistentSQLQueue_Test extends AbstractSQLTest {
         String[] col3 = new String[0];
         String[] col4 = new String[0];
         String[] col5 = new String[0];
+        String[] col6 = new String[0];
         String tableName = "queue";
         PersistentSQLQueue messageQueue = new PersistentSQLQueue(sqlManager.getPath(), sqlManager.getFileName());
 
@@ -71,6 +72,14 @@ public class PersistentSQLQueue_Test extends AbstractSQLTest {
                     rs.getString(4),//saves notnull
                     rs.getString(5),//saves default value
                     rs.getString(6)};//saves primary key
+            rs.next();
+
+            col6 = new String[]{
+                    rs.getString(2),//saves name
+                    rs.getString(3),//saves type
+                    rs.getString(4),//saves notnull
+                    rs.getString(5),//saves default value
+                    rs.getString(6)};//saves primary key
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -102,11 +111,17 @@ public class PersistentSQLQueue_Test extends AbstractSQLTest {
         Assertions.assertNull(col4[3]);
         Assertions.assertEquals("0", col4[4]);
         //checks col5
-        Assertions.assertEquals("Message", col5[0]);
-        Assertions.assertEquals("BLOB", col5[1]);
+        Assertions.assertEquals("ToBeSent", col5[0]);
+        Assertions.assertEquals("BOOLEAN", col5[1]);
         Assertions.assertEquals("0", col5[2]);
-        Assertions.assertNull(col5[3]);
+        Assertions.assertEquals("1",col5[3]);
         Assertions.assertEquals("0", col5[4]);
+        //checks col6
+        Assertions.assertEquals("Message", col6[0]);
+        Assertions.assertEquals("BLOB", col6[1]);
+        Assertions.assertEquals("0", col6[2]);
+        Assertions.assertNull(col6[3]);
+        Assertions.assertEquals("0", col6[4]);
 
         messageQueue.CloseConnection();
     }

@@ -106,11 +106,12 @@ public class SQLManager_Test extends AbstractSQLTest {
         String timeStamp = OffsetDateTime.now().toString();
         String message = "Goddag :^)";
         sqlManager.CreateNewTable(tableName,
-                            "ID integer PRIMARY KEY AUTOINCREMENT",
-                            "MessageType integer NOT NULL",
-                            "SenderID integer NOT NULL",
-                            "Timestamp text NOT NULL",
-                            "Message BLOB");
+                "ID integer PRIMARY KEY AUTOINCREMENT",
+                "MessageType integer NOT NULL",
+                "SenderID integer NOT NULL",
+                "Timestamp text NOT NULL",
+                "ToBeSent BOOLEAN DEFAULT 1",
+                "Message BLOB");
 
         //Act
         sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
@@ -146,6 +147,7 @@ public class SQLManager_Test extends AbstractSQLTest {
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
                 "Timestamp text NOT NULL",
+                "ToBeSent BOOLEAN DEFAULT 1",
                 "Message BLOB");
 
         //Act
@@ -178,6 +180,7 @@ public class SQLManager_Test extends AbstractSQLTest {
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
                 "Timestamp text NOT NULL",
+                "ToBeSent BOOLEAN DEFAULT 1",
                 "Message BLOB");
 
         //Act
@@ -220,6 +223,7 @@ public class SQLManager_Test extends AbstractSQLTest {
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
                 "Timestamp text NOT NULL",
+                "ToBeSent BOOLEAN DEFAULT 1",
                 "Message BLOB");
 
         //Act
@@ -252,5 +256,32 @@ public class SQLManager_Test extends AbstractSQLTest {
         Assertions.assertEquals(2, secondID);
         Assertions.assertEquals(3, thirdID);
         Assertions.assertEquals(4, fourthID);
+    }
+
+    @Test
+    public void testChangeStatusOfFirstToBeSentElementPass () throws SQLException {
+        //Setup
+        String tableName = "queue";
+        long senderID = 420;
+        int messageType = 1;
+        String timeStamp = OffsetDateTime.now().toString();
+        String message = "Goddag :^)";
+        sqlManager.CreateNewTable(tableName,
+                "ID integer PRIMARY KEY AUTOINCREMENT",
+                "MessageType integer NOT NULL",
+                "SenderID integer NOT NULL",
+                "Timestamp text NOT NULL",
+                "ToBeSent BOOLEAN DEFAULT 1",
+                "Message BLOB");
+
+        //Act
+        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        boolean firstElementPre = sqlManager.SelectFirst(tableName).next();
+        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
+        boolean firstElementPost = sqlManager.SelectFirst(tableName).next();
+
+        //Assert
+        Assertions.assertEquals(false, firstElementPost);
+        Assertions.assertNotEquals(firstElementPre, firstElementPost);
     }
 }
