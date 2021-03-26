@@ -40,7 +40,7 @@ public class SQLManager_Test extends AbstractSQLTest {
         String tableName = "test";
         String[] args = {"id integer PRIMARY KEY", "name text NOT NULL", "capacity real DEFAULT 1"};
         sqlManager.CreateNewTable(tableName, args);
-        ResultSet rs = sqlManager.GenericSQLQuery("PRAGMA table_info(" + tableName + ")");
+        ResultSet rs = sqlManager.GenericStmt("PRAGMA table_info(" + tableName + ")");
         //Act
         rs.next();
 
@@ -115,7 +115,7 @@ public class SQLManager_Test extends AbstractSQLTest {
 
         //Act
         sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
-        ResultSet rs = sqlManager.SelectFirst(tableName);
+        ResultSet rs = sqlManager.SelectFirstMessage(tableName);
         try {
             senderID_test = rs.getLong("senderID");
             messageType_test = rs.getInt("messageType");
@@ -135,10 +135,9 @@ public class SQLManager_Test extends AbstractSQLTest {
 
     /* verifies the method DeleteFirstMessage() deletes the first and only the first message of the given table */
     @Test
-    public void testDeleteFirstMessagePass(){
+    public void testDeleteFirstMessagePass() throws SQLException {
         //Setup
         String tableName = "test";
-        long senderID = 1L;
         int messageType = 2;
         String timeStamp = "test";
         String message = "test";
@@ -151,19 +150,26 @@ public class SQLManager_Test extends AbstractSQLTest {
                 "Message BLOB");
 
         //Act
-        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        sqlManager.InsertMessage(tableName, 1L, messageType, timeStamp, message);
+        sqlManager.InsertMessage(tableName, 2L, messageType, timeStamp, message);
+        sqlManager.InsertMessage(tableName, 3L, messageType, timeStamp, message);
 
-        int SizeBefore = sqlManager.TableSize("test");
+        int SizeBefore = sqlManager.TableSize(tableName);
 
-        sqlManager.DeleteFirstMessage("test");
+        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
 
-        int SizeAfter = sqlManager.TableSize("test");
+        sqlManager.DeleteFirstMessage(tableName);
+
+        int SizeAfter = sqlManager.TableSize(tableName);
+
+        ResultSet rs = sqlManager.SelectFirstFailedMessage(tableName);
 
         //Assert
         Assertions.assertEquals(3, SizeBefore);
         Assertions.assertEquals(2, SizeAfter);
+
+        /* Ensures it didn't delete the first messages that was set as ToBeSent = 0 */
+        Assertions.assertEquals(1L,rs.getLong("SenderID"));
     }
 
     /* verifies the ResetAutoIncrement() reset the of the specified table */
@@ -187,19 +193,19 @@ public class SQLManager_Test extends AbstractSQLTest {
         sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
         sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
 
-        ResultSet rs = sqlManager.SelectFirst(tableName);
+        ResultSet rs = sqlManager.SelectFirstMessage(tableName);
 
         int firstID = rs.getInt("ID");
 
         sqlManager.DeleteFirstMessage(tableName);
-        rs = sqlManager.SelectFirst(tableName);
+        rs = sqlManager.SelectFirstMessage(tableName);
 
         int secondID = rs.getInt("ID");
 
         sqlManager.DeleteFirstMessage(tableName);
         sqlManager.ResetAutoIncrement(tableName);
         sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
-        rs = sqlManager.SelectFirst(tableName);
+        rs = sqlManager.SelectFirstMessage(tableName);
 
         int thirdID = rs.getInt("ID");
 
@@ -231,7 +237,7 @@ public class SQLManager_Test extends AbstractSQLTest {
         sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
 
         sqlManager.DeleteFirstMessage(tableName);
-        ResultSet rs = sqlManager.SelectFirst(tableName);
+        ResultSet rs = sqlManager.SelectFirstMessage(tableName);
 
         int firstID = rs.getInt("ID");
 
@@ -239,16 +245,16 @@ public class SQLManager_Test extends AbstractSQLTest {
         sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
         sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
 
-        rs = sqlManager.SelectFirst(tableName);
+        rs = sqlManager.SelectFirstMessage(tableName);
 
         int secondID = rs.getInt("ID");
         sqlManager.DeleteFirstMessage(tableName);
 
-        rs = sqlManager.SelectFirst(tableName);
+        rs = sqlManager.SelectFirstMessage(tableName);
         int thirdID = rs.getInt("ID");
         sqlManager.DeleteFirstMessage(tableName);
 
-        rs = sqlManager.SelectFirst(tableName);
+        rs = sqlManager.SelectFirstMessage(tableName);
         int fourthID = rs.getInt("ID");
 
         //Assert
@@ -260,6 +266,48 @@ public class SQLManager_Test extends AbstractSQLTest {
 
     @Test
     public void testChangeStatusOfFirstToBeSentElementPass () throws SQLException {
+        //Setup
+        String tableName = "queue";
+        int messageType = 1;
+        String timeStamp = OffsetDateTime.now().toString();
+        String message = "Goddag :^)";
+        sqlManager.CreateNewTable(tableName,
+                "ID integer PRIMARY KEY AUTOINCREMENT",
+                "MessageType integer NOT NULL",
+                "SenderID integer NOT NULL",
+                "Timestamp text NOT NULL",
+                "ToBeSent BOOLEAN DEFAULT 1",
+                "Message BLOB");
+
+        //Act
+        sqlManager.InsertMessage(tableName, 1L, messageType, timeStamp, message);
+        sqlManager.InsertMessage(tableName, 2L, messageType, timeStamp, message);
+        sqlManager.InsertMessage(tableName, 3L, messageType, timeStamp, message);
+
+        boolean rs1before = sqlManager.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 1").getBoolean("ToBeSent");
+
+        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
+
+        boolean rs1after = sqlManager.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 1").getBoolean("ToBeSent");
+
+        boolean rs2before = sqlManager.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 2").getBoolean("ToBeSent");
+
+        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
+
+        boolean rs2after = sqlManager.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 2").getBoolean("ToBeSent");
+
+        boolean rs3 = sqlManager.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 3").getBoolean("ToBeSent");
+
+        //Assert
+        Assertions.assertTrue(rs1before);
+        Assertions.assertFalse(rs1after);
+        Assertions.assertTrue(rs2before);
+        Assertions.assertFalse(rs2after);
+        Assertions.assertTrue(rs3);
+    }
+
+    @Test
+    public void testDeleteAllFailedMessagesPass(){
         //Setup
         String tableName = "queue";
         long senderID = 420;
@@ -276,12 +324,92 @@ public class SQLManager_Test extends AbstractSQLTest {
 
         //Act
         sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
-        boolean firstElementPre = sqlManager.SelectFirst(tableName).next();
+        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+
         sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
-        boolean firstElementPost = sqlManager.SelectFirst(tableName).next();
+        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
+
+        sqlManager.DeleteAllFailedMessages(tableName);
 
         //Assert
-        Assertions.assertEquals(false, firstElementPost);
-        Assertions.assertNotEquals(firstElementPre, firstElementPost);
+        Assertions.assertEquals(1, sqlManager.TableSize(tableName));
+    }
+
+    /* verifies the method DeleteFirstFailedMessage() deletes the first and only the first failed message of the given table */
+    @Test
+    public void testDeleteFirstFailedMessagePass() throws SQLException {
+        //Setup
+        String tableName = "test";
+        int messageType = 2;
+        String timeStamp = "test";
+        String message = "test";
+        sqlManager.CreateNewTable(tableName,
+                "ID integer PRIMARY KEY AUTOINCREMENT",
+                "MessageType integer NOT NULL",
+                "SenderID integer NOT NULL",
+                "Timestamp text NOT NULL",
+                "ToBeSent BOOLEAN DEFAULT 1",
+                "Message BLOB");
+
+        //Act
+        sqlManager.InsertMessage(tableName, 1L, messageType, timeStamp, message);
+        sqlManager.InsertMessage(tableName, 2L, messageType, timeStamp, message);
+        sqlManager.InsertMessage(tableName, 3L, messageType, timeStamp, message);
+
+        int SizeBefore = sqlManager.TableSize(tableName);
+
+        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
+
+        sqlManager.DeleteFirstFailedMessage(tableName);
+
+        int SizeAfter = sqlManager.TableSize(tableName);
+
+        ResultSet rs = sqlManager.SelectFirstMessage(tableName);
+
+        //Assert
+        Assertions.assertEquals(3, SizeBefore);
+        Assertions.assertEquals(2, SizeAfter);
+
+        /* Ensures it didn't delete the first messages that was set as ToBeSent = 0 */
+        Assertions.assertEquals(2L,rs.getLong("SenderID"));
+    }
+
+    /* Verifies the SelectFirstFailedMessage() selects the first failed message in the failed message queue */
+    @Test
+    public void testSelectFirstFailedMessagePass() throws SQLException {
+        //Setup
+        String tableName = "test";
+        int messageType = 2;
+        String timeStamp = "test";
+        String message = "test";
+        sqlManager.CreateNewTable(tableName,
+                "ID integer PRIMARY KEY AUTOINCREMENT",
+                "MessageType integer NOT NULL",
+                "SenderID integer NOT NULL",
+                "Timestamp text NOT NULL",
+                "ToBeSent BOOLEAN DEFAULT 1",
+                "Message BLOB");
+
+        //Act
+        sqlManager.InsertMessage(tableName, 1L, messageType, timeStamp, message);
+        sqlManager.InsertMessage(tableName, 2L, messageType, timeStamp, message);
+        sqlManager.InsertMessage(tableName, 3L, messageType, timeStamp, message);
+
+        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
+        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
+        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
+
+        long rs1 = sqlManager.SelectFirstFailedMessage(tableName).getLong("SenderID");
+        long rs2 = sqlManager.SelectFirstFailedMessage(tableName).getLong("SenderID");
+
+        sqlManager.DeleteFirstFailedMessage(tableName);
+
+        long rs3 = sqlManager.SelectFirstFailedMessage(tableName).getLong("SenderID");
+
+        //Assert
+        Assertions.assertEquals(1L, rs1);
+        Assertions.assertEquals(1L, rs2);
+        Assertions.assertEquals(2L, rs3);
     }
 }

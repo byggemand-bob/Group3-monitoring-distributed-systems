@@ -60,9 +60,9 @@ public class MessageCreator_Test extends AbstractSQLTest {
 
         message.MakeSQL(sqlManager);
 
-        ResultSet rs = sqlManager.SelectFirst(tableName);
+        ResultSet rs = sqlManager.SelectFirstMessage(tableName);
 
-        MessageInterface messageReturn = messageCreator.CreateMessageFromSQL(rs);
+        MessageInterface messageReturn = messageCreator.MakeMessageFromSQL(rs);
         TimingMonitorData tmdReturn = ((TimingMonitorDataMessage)messageReturn).getTimingMonitorData();
         TimingMonitorData tmdBefore = ((TimingMonitorDataMessage)message).getTimingMonitorData();
 

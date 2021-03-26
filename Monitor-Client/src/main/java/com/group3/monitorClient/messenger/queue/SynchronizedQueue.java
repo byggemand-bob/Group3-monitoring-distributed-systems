@@ -31,4 +31,29 @@ public class SynchronizedQueue<T> implements QueueInterface<T> {
     public int Size(){
         return queue.size();
     }
+
+    @Override
+    public void Failed() {
+        //TODO: Implement
+    }
+
+    @Override
+    public T TakeFailed() {
+        return null; //TODO: Implement
+    }
+
+    @Override
+    public int SizeFailed() {
+        return 0; //TODO: Implement
+    }
+
+    @Override
+    public void DeleteFailed() {
+        //TODO: Implement
+    }
+
+    @Override
+    public void DeleteAllFailed() {
+        //TODO: Implement
+    }
 }

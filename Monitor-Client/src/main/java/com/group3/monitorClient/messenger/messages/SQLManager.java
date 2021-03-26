@@ -51,7 +51,23 @@ public class SQLManager {
     public int TableSize(String TableName){
         int size = -1;
         String Quary = "SELECT COUNT(*) FROM " + TableName;
-        ResultSet rs = GenericSQLQuery(Quary);
+        ResultSet rs = GenericStmt(Quary);
+        try {
+            if(rs.next()){
+                size = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return size;
+    }
+
+    public int TableSize(String TableName, String WhereArgs){
+        int size = -1;
+        String Quary = "SELECT COUNT(*) FROM " + TableName + " WHERE " + WhereArgs;
+
+        ResultSet rs = GenericStmt(Quary);
         try {
             if(rs.next()){
                 size = rs.getInt(1);
@@ -97,17 +113,18 @@ public class SQLManager {
         }
     }
 
-    /* returns the first element of tableName, as ordered by the first column */
-    public ResultSet SelectFirst(String tableName){
+    /* returns the first element of tableName, as ordered by the first column and has ToBeSent = 1 */
+    public ResultSet SelectFirstMessage(String tableName){
         String sql = "SELECT * FROM "+tableName+" WHERE ToBeSent = 1 ORDER BY 1 LIMIT 1";
 
-        try {
-            return stmt.executeQuery(sql);
-        } catch (SQLException e) {
-            System.out.println(e.getClass());
-            System.out.println(e.getMessage());
-        }
-        return null;
+        return GenericStmt(sql);
+    }
+
+    /* returns the first element of tableName, as ordered by the first column and has ToBeSent = 0 */
+    public ResultSet SelectFirstFailedMessage(String tableName){
+        String sql = "SELECT * FROM "+tableName+" WHERE ToBeSent = 0 ORDER BY 1 LIMIT 1";
+
+        return GenericStmt(sql);
     }
 
     /* Checks if a table with specified name exists in the database */
@@ -134,10 +151,10 @@ public class SQLManager {
         }
     }
 
-    /* Deletes the first element of a message Table */
+    /* Deletes the first element of a message Table, where ToBeSent = 1 */
     public void DeleteFirstMessage(String tableName){
         try {
-            long ID = SelectFirst(tableName).getLong("ID");
+            long ID = SelectFirstMessage(tableName).getLong("ID");
 
             String Quary = "DELETE FROM " + tableName + " WHERE ID = " + ID;
 
@@ -147,6 +164,27 @@ public class SQLManager {
             System.out.println(e.getMessage());
 
         }
+    }
+
+    /* Deletes the first element of a message Table, where ToBeSent = 0 */
+    public void DeleteFirstFailedMessage(String tableName){
+        try {
+            long ID = SelectFirstFailedMessage(tableName).getLong("ID");
+
+            String Quary = "DELETE FROM " + tableName + " WHERE ID = " + ID;
+
+            PreparedStatement pstmt = conn.prepareStatement(Quary);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+
+        }
+    }
+
+    public void DeleteAllFailedMessages(String tableName){
+        String Quary = "DELETE FROM " + tableName + " WHERE ToBeSent = 0";
+
+        GenericPreparedStmt(Quary);
     }
 
     public String getPath () {
@@ -159,14 +197,28 @@ public class SQLManager {
 
     /*
     * Made for testing
-    * Only Queries allowed
+    * Only statements allowed
      */
-    public ResultSet GenericSQLQuery(String query){
+    public ResultSet GenericStmt(String quary){
         try {
-            return stmt.executeQuery(query);
+            return stmt.executeQuery(quary);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
+        }
+    }
+
+    /*
+     * Made for testing
+     * Only Prepared statements allowed
+     */
+    public void GenericPreparedStmt(String quary){
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(quary);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+
         }
     }
 

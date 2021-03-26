@@ -12,7 +12,7 @@ public class MessageCreator {
 
 
     /* receives a ResultSet, representing an message and converts it back into a message structure */
-    public MessageInterface CreateMessageFromSQL(ResultSet rs){
+    public MessageInterface MakeMessageFromSQL(ResultSet rs){
         int TypeID = -1;
         try {
             TypeID = rs.getInt("MessageType");

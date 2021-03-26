@@ -37,8 +37,8 @@ public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
     /* Takes the first element in the queue from the sql */
     @Override
     public MessageInterface Take() {
-        ResultSet rs = sqlManager.SelectFirst("queue");
-        return messageCreator.CreateMessageFromSQL(rs);
+        ResultSet rs = sqlManager.SelectFirstMessage("queue");
+        return messageCreator.MakeMessageFromSQL(rs);
     }
 
     /* Deletes the first message in the Queue */
@@ -53,7 +53,32 @@ public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
     /* returns the number of messages in the queue */
     @Override
     public int Size() {
-        return sqlManager.TableSize("queue");
+        return sqlManager.TableSize("queue", "ToBeSent = 1");
+    }
+
+    @Override
+    public void Failed() {
+        sqlManager.ChangeStatusOfFirstToBeSentElement("queue");
+    }
+
+    @Override
+    public MessageInterface TakeFailed() {
+        return messageCreator.MakeMessageFromSQL(sqlManager.SelectFirstFailedMessage("queue"));
+    }
+
+    @Override
+    public int SizeFailed() {
+        return sqlManager.TableSize("queue", "ToBeSent = 0");
+    }
+
+    @Override
+    public void DeleteFailed() {
+        sqlManager.DeleteFirstFailedMessage("queue");
+    }
+
+    @Override
+    public void DeleteAllFailed() {
+        sqlManager.DeleteAllFailedMessages("queue");
     }
 
     /* Closes the queues connection to the sql database */

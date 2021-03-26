@@ -36,9 +36,10 @@ public class TimingMonitorDataMessage_Test extends AbstractSQLTest {
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
                 "Timestamp text NOT NULL",
+                "ToBeSent BOOLEAN DEFAULT 1",
                 "Message BLOB");
         messageInterface.MakeSQL(sqlManager);
-        ResultSet rs = sqlManager.SelectFirst("queue");
+        ResultSet rs = sqlManager.SelectFirstMessage("queue");
 
         try {
             String blob = rs.getString("Message");

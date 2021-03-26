@@ -12,4 +12,19 @@ public interface QueueInterface<T> {
 
     /* returns the size of the queue */
     int Size();
+
+    /* First element of queue is moved to failed queue */
+    void Failed();
+
+    /* Take first element in failed queue */
+    T TakeFailed();
+
+    /* Returns the size of failed queue */
+    int SizeFailed();
+
+    /* Delete first element of failed queue */
+    void DeleteFailed();
+
+    /* Delete all elements of failed queue */
+    void DeleteAllFailed();
 }

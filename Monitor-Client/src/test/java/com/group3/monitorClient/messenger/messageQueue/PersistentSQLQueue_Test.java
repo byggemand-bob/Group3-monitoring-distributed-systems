@@ -28,7 +28,7 @@ public class PersistentSQLQueue_Test extends AbstractSQLTest {
         PersistentSQLQueue messageQueue = new PersistentSQLQueue(sqlManager.getPath(), sqlManager.getFileName());
 
         //Act
-        ResultSet rs = sqlManager.GenericSQLQuery("PRAGMA table_info(" + tableName + ")");
+        ResultSet rs = sqlManager.GenericStmt("PRAGMA table_info(" + tableName + ")");
 
         try {
             rs.next();
@@ -157,6 +157,49 @@ public class PersistentSQLQueue_Test extends AbstractSQLTest {
         //Assert
         Assertions.assertEquals(1L, ((TimingMonitorDataMessage)firstMessage).getTimingMonitorData().getSenderID());
         Assertions.assertEquals(2L, ((TimingMonitorDataMessage)secondMessage).getTimingMonitorData().getSenderID());
+
+        messageQueue.CloseConnection();
+    }
+
+    @Test
+    public void testFailQueuePass(){
+        PersistentSQLQueue messageQueue = new PersistentSQLQueue(sqlManager.getPath(), sqlManager.getFileName());
+        TimingMonitorData timingMonitorData = new TimingMonitorData();
+        MessageCreator messageCreator = new MessageCreator();
+        OffsetDateTime offsetDateTime = OffsetDateTime.now();
+        timingMonitorData.setTimestamp(offsetDateTime);
+        timingMonitorData.setTargetEndpoint("/monitor");
+        timingMonitorData.setEventID(22L);
+
+        timingMonitorData.setSenderID(1L);
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+
+        timingMonitorData.setSenderID(2L);
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+
+        timingMonitorData.setSenderID(3L);
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+
+        //Act
+        MessageInterface firstMessageBefore = messageQueue.Take();
+        int SizeOfQueueBefore = messageQueue.Size();
+        int SizeOfFailedQueueBefore = messageQueue.SizeFailed();
+
+        messageQueue.Failed();
+
+        MessageInterface firstMessageAfter = messageQueue.Take();
+        int SizeOfQueueAfter = messageQueue.Size();
+        int SizeOfFailedQueueAfter = messageQueue.SizeFailed();
+        MessageInterface firstFailedMessage = messageQueue.TakeFailed();
+
+        //Assert
+        Assertions.assertEquals(1L, ((TimingMonitorDataMessage)firstMessageBefore).getTimingMonitorData().getSenderID());
+        Assertions.assertEquals(2L, ((TimingMonitorDataMessage)firstMessageAfter).getTimingMonitorData().getSenderID());
+        Assertions.assertEquals(1L, ((TimingMonitorDataMessage)firstFailedMessage).getTimingMonitorData().getSenderID());
+        Assertions.assertEquals(3, SizeOfQueueBefore);
+        Assertions.assertEquals(2, SizeOfQueueAfter);
+        Assertions.assertEquals(0, SizeOfFailedQueueBefore);
+        Assertions.assertEquals(1, SizeOfFailedQueueAfter);
 
         messageQueue.CloseConnection();
     }
