@@ -23,6 +23,7 @@ public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
                     "MessageType integer NOT NULL",
                     "SenderID integer NOT NULL",
                     "Timestamp text NOT NULL",
+                    "ToBeSent BOOLEAN DEFAULT 1",
                     "Message BLOB");
         }
     }

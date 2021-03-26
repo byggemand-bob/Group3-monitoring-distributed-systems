@@ -54,6 +54,7 @@ public class MessageCreator_Test extends AbstractSQLTest {
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
                 "Timestamp text NOT NULL",
+                "ToBeSent BOOLEAN DEFAULT 1",
                 "Message BLOB");
         MessageInterface message = messageCreator.MakeMessage(timingMonitorData);
 
