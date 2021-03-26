@@ -153,6 +153,7 @@ public class GreedyMessenger implements MessengerInterface {
             messageQueue.Delete();
         } else {
             ErrorData errorData = new ErrorData();
+            messageQueue.Failed();
             if(response == -1){
                 if(running && !paused){ //TODO: change - preferably change from UnknownError to a defined error
                     //A non-SocketTimeoutException was thrown when sending the message
