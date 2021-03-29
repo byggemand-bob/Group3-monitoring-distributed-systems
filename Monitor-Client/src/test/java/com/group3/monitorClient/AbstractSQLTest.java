@@ -29,10 +29,9 @@ public class AbstractSQLTest {
         sqlManager.CloseConnection();
         try {
             if (!db.delete()) {
-                System.out.println("Could not access database file and is therefore not deleted!");
+                System.out.println("AbstractSQLTest: Could not access database file. It was therefore not deleted!");
             }
         } catch (Exception e) {
-
             e.printStackTrace();
         }
     }

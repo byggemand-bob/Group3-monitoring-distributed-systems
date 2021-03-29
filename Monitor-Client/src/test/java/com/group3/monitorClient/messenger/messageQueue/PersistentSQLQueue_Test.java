@@ -124,6 +124,12 @@ public class PersistentSQLQueue_Test extends AbstractPersistentSQLQueueTest {
         Assertions.assertEquals("0", col6[2]);
         Assertions.assertNull(col6[3]);
         Assertions.assertEquals("0", col6[4]);
+
+        try {
+            rs.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     /* test if the message order of the queue is preserved */

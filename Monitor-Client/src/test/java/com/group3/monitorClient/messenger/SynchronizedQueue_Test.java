@@ -36,6 +36,12 @@ public class SynchronizedQueue_Test {
                 thread.join();
             } catch (InterruptedException e) { e.printStackTrace(); }
         }
+        try {
+            //TODO:remove sleep and fix thread
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         Assertions.assertEquals(numOfThreads, syncQueue.Size());
     }
@@ -64,6 +70,12 @@ public class SynchronizedQueue_Test {
             try {
                 thread.join();
             } catch (InterruptedException e) {e.printStackTrace(); }
+        }
+        try {
+            //TODO:remove sleep and fix thread
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         TimingMonitorData TestCase = syncQueue.Take();

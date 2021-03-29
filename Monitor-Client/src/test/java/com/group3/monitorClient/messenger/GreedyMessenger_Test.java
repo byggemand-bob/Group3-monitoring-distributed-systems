@@ -12,6 +12,7 @@ import com.group3.monitorClient.testClasses.GreedyMessenger_TestClass;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.TimingMonitorData;
+import org.threeten.bp.OffsetDateTime;
 
 public class GreedyMessenger_Test extends AbstractPersistentSQLQueueTest {
 
@@ -64,7 +65,12 @@ public class GreedyMessenger_Test extends AbstractPersistentSQLQueueTest {
         GreedyMessenger messenger = new GreedyMessenger("1.1.1.1:8080", messageQueue);
         MessageCreator messageCreator = new MessageCreator();
 
-        messenger.AddMessage(messageCreator.MakeMessage(new TimingMonitorData()));
+        TimingMonitorData timingMonitorData = new TimingMonitorData();
+        timingMonitorData.setEventID(1L);
+        timingMonitorData.setTimestamp(OffsetDateTime.now());
+        timingMonitorData.setSenderID(21L);
+
+        messenger.AddMessage(messageCreator.MakeMessage(timingMonitorData));
 
         Assertions.assertEquals(1, messageQueue.Size());
     }
