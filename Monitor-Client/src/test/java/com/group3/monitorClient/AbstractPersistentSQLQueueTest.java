@@ -22,20 +22,14 @@ public class AbstractPersistentSQLQueueTest {
     }
 
     @AfterEach
-    public void CleanUp () {
-        messageQueue.CloseConnection();
-    }
-
-    @AfterEach
     public void cleanUp() {
         File db = new File("src/main/resources/sqlite/db/", "test.db");
         messageQueue.CloseConnection();
         try {
             if (!db.delete()) {
-                System.out.println("Could not access database file and is therefore not deleted!");
+                System.out.println("AbstractPersistentSQLQueueTest: Could not access database file. It was therefore not deleted!");
             }
         } catch (Exception e) {
-
             e.printStackTrace();
         }
     }
