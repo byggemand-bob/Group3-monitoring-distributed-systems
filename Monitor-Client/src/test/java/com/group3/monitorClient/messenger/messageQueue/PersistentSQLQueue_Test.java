@@ -125,11 +125,7 @@ public class PersistentSQLQueue_Test extends AbstractPersistentSQLQueueTest {
         Assertions.assertNull(col6[3]);
         Assertions.assertEquals("0", col6[4]);
 
-        try {
-            rs.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        sqlManager.CloseConnection();
     }
 
     /* test if the message order of the queue is preserved */
