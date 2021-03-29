@@ -21,37 +21,11 @@ public class SQLManager {
         }
     }
 
-    private Connection Connect() {
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(url+fileName);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return conn;
-    }
-
-//    public ResultSet SelectAll(String table, String... args){
-//        StringBuilder cols = new StringBuilder();
-//        for (String arg: args){
-//            cols.append(arg).append(",");
-//        }
-//        cols = new StringBuilder(cols.substring(0, cols.length() - 1));
-//        String sql = "SELECT "+cols+" FROM "+table;
-//
-//        try (ResultSet rs    = stmt.executeQuery(sql)){
-//            return rs;
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//            return null;
-//        }
-//    }
-
     /* returns the number of elements in a specified table */
     public int TableSize(String TableName){
         int size = -1;
-        String Quary = "SELECT COUNT(*) FROM " + TableName;
-        ResultSet rs = GenericStmt(Quary);
+        ResultSet rs = GenericStmt("SELECT COUNT(*) FROM " + TableName);
+
         try {
             if(rs.next()){
                 size = rs.getInt(1);
@@ -65,15 +39,14 @@ public class SQLManager {
 
     public int TableSize(String TableName, String WhereArgs){
         int size = -1;
-        String Quary = "SELECT COUNT(*) FROM " + TableName + " WHERE " + WhereArgs;
+        ResultSet rs = GenericStmt("SELECT COUNT(*) FROM " + TableName + " WHERE " + WhereArgs);
 
-        ResultSet rs = GenericStmt(Quary);
         try {
             if(rs.next()){
                 size = rs.getInt(1);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
 
         return size;
@@ -89,77 +62,60 @@ public class SQLManager {
         sql = new StringBuilder(sql.substring(0,sql.length()-2)).append("\n");
         sql.append(");");
 
-        try {
-            // create a new table
-            stmt.execute(sql.toString());
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        GenericPreparedStmt(sql.toString());
     }
 
     /* Inserts and Message element into the given table */
     public void InsertMessage(String tableName, long senderID, int messageType, String timeStamp, String message) {
-        String sql = "INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) VALUES(?,?,?,?)";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setLong(1, senderID);
-            pstmt.setInt(2, messageType);
-            pstmt.setString(3, timeStamp);
-            pstmt.setString(4, message);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        //TODO: choose the prettiest in all the lands
+        GenericPreparedStmt("INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) " +
+                "VALUES(" +
+                        senderID + ',' +
+                        messageType + ",'" +
+                        timeStamp +"','" +
+                        message + "')");
+//        try {
+//            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) VALUES(?,?,?,?)");
+//            pstmt.setLong(1, senderID);
+//            pstmt.setInt(2, messageType);
+//            pstmt.setString(3, timeStamp);
+//            pstmt.setString(4, message);
+//            pstmt.executeUpdate();
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
     }
 
     /* returns the first element of tableName, as ordered by the first column and has ToBeSent = 1 */
     public ResultSet SelectFirstMessage(String tableName){
-        String sql = "SELECT * FROM "+tableName+" WHERE ToBeSent = 1 ORDER BY 1 LIMIT 1";
-
-        return GenericStmt(sql);
+        return GenericStmt("SELECT * FROM "+tableName+" WHERE ToBeSent = 1 ORDER BY 1 LIMIT 1");
     }
 
     /* returns the first element of tableName, as ordered by the first column and has ToBeSent = 0 */
     public ResultSet SelectFirstFailedMessage(String tableName){
-        String sql = "SELECT * FROM "+tableName+" WHERE ToBeSent = 0 ORDER BY 1 LIMIT 1";
-
-        return GenericStmt(sql);
+        return GenericStmt("SELECT * FROM "+tableName+" WHERE ToBeSent = 0 ORDER BY 1 LIMIT 1");
     }
 
     /* Checks if a table with specified name exists in the database */
     public boolean CheckIfExists(String tableName) {
-        String sql = "SELECT name FROM sqlite_master WHERE name = '" + tableName +"'";
-
-        try (ResultSet rs    = stmt.executeQuery(sql)){
-            return rs.next();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        try {
+            return GenericStmt("SELECT name FROM sqlite_master WHERE name = '" + tableName +"'").next();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
             return false;
         }
     }
 
     /* Resets the AutoIncrement to the highest number contained in the column */
     public void ResetAutoIncrement(String tableName) {
-        String sql = "UPDATE sqlite_sequence SET seq = 0 WHERE name = '" + tableName + "'";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        GenericPreparedStmt("UPDATE sqlite_sequence SET seq = 0 WHERE name = '" + tableName + "'");
     }
 
     /* Deletes the first element of a message Table, where ToBeSent = 1 */
     public void DeleteFirstMessage(String tableName){
         try {
             long ID = SelectFirstMessage(tableName).getLong("ID");
-
-            String Quary = "DELETE FROM " + tableName + " WHERE ID = " + ID;
-
-            PreparedStatement pstmt = conn.prepareStatement(Quary);
-            pstmt.executeUpdate();
+            GenericPreparedStmt("DELETE FROM " + tableName + " WHERE ID = " + ID);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
 
@@ -170,21 +126,25 @@ public class SQLManager {
     public void DeleteFirstFailedMessage(String tableName){
         try {
             long ID = SelectFirstFailedMessage(tableName).getLong("ID");
-
-            String Quary = "DELETE FROM " + tableName + " WHERE ID = " + ID;
-
-            PreparedStatement pstmt = conn.prepareStatement(Quary);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-
+            GenericPreparedStmt("DELETE FROM " + tableName + " WHERE ID = " + ID);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
     public void DeleteAllFailedMessages(String tableName){
-        String Quary = "DELETE FROM " + tableName + " WHERE ToBeSent = 0";
+        String sql = "DELETE FROM " + tableName + " WHERE ToBeSent = 0";
+        GenericPreparedStmt(sql);
+    }
 
-        GenericPreparedStmt(Quary);
+    public void ChangeStatusOfFirstToBeSentElement (String tableName) {
+        String sql = "SELECT * FROM "+tableName+" WHERE ToBeSent = 1 ORDER BY 1 LIMIT 1";
+        try {
+            long ID = GenericStmt(sql).getLong(1);
+            GenericPreparedStmt("UPDATE " + tableName + " SET ToBeSent = 0 WHERE ID = '" + ID + "'");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     public String getPath () {
@@ -196,13 +156,14 @@ public class SQLManager {
     }
 
     /*
-    * Made for testing
-    * Only statements allowed
+     * Made for testing
+     * Only statements allowed
      */
     public ResultSet GenericStmt(String quary){
         try {
             return stmt.executeQuery(quary);
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println(e.getMessage());
             return null;
         }
@@ -217,40 +178,24 @@ public class SQLManager {
             PreparedStatement pstmt = conn.prepareStatement(quary);
             pstmt.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println(e.getMessage());
 
         }
     }
 
-    public void ChangeStatusOfFirstToBeSentElement (String tableName) {
-        String sql = "SELECT * FROM "+tableName+" WHERE ToBeSent = 1 ORDER BY 1 LIMIT 1";
-
+    private Connection Connect() {
+        Connection conn = null;
         try {
-            Long ID = stmt.executeQuery(sql).getLong(1);
-
-            String Quary = "UPDATE " + tableName + " SET ToBeSent = 0 WHERE ID = '" + ID + "'";
-
-            PreparedStatement pstmt = conn.prepareStatement(Quary);
-            pstmt.executeUpdate();
+            conn = DriverManager.getConnection(url+fileName);
         } catch (SQLException e) {
-            System.out.println(e.getClass());
             System.out.println(e.getMessage());
         }
+        return conn;
     }
 
     /* Closes the connection to the database */
     public void CloseConnection () {
         try { conn.close(); } catch (Exception e) { /* Ignored */ }
     }
-
-//    public void SendMessage (MessageInterface message){
-//        String sqlMessage = message.CreateMessage();
-//
-//        try (Connection conn = this.Connect();
-//             Statement stmt  = conn.createStatement();
-//             ResultSet rs    = stmt.executeQuery(sqlMessage)){
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
 }
