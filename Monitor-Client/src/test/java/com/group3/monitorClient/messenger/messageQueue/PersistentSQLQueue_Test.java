@@ -268,4 +268,36 @@ public class PersistentSQLQueue_Test extends AbstractPersistentSQLQueueTest {
         Assertions.assertEquals(3, sizeBefore);
         Assertions.assertEquals(0, sizeAfter);
     }
+
+    /* Ensures that the size functions works */
+    @Test
+    public void testSizePass(){
+        //Setup
+        TimingMonitorData timingMonitorData = new TimingMonitorData();
+        MessageCreator messageCreator = new MessageCreator();
+        OffsetDateTime offsetDateTime = OffsetDateTime.now();
+        timingMonitorData.setTimestamp(offsetDateTime);
+        timingMonitorData.setTargetEndpoint("/monitor");
+        timingMonitorData.setEventID(22L);
+        timingMonitorData.setSenderID(1L);
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
+
+        //Act
+        int SizeBefore = messageQueue.Size();
+        int FailedSizeBefore = messageQueue.SizeFailed();
+
+        messageQueue.Failed();
+        messageQueue.Failed();
+
+        int SizeAfter = messageQueue.Size();
+        int FailedSizeAfter = messageQueue.SizeFailed();
+
+        //Assert
+        Assertions.assertEquals(3, SizeBefore);
+        Assertions.assertEquals(1, SizeAfter);
+        Assertions.assertEquals(0, FailedSizeBefore);
+        Assertions.assertEquals(2, FailedSizeAfter);
+    }
 }

@@ -2,6 +2,7 @@ package com.group3.monitorClient.messenger;
 
 import com.group3.monitorClient.AbstractPersistentSQLQueueTest;
 import com.group3.monitorClient.AbstractSQLTest;
+import com.group3.monitorClient.messenger.messages.ErrorDataMessage;
 import com.group3.monitorClient.messenger.messages.MessageCreator;
 import com.group3.monitorClient.messenger.messages.MessageInterface;
 import com.group3.monitorClient.messenger.queue.PersistentSQLQueue;
@@ -11,6 +12,7 @@ import com.group3.monitorClient.testClasses.GreedyMessenger_TestClass;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.openapitools.client.model.ErrorData;
 import org.openapitools.client.model.TimingMonitorData;
 import org.threeten.bp.OffsetDateTime;
 
@@ -75,13 +77,27 @@ public class GreedyMessenger_Test extends AbstractPersistentSQLQueueTest {
         Assertions.assertEquals(1, messageQueue.Size());
     }
 
+    /* Ensures that an ErrorMessage doesn't create another ErrorMessage even if it fails to send itself */
     @Test
-    public void testCheckResponsePass () {
+    public void testErrorMessageCreationFail () throws InterruptedException {
         //Setup
+        GreedyMessenger_TestClass messenger = new GreedyMessenger_TestClass("1.1.1.1:8080", messageQueue, 400);
+        ErrorData errorData = new ErrorData();
+        errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.NOCONNECTION);
+        errorData.setSenderID(1L);
+        errorData.setTimestamp(OffsetDateTime.now());
+        errorData.setComment("hej");
+        ErrorDataMessage errorDataMessage = new ErrorDataMessage(errorData);
+
+        messageQueue.Put(errorDataMessage);
 
         //Act
+        messenger.Start();
+        Thread.sleep(1000);
+        messenger.Stop();
 
         //Assert
+        Assertions.assertEquals(0, messageQueue.Size());
     }
 }
 

@@ -141,36 +141,40 @@ public class GreedyMessenger implements MessengerInterface {
                 if(!running || paused){ break; }
             } while(statusCode >= 200 && statusCode < 300 && loop < 10);
 
-            CheckResponse(statusCode); //after 10 loops of none 200 response codes, check Response;
+            CheckResponse(statusCode, message.getClass() == ErrorDataMessage.class); //after 10 loops of none 200 response codes, check Response;
         } else {
             ThreadWait(5000);
         }
     }
 
     /* Checks the Response of message.send() and takes the appropriate action */
-    private void CheckResponse(int response){
+    private void CheckResponse(int response, boolean isErrorMessage){
         if(response >= 200 && response < 300){
             messageQueue.Delete();
         } else {
-            ErrorData errorData = new ErrorData();
             messageQueue.Failed();
-            if(response == -1){
-                if(running && !paused){ //TODO: change - preferably change from UnknownError to a defined error
-                    //A non-SocketTimeoutException was thrown when sending the message
+            System.out.println("got here");
+            if(!isErrorMessage){
+                System.out.println("got here 2");
+                ErrorData errorData = new ErrorData();
+                if(response == -1){
+                    if(running && !paused){ //TODO: change - preferably change from UnknownError to a defined error
+                        //A non-SocketTimeoutException was thrown when sending the message
+                        errorData.setTimestamp(OffsetDateTime.now());
+                        errorData.setSenderID(senderID);
+                        errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.UNKNOWNERROR);
+                        MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
+                        messageQueue.Put(errorDataMessage);
+                    }
+                } else {
+                    //if a non-200 http response is gotten - add it to the message
                     errorData.setTimestamp(OffsetDateTime.now());
                     errorData.setSenderID(senderID);
-                    errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.UNKNOWNERROR);
+                    errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.HTTPERROR);
+                    errorData.setHttpResponse(response);
                     MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
                     messageQueue.Put(errorDataMessage);
                 }
-            } else {
-                //if a non-200 http response is gotten - add it to the message
-                errorData.setTimestamp(OffsetDateTime.now());
-                errorData.setSenderID(senderID);
-                errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.HTTPERROR);
-                errorData.setHttpResponse(response);
-                MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
-                messageQueue.Put(errorDataMessage);
             }
         }
     }

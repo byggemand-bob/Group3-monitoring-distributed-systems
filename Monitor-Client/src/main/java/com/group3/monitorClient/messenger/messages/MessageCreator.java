@@ -75,7 +75,10 @@ public class MessageCreator {
             String blob = rs.getString("Message");
             String[] blobSplit = blob.split(MessageInterface.separator);
 
-            errorData.setHttpResponse(Integer.parseInt(blobSplit[0]));
+            if(!blobSplit[0].contains("null")){
+                errorData.setHttpResponse(Integer.parseInt(blobSplit[0]));
+            }
+
 
             errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.values()[Integer.parseInt(blobSplit[1])]);
 
