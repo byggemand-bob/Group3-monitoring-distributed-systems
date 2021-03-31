@@ -3,102 +3,102 @@ files:
   MonitorClientInterface.mustache:
     templateType: SupportingFiles
     destinationFilename: MonitorClientInterface.java
-    folder: src/gen/java/main/com/Group3/monitor/client
+    folder: src/gen/java/main/com/group3/monitor/client
 
   client/ApiCallback.mustache:
     templateType: SupportingFiles
     destinationFilename: ApiCallback.java
-    folder: src/gen/java/main/com/Group3/client
+    folder: src/gen/java/main/org/openapitools/client
 
   client/ApiClient.mustache:
     templateType: SupportingFiles
     destinationFilename: ApiClient.java
-    folder: src/gen/java/main/com/Group3/client
+    folder: src/gen/java/main/org/openapitools/client
 
   client/ApiException.mustache:
     templateType: SupportingFiles
     destinationFilename: ApiException.java
-    folder: src/gen/java/main/com/Group3/client
+    folder: src/gen/java/main/org/openapitools/client
 
   client/ApiResponse.mustache:
     templateType: SupportingFiles
     destinationFilename: ApiResponse.java
-    folder: src/gen/java/main/com/Group3/client
+    folder: src/gen/java/main/org/openapitools/client
 
   client/Configuration.mustache:
     templateType: SupportingFiles
     destinationFilename: Configuration.java
-    folder: src/gen/java/main/com/Group3/client
+    folder: src/gen/java/main/org/openapitools/client
 
   client/GzipRequestInterceptor.mustache:
     templateType: SupportingFiles
     destinationFilename: GzipRequestInterceptor.java
-    folder: src/gen/java/main/com/Group3/client
+    folder: src/gen/java/main/org/openapitools/client
 
   client/JSON.mustache:
     templateType: SupportingFiles
     destinationFilename: JSON.java
-    folder: src/gen/java/main/com/Group3/client
+    folder: src/gen/java/main/org/openapitools/client
 
   client/Pair.mustache:
     templateType: SupportingFiles
     destinationFilename: Pair.java
-    folder: src/gen/java/main/com/Group3/client
+    folder: src/gen/java/main/org/openapitools/client
 
   client/ProgressRequestBody.mustache:
     templateType: SupportingFiles
     destinationFilename: ProgressRequestBody.java
-    folder: src/gen/java/main/com/Group3/client
+    folder: src/gen/java/main/org/openapitools/client
 
   client/ProgressResponseBody.mustache:
     templateType: SupportingFiles
     destinationFilename: ProgressResponseBody.java
-    folder: src/gen/java/main/com/Group3/client
+    folder: src/gen/java/main/org/openapitools/client
 
   client/ServerConfiguration.mustache:
     templateType: SupportingFiles
     destinationFilename: ServerConfiguration.java
-    folder: src/gen/java/main/com/Group3/client
+    folder: src/gen/java/main/org/openapitools/client
 
   client/ServerVariable.mustache:
     templateType: SupportingFiles
     destinationFilename: ServerVariable.java
-    folder: src/gen/java/main/com/Group3/client
+    folder: src/gen/java/main/org/openapitools/client
 
   client/StringUtil.mustache:
     templateType: SupportingFiles
     destinationFilename: StringUtil.java
-    folder: src/gen/java/main/com/Group3/client
+    folder: src/gen/java/main/org/openapitools/client
 
   api/MonitorApi.mustache:
     templateType: SupportingFiles
     destinationFilename: MonitorApi.java
-    folder: src/gen/java/main/com/Group3/client/api
+    folder: src/gen/java/main/com/group3/monitor/api
 
   auth/ApiKeyAuth.mustache:
     templateType: SupportingFiles
     destinationFilename: ApiKeyAuth.java
-    folder: src/gen/java/main/com/Group3/client/auth
+    folder: src/gen/java/main/org/openapitools/client/auth
 
   auth/Authentication.mustache:
     templateType: SupportingFiles
     destinationFilename: Authentication.java
-    folder: src/gen/java/main/com/Group3/client/auth
+    folder: src/gen/java/main/org/openapitools/client/auth
 
   auth/HttpBasicAuth.mustache:
     templateType: SupportingFiles
     destinationFilename: HttpBasicAuth.java
-    folder: src/gen/java/main/com/Group3/client/auth
+    folder: src/gen/java/main/org/openapitools/client/auth
 
   auth/HttpBearerAuth.mustache:
     templateType: SupportingFiles
     destinationFilename: HttpBearerAuth.java
-    folder: src/gen/java/main/com/Group3/client/auth
+    folder: src/gen/java/main/org/openapitools/client/auth
 
   model/timingMonitorData.mustache:
     templateType: SupportingFiles
     destinationFilename: TimingMonitorData.java
-    folder: src/gen/java/main/com/Group3/monitor/model
+    folder: src/gen/java/main/com/group3/monitor/model
 
   api/controller/apiController.mustache:
     templateType: API
@@ -111,9 +111,9 @@ files:
   configuration/configManager.mustache:
     templateType: SupportingFiles
     destinationFilename: ConfigurationManager.java
-    folder: src/gen/java/main/com/Group3/monitor/configuration
+    folder: src/gen/java/main/com/group3/monitor/configuration
   
   exception/monitorConfigException.mustache:
     templateType: SupportingFiles
     destinationFilename: MonitorConfigException.java
-    folder: src/gen/java/main/com/Group3/monitor/exception
+    folder: src/gen/java/main/com/group3/monitor/exception

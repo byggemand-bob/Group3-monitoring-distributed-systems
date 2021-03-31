@@ -1,12 +1,11 @@
-package com.Group3.monitor.test.configuration;
+package com.group3.monitor.test.configuration;
 
-import com.Group3.monitor.exception.MonitorConfigException;
-import com.Group3.monitor.test.AbstractMonitorTest;
+import com.group3.monitor.configuration.ConfigurationManager;
+import com.group3.monitor.exception.MonitorConfigException;
+import com.group3.monitor.test.AbstractMonitorTest;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import com.Group3.monitor.configuration.ConfigurationManager;
 
 public class ConfigManagerTest extends AbstractMonitorTest {
 
