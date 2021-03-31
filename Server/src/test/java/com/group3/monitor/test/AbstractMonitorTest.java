@@ -1,4 +1,4 @@
-package com.Group3.monitor.test;
+package com.group3.monitor.test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-import com.Group3.monitor.configuration.ConfigurationManager;
+import com.group3.monitor.configuration.ConfigurationManager;
 
 public abstract class AbstractMonitorTest {
 

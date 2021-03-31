@@ -3,17 +3,17 @@ files:
   monitorClientInterface.mustache:
     templateType: SupportingFiles
     destinationFilename: MonitorClientInterface.java
-    folder: src/gen/java/main/com/Group3/monitor/client
+    folder: src/gen/java/main/com/group3/monitor/client
 
   model/timingMonitorData.mustache:
     templateType: SupportingFiles
     destinationFilename: TimingMonitorData.java
-    folder: src/gen/java/main/com/Group3/monitor/model
+    folder: src/gen/java/main/com/group3/monitor/model
 
   api/monitorApi.mustache:
     templateType: SupportingFiles
     destinationFilename: MonitorApi.java
-    folder: src/gen/java/main/com/Group3/monitor/api
+    folder: src/gen/java/main/com/group3/monitor/api
 
   api/api.mustache:
     templateType: API
@@ -22,14 +22,14 @@ files:
   configuration/configManager.mustache:
     templateType: SupportingFiles
     destinationFilename: ConfigurationManager.java
-    folder: src/gen/java/main/com/Group3/monitor/configuration
+    folder: src/gen/java/main/com/group3/monitor/configuration
     
   exception/monitorConfigException.mustache:
     templateType: SupportingFiles
     destinationFilename: MonitorConfigException.java
-    folder: src/gen/java/main/com/Group3/monitor/exception
+    folder: src/gen/java/main/com/group3/monitor/exception
 
-  model_test.mustache:
+  test/model_test.mustache:
     templateType: ModelTests
     destinationFilename: .java
 

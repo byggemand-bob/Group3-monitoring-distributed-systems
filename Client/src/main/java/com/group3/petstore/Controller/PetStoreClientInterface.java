@@ -1,11 +1,9 @@
-package com.Group3.petstore.Controller;
+package com.group3.petstore.Controller;
 
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.api.PetApi;
 import org.openapitools.client.model.Pet;
-
-import com.Group3.monitor.client.MonitorClientInterface;
 
 import java.util.List;
 import java.util.regex.Pattern;
