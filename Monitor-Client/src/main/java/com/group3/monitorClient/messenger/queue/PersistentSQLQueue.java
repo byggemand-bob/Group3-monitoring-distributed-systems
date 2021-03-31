@@ -37,8 +37,12 @@ public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
     /* Takes the first element in the queue from the sql */
     @Override
     public MessageInterface Take() {
-        ResultSet rs = sqlManager.SelectFirstMessage("queue");
-        return messageCreator.MakeMessageFromSQL(rs);
+        if (Size() != 0) {
+            ResultSet rs = sqlManager.SelectFirstMessage("queue");
+            return messageCreator.MakeMessageFromSQL(rs);
+        } else {
+            return null;
+        }
     }
 
     /* Deletes the first message in the Queue */

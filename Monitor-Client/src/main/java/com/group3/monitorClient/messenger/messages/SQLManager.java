@@ -161,10 +161,10 @@ public class SQLManager {
      */
     public ResultSet GenericStmt(String quary){
         try {
-            return stmt.executeQuery(quary);
+            ResultSet rs = stmt.executeQuery(quary);
+            return rs;
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
             return null;
         }
     }

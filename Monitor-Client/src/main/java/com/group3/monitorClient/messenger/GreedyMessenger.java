@@ -153,9 +153,7 @@ public class GreedyMessenger implements MessengerInterface {
             messageQueue.Delete();
         } else {
             messageQueue.Failed();
-            System.out.println("got here");
             if(!isErrorMessage){
-                System.out.println("got here 2");
                 ErrorData errorData = new ErrorData();
                 if(response == -1){
                     if(running && !paused){ //TODO: change - preferably change from UnknownError to a defined error

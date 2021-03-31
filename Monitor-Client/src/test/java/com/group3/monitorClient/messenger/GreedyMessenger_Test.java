@@ -93,7 +93,7 @@ public class GreedyMessenger_Test extends AbstractPersistentSQLQueueTest {
 
         //Act
         messenger.Start();
-        Thread.sleep(1000);
+        Thread.sleep(100);
         messenger.Stop();
 
         //Assert
