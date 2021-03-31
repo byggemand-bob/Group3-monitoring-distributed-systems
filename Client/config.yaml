@@ -29,7 +29,7 @@ files:
     destinationFilename: MonitorConfigException.java
     folder: src/gen/java/main/com/group3/monitor/exception
 
-  model_test.mustache:
+  test/model_test.mustache:
     templateType: ModelTests
     destinationFilename: .java
 
