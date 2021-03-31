@@ -1,4 +1,4 @@
-package com.Group3.monitor.api.test;
+package com.group3.monitor.api.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -18,9 +18,9 @@ import org.openapitools.client.ApiException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-import com.Group3.monitor.api.MonitorApi;
-import com.Group3.monitor.model.TimingMonitorData;
-import com.Group3.monitor.model.TimingMonitorData.EventCodeEnum;
+import com.group3.monitor.api.MonitorApi;
+import com.group3.monitor.model.TimingMonitorData;
+import com.group3.monitor.model.TimingMonitorData.EventCodeEnum;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;

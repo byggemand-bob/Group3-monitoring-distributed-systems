@@ -1,13 +1,14 @@
-package com.Group3.monitor.test.client;
+package com.group3.monitor.test.client;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.Group3.monitor.client.MonitorClientInterface;
-import com.Group3.monitor.configuration.ConfigurationManager;
-import com.Group3.monitor.exception.MonitorConfigException;
-import com.Group3.monitor.test.AbstractMonitorTest;
+import com.group3.monitor.client.MonitorClientInterface;
+import com.group3.monitor.configuration.ConfigurationManager;
+import com.group3.monitor.exception.MonitorConfigException;
+import com.group3.monitor.test.AbstractMonitorTest;
+
 
 
 public class MonitorClientInterfaceTest extends AbstractMonitorTest{
