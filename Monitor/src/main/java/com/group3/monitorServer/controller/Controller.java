@@ -1,4 +1,4 @@
-package com.Group3.MonitorServer.Controller;
+package com.group3.monitorServer.controller;
 
 import org.openapitools.api.MonitorApi;
 import org.openapitools.model.TimingMonitorData;
