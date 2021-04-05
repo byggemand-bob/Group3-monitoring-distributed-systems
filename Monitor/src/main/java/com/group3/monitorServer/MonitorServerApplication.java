@@ -1,4 +1,4 @@
-package com.Group3.MonitorServer;
+package com.group3.monitorServer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
