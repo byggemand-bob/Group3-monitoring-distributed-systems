@@ -1,10 +1,9 @@
 package com.group3.monitorServer.controller.messages;
 
-import org.openapitools.client.model.ErrorData;
-import org.openapitools.client.model.TimingMonitorData;
-import org.threeten.bp.OffsetDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
-
+import org.openapitools.model.ErrorData;
+import org.openapitools.model.TimingMonitorData;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -12,7 +11,7 @@ public class MessageCreator {
 
 
     /* receives a ResultSet, representing an message and converts it back into a message structure */
-    public com.group3.monitorClient.messenger.messages.MessageInterface MakeMessageFromSQL(ResultSet rs){
+    public com.group3.monitorServer.controller.messages.MessageInterface MakeMessageFromSQL(ResultSet rs){
         int TypeID = -1;
         try {
             TypeID = rs.getInt("MessageType");
@@ -20,9 +19,9 @@ public class MessageCreator {
             e.printStackTrace();
         }
 
-        if(TypeID == com.group3.monitorClient.messenger.messages.MessageTypeID.TimingMonitorData.ordinal()){
+        if(TypeID == MessageTypeID.TimingMonitorData.ordinal()){
             return CreateTimingMonitorData(rs);
-        } else if (TypeID == com.group3.monitorClient.messenger.messages.MessageTypeID.ErrorData.ordinal()){
+        } else if (TypeID == MessageTypeID.ErrorData.ordinal()){
             return CreateErrorData(rs);
         }
 
@@ -30,19 +29,19 @@ public class MessageCreator {
     }
 
     /* Converts TimingMonitorData into a Message format */
-    public com.group3.monitorClient.messenger.messages.MessageInterface MakeMessage(TimingMonitorData timingMonitorData){
-        return new com.group3.monitorClient.messenger.messages.TimingMonitorDataMessage(timingMonitorData);
+    public MessageInterface MakeMessage(TimingMonitorData timingMonitorData){
+        return new TimingMonitorDataMessage(timingMonitorData);
     }
 
     /* Converts ErrorData into a Message format */
-    public com.group3.monitorClient.messenger.messages.MessageInterface MakeMessage(ErrorData errorData) {
-        return new com.group3.monitorClient.messenger.messages.ErrorDataMessage(errorData);
+    public MessageInterface MakeMessage(ErrorData errorData) {
+        return new ErrorDataMessage(errorData);
     }
 
     /* converts a resultSet representing a TimingMonitorData and reconstructs it into a message format */
-    private com.group3.monitorClient.messenger.messages.MessageInterface CreateTimingMonitorData(ResultSet rs) {
+    private MessageInterface CreateTimingMonitorData(ResultSet rs) {
         TimingMonitorData timingMonitorData = new TimingMonitorData();
-        com.group3.monitorClient.messenger.messages.MessageInterface message = null;
+        MessageInterface message = null;
         try {
             timingMonitorData.setSenderID(rs.getLong("SenderID"));
 
@@ -50,7 +49,7 @@ public class MessageCreator {
             timingMonitorData.setTimestamp(ConvertStringToDateTime(dateTimeString));
 
             String blob = rs.getString("Message");
-            String[] blobSplit = blob.split(com.group3.monitorClient.messenger.messages.MessageInterface.separator);
+            String[] blobSplit = blob.split(MessageInterface.separator);
 
             timingMonitorData.setTargetEndpoint(blobSplit[0]);
 
@@ -64,16 +63,16 @@ public class MessageCreator {
     }
 
     /* converts a resultSet representing a ErrorData and reconstructs it into a message format */
-    private com.group3.monitorClient.messenger.messages.MessageInterface CreateErrorData(ResultSet rs) {
+    private MessageInterface CreateErrorData(ResultSet rs) {
         ErrorData errorData = new ErrorData();
-        com.group3.monitorClient.messenger.messages.MessageInterface message = null;
+        MessageInterface message = null;
         try {
             errorData.setSenderID(rs.getLong("SenderID"));
             String dateTimeString = rs.getString("Timestamp");
-            errorData.setTimestamp(ConvertStringToDateTime(dateTimeString));
+            errorData.setTimestamp(ConvertStringToDateTime((dateTimeString)));
 
             String blob = rs.getString("Message");
-            String[] blobSplit = blob.split(com.group3.monitorClient.messenger.messages.MessageInterface.separator);
+            String[] blobSplit = blob.split(MessageInterface.separator);
 
             if(!blobSplit[0].contains("null")){
                 errorData.setHttpResponse(Integer.parseInt(blobSplit[0]));
@@ -92,8 +91,10 @@ public class MessageCreator {
     }
 
     /* Converts a given string into a Datetime data-structure */
-    private OffsetDateTime ConvertStringToDateTime(String string){
+    public OffsetDateTime ConvertStringToDateTime(String string){
         return OffsetDateTime.parse(string, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
-
+//    private OffsetDateTime convertFrom (java.time.OffsetDateTime jtOdt) {
+//        return OffsetDateTime.parse(jtOdt.format(java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+//    }
 }

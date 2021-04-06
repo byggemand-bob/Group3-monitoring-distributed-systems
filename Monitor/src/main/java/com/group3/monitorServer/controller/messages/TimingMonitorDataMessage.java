@@ -1,25 +1,17 @@
 package com.group3.monitorServer.controller.messages;
 
-import com.group3.monitorClient.controller.MonitorClientInterface;
-import org.openapitools.client.ApiException;
-import org.openapitools.client.model.TimingMonitorData;
+import org.openapitools.model.TimingMonitorData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimingMonitorDataMessage implements com.group3.monitorClient.messenger.messages.MessageInterface {
+public class TimingMonitorDataMessage implements MessageInterface {
     private TimingMonitorData timingMonitorData;
     private int messageTypeID;
 
     public TimingMonitorDataMessage(TimingMonitorData timingMonitorData){
         this.timingMonitorData = timingMonitorData;
-        this.messageTypeID = com.group3.monitorClient.messenger.messages.MessageTypeID.TimingMonitorData.ordinal();
-    }
-
-    /* Message sends itself using the given MonitorClientInterface */
-    @Override
-    public int send(MonitorClientInterface monitorClientInterface) throws ApiException {
-            return monitorClientInterface.addMonitorData(timingMonitorData);
+        this.messageTypeID = MessageTypeID.TimingMonitorData.ordinal();
     }
 
     /* the message converts itself into an sql format, and saves itself using provided SQLManager */
