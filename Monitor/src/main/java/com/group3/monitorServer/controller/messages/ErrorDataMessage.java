@@ -1,8 +1,4 @@
-package com.Group3.MonitorServer.Controller.messages;
-
-import com.group3.monitorClient.controller.MonitorClientInterface;
-import org.openapitools.client.ApiException;
-import org.openapitools.client.model.ErrorData;
+package com.group3.monitorServer.controller.messages;
 
 public class ErrorDataMessage implements com.group3.monitorClient.messenger.messages.MessageInterface {
     //TODO: Make tests

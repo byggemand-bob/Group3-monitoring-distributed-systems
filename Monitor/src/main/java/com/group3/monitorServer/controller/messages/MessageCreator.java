@@ -1,4 +1,4 @@
-package com.Group3.MonitorServer.Controller.messages;
+package com.group3.monitorServer.controller.messages;
 
 import org.openapitools.client.model.ErrorData;
 import org.openapitools.client.model.TimingMonitorData;
