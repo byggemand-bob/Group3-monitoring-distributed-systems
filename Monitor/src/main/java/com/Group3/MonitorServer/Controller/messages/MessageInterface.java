@@ -1,0 +1,17 @@
+package com.Group3.MonitorServer.Controller.messages;
+
+import com.group3.monitorClient.controller.MonitorClientInterface;
+import org.openapitools.client.ApiException;
+
+public interface MessageInterface {
+    String separator = ",";
+
+    /* Send message to MonitorServer, and returns http status code */
+    int send(MonitorClientInterface monitorClientInterface) throws ApiException;
+
+    /*
+     * Create SQL-query to save message data in SQL database
+     * needed for messageQueue to function
+     */
+    void MakeSQL(SQLManager sqlManager);
+}
