@@ -94,7 +94,7 @@ public class MessageCreator {
     public OffsetDateTime ConvertStringToDateTime(String string){
         return OffsetDateTime.parse(string, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
-//    private OffsetDateTime convertFrom (java.time.OffsetDateTime jtOdt) {
+//    public OffsetDateTime convertFrom (java.time.OffsetDateTime jtOdt) {
 //        return OffsetDateTime.parse(jtOdt.format(java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME));
 //    }
 }
