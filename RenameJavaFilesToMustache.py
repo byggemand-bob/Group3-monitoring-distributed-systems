@@ -1,18 +1,37 @@
 #Imports
 import os
 import shutil
+from typing import List
 
 #Used to store the soruce and dest file path
 source = './Monitor-Client/src/main/java'
 dest = ['./Client/src/main/resources/cstTemplates/', './Server/src/main/resources/cstTemplates/']
+autogen = './Monitor-Client/target/generated-sources/openapi/src/gen/java/main'
+autogen_folders = ['\\org\\openapitools\\client\\api', '\\org\\openapitools\\client\\model']
+
+def check_include_list(path: str, include_list: List) -> bool:
+  if include_list == None:
+    print('Include by default for path: ' + path)
+    return True
+
+  allow = False
+  for dir in include_list:
+    if path.find(dir) != -1:
+      print('Path <' + path + '> allowed because it contains dir <' + dir + '>')
+      allow = True
+      break
+  
+  return allow
 
 #Function that does:
   # Rename .java files to mustache files
   # Copy and move them into the desired target location
-def CopyRenameMove(path, file_name):
-
+def CopyRenameMove(path: str, file_name: str, include_dir_list: List = None) -> None:
   #Rules out the files that does not end with .java
   if file_name.endswith('.java'):
+    
+    if not check_include_list(path, include_dir_list): return
+
     subpath = path[len(source) + 1:]
 
     #Spilt the path into a list containing mutitple strings used to generate the folder structure
@@ -52,3 +71,9 @@ def CopyRenameMove(path, file_name):
 for root, dirs, files in os.walk(source, topdown=True):
   for name in files:
     CopyRenameMove(root, name)
+
+# Remember to get the necessary api and models from the autogen folders
+for autogen_dir in autogen_folders:
+  for root, dirs, files in os.walk(autogen, topdown=True):
+    for name in files:
+        CopyRenameMove(root, name, autogen_folders)
