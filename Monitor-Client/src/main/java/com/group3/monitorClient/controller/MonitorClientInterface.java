@@ -26,10 +26,12 @@ public class MonitorClientInterface{
         if (Pattern.matches("^http://\\d+.\\d+.\\d+.\\d+:\\d+$", MonitorIP)) {
             monitorIP = MonitorIP;
         } else if(Pattern.matches("^\\d+.\\d+.\\d+.\\d+:\\d+$", MonitorIP)){
-            monitorIP = MonitorIP;
+            monitorIP = "http://" + MonitorIP;
         } else if(Pattern.matches("^http://localhost:\\d+$", MonitorIP)){
             monitorIP = MonitorIP;
         } else if(Pattern.matches("^localhost:\\d+$", MonitorIP)){
+            monitorIP = MonitorIP;
+        } else if(Pattern.matches("^localhost:\\d+.\\d+.\\d+.\\d+:\\d+$", MonitorIP)){
             monitorIP = MonitorIP;
         } else {
             //TODO: crash and burn?
