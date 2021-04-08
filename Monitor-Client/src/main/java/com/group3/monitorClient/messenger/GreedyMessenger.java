@@ -10,6 +10,10 @@ import org.openapitools.client.ApiException;
 import org.openapitools.client.api.MonitorApi;
 import org.openapitools.client.model.ErrorData;
 import org.threeten.bp.OffsetDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
+
+import java.io.*;
+import java.nio.file.Path;
 
 /*
  * The GreedyMessenger class runs a continues thread sending TimingMonitorData from a SynchronizedQueue.
@@ -125,7 +129,18 @@ public class GreedyMessenger implements MessengerInterface {
                             errorData.setComment("No connection to monitor server - start: " + errorData.getTimestamp().toString() + "\n");
                         }
                     } else {
-                        e.printStackTrace();
+                        try {
+                            File dumpfile = new File("src/main/resources/dumpfile.txt");
+                            PrintWriter pw = new PrintWriter(new FileOutputStream(dumpfile, true));
+
+                            pw.println(OffsetDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME));
+                            if(e.getCode() != 0){ pw.println("http error code: " + e.getCode()); }
+                            e.printStackTrace(pw);
+                            pw.println();
+                            pw.close();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }
 
@@ -139,7 +154,7 @@ public class GreedyMessenger implements MessengerInterface {
 
                 loop++;
                 if(!running || paused){ break; }
-            } while(statusCode >= 200 && statusCode < 300 && loop < 10);
+            } while(!(statusCode >= 200 && statusCode < 300) && loop < 10);
 
             CheckResponse(statusCode, message.getClass() == ErrorDataMessage.class); //after 10 loops of none 200 response codes, check Response;
         } else {
