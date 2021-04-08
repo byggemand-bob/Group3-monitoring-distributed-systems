@@ -71,6 +71,7 @@ public class GreedyMessenger_Test extends AbstractPersistentSQLQueueTest {
         timingMonitorData.setEventID(1L);
         timingMonitorData.setTimestamp(OffsetDateTime.now());
         timingMonitorData.setSenderID(21L);
+        timingMonitorData.setEventCode(TimingMonitorData.EventCodeEnum.RECEIVEREQUEST);
 
         messenger.AddMessage(messageCreator.MakeMessage(timingMonitorData));
 

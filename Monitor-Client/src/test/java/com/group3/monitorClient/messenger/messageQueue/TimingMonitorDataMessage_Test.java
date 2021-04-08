@@ -28,6 +28,7 @@ public class TimingMonitorDataMessage_Test extends AbstractSQLTest {
         timingMonitorData.setTimestamp(offsetDateTime);
         timingMonitorData.setTargetEndpoint("/monitor");
         timingMonitorData.setEventID(22L);
+        timingMonitorData.setEventCode(TimingMonitorData.EventCodeEnum.RECEIVEREQUEST);
         MessageInterface messageInterface = new TimingMonitorDataMessage(timingMonitorData);
 
         //Act

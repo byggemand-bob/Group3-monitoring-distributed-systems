@@ -47,6 +47,7 @@ public class MessageCreator_Test extends AbstractSQLTest {
         timingMonitorData.setTimestamp(offsetDateTime);
         timingMonitorData.setTargetEndpoint("/monitor");
         timingMonitorData.setEventID(22L);
+        timingMonitorData.setEventCode(TimingMonitorData.EventCodeEnum.RECEIVEREQUEST);
 
         //Act
         sqlManager.CreateNewTable(tableName,

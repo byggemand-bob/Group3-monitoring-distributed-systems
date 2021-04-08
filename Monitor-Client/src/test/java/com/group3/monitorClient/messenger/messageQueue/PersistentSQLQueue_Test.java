@@ -138,6 +138,7 @@ public class PersistentSQLQueue_Test extends AbstractPersistentSQLQueueTest {
         timingMonitorData.setTimestamp(offsetDateTime);
         timingMonitorData.setTargetEndpoint("/monitor");
         timingMonitorData.setEventID(22L);
+        timingMonitorData.setEventCode(TimingMonitorData.EventCodeEnum.RECEIVEREQUEST);
 
         //Act
         timingMonitorData.setSenderID(1L);
@@ -168,6 +169,7 @@ public class PersistentSQLQueue_Test extends AbstractPersistentSQLQueueTest {
         timingMonitorData.setTimestamp(offsetDateTime);
         timingMonitorData.setTargetEndpoint("/monitor");
         timingMonitorData.setEventID(22L);
+        timingMonitorData.setEventCode(TimingMonitorData.EventCodeEnum.RECEIVEREQUEST);
 
         timingMonitorData.setSenderID(1L);
         messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
@@ -209,6 +211,7 @@ public class PersistentSQLQueue_Test extends AbstractPersistentSQLQueueTest {
         timingMonitorData.setTimestamp(offsetDateTime);
         timingMonitorData.setTargetEndpoint("/monitor");
         timingMonitorData.setEventID(22L);
+        timingMonitorData.setEventCode(TimingMonitorData.EventCodeEnum.RECEIVEREQUEST);
 
         timingMonitorData.setSenderID(1L);
         messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
@@ -243,6 +246,7 @@ public class PersistentSQLQueue_Test extends AbstractPersistentSQLQueueTest {
         timingMonitorData.setTimestamp(offsetDateTime);
         timingMonitorData.setTargetEndpoint("/monitor");
         timingMonitorData.setEventID(22L);
+        timingMonitorData.setEventCode(TimingMonitorData.EventCodeEnum.RECEIVEREQUEST);
 
         timingMonitorData.setSenderID(1L);
         messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
@@ -280,6 +284,7 @@ public class PersistentSQLQueue_Test extends AbstractPersistentSQLQueueTest {
         timingMonitorData.setTargetEndpoint("/monitor");
         timingMonitorData.setEventID(22L);
         timingMonitorData.setSenderID(1L);
+        timingMonitorData.setEventCode(TimingMonitorData.EventCodeEnum.RECEIVEREQUEST);
         messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
         messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
         messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
