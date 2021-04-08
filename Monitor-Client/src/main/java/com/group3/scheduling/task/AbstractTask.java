@@ -1,4 +1,4 @@
-package com.group3.scheduling;
+package com.group3.scheduling.task;
 
 import org.quartz.Job;
 

@@ -3,6 +3,8 @@ package com.group3.scheduling;
 import org.quartz.JobKey;
 import org.quartz.TriggerKey;
 
+import com.group3.scheduling.task.AbstractTask;
+
 public class TaskDetails {
 	
 	private AbstractTask task;

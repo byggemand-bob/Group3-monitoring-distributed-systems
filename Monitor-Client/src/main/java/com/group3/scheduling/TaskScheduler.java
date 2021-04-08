@@ -11,6 +11,9 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
+import com.group3.scheduling.task.AbstractTask;
+import com.group3.scheduling.task.CleanUpOldFailedMessagesTask;
+
 public class TaskScheduler {
 	
 	private Map<String, TaskDetails> tasks;
@@ -23,8 +26,9 @@ public class TaskScheduler {
 		ConfigureBuiltInTasks();
 	}
 	
-	public void ConfigureBuiltInTasks() {
-		//TODO:Add clean up built in task
+	public void ConfigureBuiltInTasks() throws TaskAlreadyExistsExecption, SchedulerException {
+		CleanUpOldFailedMessagesTask cleanupMessageTask = new CleanUpOldFailedMessagesTask(CleanUpOldFailedMessagesTask.class.getName(), "cleanup", "0 * * ? * * *");
+		ScheduleTask(cleanupMessageTask);
 	}
 	
 	public void ScheduleTask(AbstractTask task) throws SchedulerException, TaskAlreadyExistsExecption {

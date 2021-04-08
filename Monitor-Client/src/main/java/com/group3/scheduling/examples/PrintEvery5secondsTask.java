@@ -6,7 +6,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import com.group3.scheduling.AbstractTask;
+import com.group3.scheduling.task.AbstractTask;
 
 public class PrintEvery5secondsTask extends AbstractTask {
 
