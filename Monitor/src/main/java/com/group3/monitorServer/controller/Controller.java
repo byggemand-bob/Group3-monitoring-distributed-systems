@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
-public class Controller implements MonitorApi {
+public class Controller implements MonitorApi, ErrorApi {
     PersistentSQLQueue messageQueue;
     MessageCreator messageCreator;
 
@@ -24,10 +24,10 @@ public class Controller implements MonitorApi {
         messageCreator = new MessageCreator();
     }
 
-//    @Override
-//    public Optional<NativeWebRequest> getRequest() {
-//        return Optional.empty();
-//    }
+    @Override
+    public Optional<NativeWebRequest> getRequest() {
+        return Optional.empty();
+    }
 
     @Override
     public ResponseEntity<Void> addMonitorData(@Valid TimingMonitorData timingMonitorData) {
@@ -36,10 +36,10 @@ public class Controller implements MonitorApi {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @Override
-//    public ResponseEntity<Void> addErrorData(@Valid ErrorData errorData) {
-//        messageQueue.Put(messageCreator.MakeMessage(errorData));
-//        System.out.println(errorData);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    @Override
+    public ResponseEntity<Void> addErrorData(@Valid ErrorData errorData) {
+        messageQueue.Put(messageCreator.MakeMessage(errorData));
+        System.out.println(errorData);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
