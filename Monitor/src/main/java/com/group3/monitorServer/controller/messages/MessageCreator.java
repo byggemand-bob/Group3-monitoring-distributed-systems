@@ -55,6 +55,8 @@ public class MessageCreator {
 
             timingMonitorData.setEventID(Long.valueOf(blobSplit[1]));
 
+            timingMonitorData.setEventCode(TimingMonitorData.EventCodeEnum.values()[Integer.parseInt(blobSplit[2])]);
+
             message = MakeMessage(timingMonitorData);
         } catch (SQLException e) {
             e.printStackTrace();

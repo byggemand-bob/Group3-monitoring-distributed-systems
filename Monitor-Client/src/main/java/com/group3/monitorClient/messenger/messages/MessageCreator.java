@@ -40,6 +40,7 @@ public class MessageCreator {
     }
 
     /* converts a resultSet representing a TimingMonitorData and reconstructs it into a message format */
+    /* converts a resultSet representing a TimingMonitorData and reconstructs it into a message format */
     private MessageInterface CreateTimingMonitorData(ResultSet rs) {
         TimingMonitorData timingMonitorData = new TimingMonitorData();
         MessageInterface message = null;
@@ -55,6 +56,8 @@ public class MessageCreator {
             timingMonitorData.setTargetEndpoint(blobSplit[0]);
 
             timingMonitorData.setEventID(Long.valueOf(blobSplit[1]));
+
+            timingMonitorData.setEventCode(TimingMonitorData.EventCodeEnum.values()[Integer.parseInt(blobSplit[2])]);
 
             message = MakeMessage(timingMonitorData);
         } catch (SQLException e) {
