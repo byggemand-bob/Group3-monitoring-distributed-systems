@@ -27,6 +27,9 @@ public class TimingMonitorDataMessage implements MessageInterface {
         if (timingMonitorData.getSenderID() == null) {
             errorMessages.add("SenderID");
         }
+        if (timingMonitorData.getEventCode() == null) {
+            errorMessages.add("EventCode");
+        }
 
         if (!errorMessages.isEmpty()) {
             String errorMessage = "TimingMonitorDataMessage did not contain the required fields\n";
@@ -36,7 +39,7 @@ public class TimingMonitorDataMessage implements MessageInterface {
             throw new NullPointerException(errorMessage);
         }
 
-        String blob = timingMonitorData.getTargetEndpoint() + separator + timingMonitorData.getEventID();
+        String blob = timingMonitorData.getTargetEndpoint() + separator + timingMonitorData.getEventID() + separator + timingMonitorData.getEventCode().ordinal();
 
         sqlManager.InsertMessage("queue", timingMonitorData.getSenderID(), messageTypeID, timingMonitorData.getTimestamp().toString(), blob);
     }
