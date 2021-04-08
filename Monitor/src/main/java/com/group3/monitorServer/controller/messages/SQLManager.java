@@ -96,6 +96,10 @@ public class SQLManager {
         return GenericStmt("SELECT * FROM "+tableName+" WHERE ToBeSent = 0 ORDER BY 1 LIMIT 1");
     }
 
+    public ResultSet SelectBySenderID(String tableName){
+        return GenericStmt("SELECT * FROM "+tableName+" WHERE ToBeSent = 0 ORDER BY SenderID");
+    }
+
     /* Checks if a table with specified name exists in the database */
     public boolean CheckIfExists(String tableName) {
         try {
@@ -134,6 +138,11 @@ public class SQLManager {
 
     public void DeleteAllFailedMessages(String tableName){
         String sql = "DELETE FROM " + tableName + " WHERE ToBeSent = 0";
+        GenericPreparedStmt(sql);
+    }
+
+    public void DeleteByID (String tableName, int id) {
+        String sql = "DELETE FROM " + tableName + " WHERE ID = " + id;
         GenericPreparedStmt(sql);
     }
 
