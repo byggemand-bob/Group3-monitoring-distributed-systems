@@ -18,6 +18,7 @@ public class SQLManager_Test extends AbstractSQLTest {
         TimingMonitorData timingMonitorData = new TimingMonitorData();
         MessageCreator messageCreator = new MessageCreator();
         timingMonitorData.setEventID(420L);
+        timingMonitorData.setEventCode(TimingMonitorData.EventCodeEnum.RECEIVEREQUEST);
         timingMonitorData.setTimestamp(OffsetDateTime.now());
         timingMonitorData.setTargetEndpoint("test");
         MessageInterface message = messageCreator.MakeMessage(timingMonitorData);
@@ -35,7 +36,6 @@ public class SQLManager_Test extends AbstractSQLTest {
         //Act
         int tableSize = sqlManager.TableSize(tableName);
         try {
-
             for (int i = 1; i <= tableSize; i++){
                 ResultSet rs = sqlManager.GenericStmt("SELECT * FROM " + tableName);
                 for (int l = 0; l < i; l++) {

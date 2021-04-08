@@ -5,6 +5,8 @@ import com.group3.monitorServer.controller.messages.MessageInterface;
 import com.group3.monitorServer.controller.messages.SQLManager;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.LinkedList;
 
 /*
  * This class serves as a persistent queue, utilizing sqlite to ensure
@@ -43,6 +45,21 @@ public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public ResultSet Take(int Number) {
+        return sqlManager.SelectMessages("queue", Number);
+    }
+
+    @Override
+    public ResultSet TakeAll() {
+        return sqlManager.SelectAllMessages("queue");
+    }
+
+    @Override
+    public void DeleteID(Long ID) {
+        sqlManager.DeleteByID("queue", ID);
     }
 
     /* Deletes the first message in the Queue */

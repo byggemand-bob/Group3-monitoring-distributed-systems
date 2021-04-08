@@ -21,6 +21,14 @@ public class SQLManager {
         }
     }
 
+    public ResultSet SelectAllMessages(String TableName){
+        return GenericStmt("SELECT * FROM " + TableName);
+    }
+
+    public ResultSet SelectMessages(String TableName, int Number){
+        return GenericStmt("SELECT * FROM " + TableName + " LIMIT " + Number);
+    }
+
     /* returns the number of elements in a specified table */
     public int TableSize(String TableName){
         int size = -1;
@@ -141,7 +149,7 @@ public class SQLManager {
         GenericPreparedStmt(sql);
     }
 
-    public void DeleteByID (String tableName, int id) {
+    public void DeleteByID (String tableName, long id) {
         String sql = "DELETE FROM " + tableName + " WHERE ID = " + id;
         GenericPreparedStmt(sql);
     }
