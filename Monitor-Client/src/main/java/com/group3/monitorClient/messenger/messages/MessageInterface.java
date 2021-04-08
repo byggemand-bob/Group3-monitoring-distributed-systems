@@ -2,7 +2,6 @@ package com.group3.monitorClient.messenger.messages;
 
 import com.group3.monitorClient.controller.MonitorClientInterface;
 import org.openapitools.client.ApiException;
-import org.openapitools.client.api.MonitorApi;
 
 public interface MessageInterface {
     String separator = ",";
