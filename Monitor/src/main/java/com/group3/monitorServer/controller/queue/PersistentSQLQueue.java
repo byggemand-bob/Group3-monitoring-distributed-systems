@@ -30,7 +30,7 @@ public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
 
     /* puts the given message into the sql database */
     @Override
-    public void Put(MessageInterface data) {
+    public synchronized void Put(MessageInterface data) {
         data.MakeSQL(sqlManager);
     }
 
@@ -47,7 +47,7 @@ public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
 
     /* Deletes the first message in the Queue */
     @Override
-    public void Delete() {
+    public synchronized void Delete() {
         sqlManager.DeleteFirstMessage("queue");
         if(sqlManager.TableSize("queue") == 0){
             sqlManager.ResetAutoIncrement("queue");
@@ -56,45 +56,45 @@ public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
 
     /* returns the number of messages in the queue */
     @Override
-    public int Size() {
+    public synchronized int Size() {
         return sqlManager.TableSize("queue", "ToBeSent = 1");
     }
 
     @Override
-    public void Failed() {
+    public synchronized void Failed() {
         sqlManager.ChangeStatusOfFirstToBeSentElement("queue");
     }
 
     @Override
-    public MessageInterface TakeFailed() {
+    public synchronized MessageInterface TakeFailed() {
         return messageCreator.MakeMessageFromSQL(sqlManager.SelectFirstFailedMessage("queue"));
     }
 
     @Override
-    public int SizeFailed() {
+    public synchronized int SizeFailed() {
         return sqlManager.TableSize("queue", "ToBeSent = 0");
     }
 
     @Override
-    public void DeleteFailed() {
+    public synchronized void DeleteFailed() {
         sqlManager.DeleteFirstFailedMessage("queue");
     }
 
     @Override
-    public void DeleteAllFailed() {
+    public synchronized void DeleteAllFailed() {
         sqlManager.DeleteAllFailedMessages("queue");
     }
 
     /* Closes the queues connection to the sql database */
-    public void CloseConnection () {
+    public synchronized void CloseConnection () {
         sqlManager.CloseConnection();
     }
 
-    public String getPath () {
+    public synchronized String getPath () {
         return sqlManager.getPath();
     }
 
-    public String getFileName () {
+    public synchronized String getFileName () {
         return sqlManager.getFileName();
     }
 }
