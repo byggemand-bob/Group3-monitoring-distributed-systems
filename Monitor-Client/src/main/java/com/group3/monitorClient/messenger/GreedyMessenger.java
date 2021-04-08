@@ -2,18 +2,17 @@ package com.group3.monitorClient.messenger;
 
 import com.group3.monitorClient.controller.MonitorClientInterface;
 import com.group3.monitorClient.messenger.messages.ErrorDataMessage;
-import com.group3.monitorClient.messenger.queue.QueueInterface;
 import com.group3.monitorClient.messenger.messages.MessageCreator;
 import com.group3.monitorClient.messenger.messages.MessageInterface;
-import org.openapitools.client.ApiClient;
+import com.group3.monitorClient.messenger.queue.QueueInterface;
 import org.openapitools.client.ApiException;
-import org.openapitools.client.api.MonitorApi;
 import org.openapitools.client.model.ErrorData;
 import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import java.io.*;
-import java.nio.file.Path;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
 /*
  * The GreedyMessenger class runs a continues thread sending TimingMonitorData from a SynchronizedQueue.
