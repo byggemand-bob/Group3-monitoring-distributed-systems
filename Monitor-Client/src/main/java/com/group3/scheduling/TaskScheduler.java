@@ -40,13 +40,26 @@ public class TaskScheduler {
 		ConfigureBuiltInTasks();
 	}
 	
+	/**
+	 * Configures the built-in scheduled tasks of the monitoring framework.
+	 * 
+	 * @throws TaskAlreadyExistsExecption Thrown if a task with the same name has already been scheduled.
+	 * @throws SchedulerException
+	 */
 	public void ConfigureBuiltInTasks() throws TaskAlreadyExistsExecption, SchedulerException {
 		CheckIfInitialized();
 		CleanUpOldFailedMessagesTask cleanupMessageTask = new CleanUpOldFailedMessagesTask(CleanUpOldFailedMessagesTask.class.getName(), "cleanup", "0 0 22 ? * * *");
 		ScheduleTask(cleanupMessageTask);
 	}
 	
-	public void ScheduleTask(AbstractTask task) throws SchedulerException, TaskAlreadyExistsExecption {
+	/**
+	 * Schedules a new task in the TaskScheduler.
+	 * 
+	 * @param task The {@link AbstractTask} that is to be scheduled.
+	 * @throws TaskAlreadyExistsExecption Thrown if a task with the same name has already been scheduled.
+	 * @throws SchedulerException
+	 */
+	public void ScheduleTask(AbstractTask task) throws TaskAlreadyExistsExecption, SchedulerException {
 		CheckIfInitialized();
 		if(tasks.containsKey(task.GetName())) {
 			throw new TaskAlreadyExistsExecption("Task with name " + task.GetName() + ", have already been scheduled");
@@ -66,12 +79,24 @@ public class TaskScheduler {
 		tasks.put(task.GetName(), taskDetails);
 	}
 
+	/**
+	 * Creates a {@link JobDetail} instance from the given Task.
+	 * 
+	 * @param task The {@link AbstractTask} used to create the Quartz {@link JobDetail}.
+	 * @return An instance of {@link JobDetail} which is used to schedule the job.
+	 */
 	public JobDetail CreateJobForTask(AbstractTask task) {
 		return JobBuilder.newJob(task.getClass())
 				.withIdentity(task.GetName(), task.GetGroup())
 				.build();
 	}
 	
+	/**
+	 * Enables a disabled Task in the TaskScheduler.
+	 * 
+	 * @param taskName The name of the task to enable.
+	 * @return true if task is successfully enabled, false otherwise.
+	 */
 	public boolean EnableTask(String taskName) {
 		CheckIfInitialized();
 		if (!tasks.containsKey(taskName)) {
@@ -82,6 +107,7 @@ public class TaskScheduler {
 		TaskDetails taskDetails = tasks.get(taskName);
 		try {
 			Trigger newTrigger = CreateTriggerForTask(taskDetails.GetTask());
+			// Reschedule the job instead of resume to stop the job executing multiple times when resuming
 			scheduler.rescheduleJob(taskDetails.GetTriggerKey(), newTrigger);
 			taskDetails.SetTriggerKey(newTrigger.getKey());
 		} catch (SchedulerException e) {
@@ -94,6 +120,12 @@ public class TaskScheduler {
 		return true;
 	}
 	
+	/**
+	 * Disables a Task in the TaskScheduler.
+	 * 
+	 * @param taskName The name of the task to disable.
+	 * @return true if task is successfully disabled, false otherwise.
+	 */
 	public boolean DisableTask(String taskName) {
 		CheckIfInitialized();
 		if (!tasks.containsKey(taskName)) {
@@ -115,6 +147,12 @@ public class TaskScheduler {
 		return true;
 	}
 	
+	/**
+	 * Checks whether the task with the given name is enabled.
+	 * 
+	 * @param taskName The name of the task to check.
+	 * @return true if the task exist and is enabled, false otherwise.
+	 */
 	public boolean IsTaskEnabled(String taskName) {
 		CheckIfInitialized();
 		//If the map does not contain the task name return false
@@ -128,11 +166,23 @@ public class TaskScheduler {
 		return taskDetails.IsEnabled();
 	}
 	
+	/**
+	 * Shutdown the scheduler for good.
+	 * This is to be run on termination.
+	 * 
+	 * @throws SchedulerException
+	 */
 	public void Shutdown() throws SchedulerException {
 		CheckIfInitialized();
 		scheduler.shutdown();
 	}
 	
+	/**
+	 * Creates a new {@link Trigger} based on the {@link AbstractTask} provided.
+	 * 
+	 * @param task The {@link AbstractTask} used to create the {@link Trigger}.
+	 * @return A new {@link Trigger} instance.
+	 */
 	public Trigger CreateTriggerForTask(AbstractTask task) {
 		String triggerName = "cronTrigger4" + task.GetName();
 		return TriggerBuilder.newTrigger()
@@ -141,6 +191,9 @@ public class TaskScheduler {
 		.build();
 	}
 	
+	/**
+	 * Checks whether the TaskScheduler has been initialized before any scheduling methods are called.
+	 */
 	private void CheckIfInitialized() {
 		if (tasks == null || scheduler == null) {
 			throw new NotInitializedException("Method \"Initialize()\" have to be called before <" + MonitorUtils.GetCallingMethodName(3) + "> on " + this.getClass().getSimpleName());

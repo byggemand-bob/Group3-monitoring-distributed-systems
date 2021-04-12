@@ -11,6 +11,15 @@ public class CleanUpOldFailedMessagesTask extends AbstractTask {
 
 	private final String cleanupSQL = "DELETE FROM queue WHERE ToBeSent = 0 AND datetime(Timestamp) < datetime('now', ?)";
 	
+	/**
+	 * Constructor for the CleanUpOldFailedMessagesTask.
+	 * 
+	 * @param name The name of the task.
+	 * @param group The group the task belongs to.
+	 * @param cron The cron expression used to specify the execution schedule of the task.
+	 * 
+	 * @see AbstractTask
+	 */
 	public CleanUpOldFailedMessagesTask(String name, String group, String cron) {
 		super(name, group, cron);
 	}
