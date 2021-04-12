@@ -63,8 +63,8 @@ public class Processor implements Runnable {
                     if(rs.getInt("MessageType") == MessageTypeID.TimingMonitorData.ordinal()){
                         TimingMonitorDataMessage TimingMessage = (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(rs);
                         LinkedList<TimingMonitorDataMessage> TimingMessagesList = new LinkedList<>();
-                        TimingMessagesList = FindMatchingTimingMonitorData(TimingMessage, rs);
-                        AnalyseTimingMessages(TimingMessagesList);
+//                        TimingMessagesList = FindMatchingTimingMonitorData(TimingMessage, rs);
+//                        AnalyseTimingMessages(TimingMessagesList);
                         //TODO: Add elements analyzed to deletelist
                     } else if(rs.getInt("MessageType") == MessageTypeID.ErrorData.ordinal()){
                         //TODO: Move Analyze ErrorData and add to delete list

@@ -1,5 +1,6 @@
 package com.group3.monitorServer.controller.queue;
 
+import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -19,6 +20,21 @@ public class SynchronizedQueue<T> implements QueueInterface<T> {
     @Override
     public synchronized T Take(){
         return queue.peek();
+    }
+
+    @Override
+    public ResultSet Take(int number) {
+        return null; //TODO: Implement
+    }
+
+    @Override
+    public ResultSet TakeAll() {
+        return null; //TODO: Implement
+    }
+
+    @Override
+    public void DeleteID(Long ID) {
+        //TODO: Implement
     }
 
     @Override

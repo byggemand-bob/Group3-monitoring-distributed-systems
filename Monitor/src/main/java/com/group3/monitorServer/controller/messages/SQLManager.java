@@ -2,6 +2,10 @@ package com.group3.monitorServer.controller.messages;
 
 import java.sql.*;
 
+/*
+ * SQLManager handles queries to a given database
+ * CAN ONLY MANAGE 1 QUERY PER DATABASE!
+ */
 public class SQLManager {
     private final String path;
     private final String url;
@@ -176,9 +180,9 @@ public class SQLManager {
      * Made for testing
      * Only statements allowed
      */
-    public ResultSet GenericStmt(String quary){
+    public ResultSet GenericStmt(String query){
         try {
-            ResultSet rs = stmt.executeQuery(quary);
+            ResultSet rs = stmt.executeQuery(query);
             return rs;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -190,9 +194,9 @@ public class SQLManager {
      * Made for testing
      * Only Prepared statements allowed
      */
-    public void GenericPreparedStmt(String quary){
+    public void GenericPreparedStmt(String query){
         try {
-            PreparedStatement pstmt = conn.prepareStatement(quary);
+            PreparedStatement pstmt = conn.prepareStatement(query);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
