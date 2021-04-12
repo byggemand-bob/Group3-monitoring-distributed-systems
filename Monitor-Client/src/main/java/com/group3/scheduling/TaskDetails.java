@@ -84,4 +84,20 @@ public class TaskDetails {
 	public AbstractTask GetTask() {
 		return task;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.getClass().getSimpleName());
+		sb.append("[");
+		sb.append("enabled=" + enabled);
+		sb.append(", ");
+		sb.append("task=" + task.getClass().getSimpleName());
+		sb.append(", ");
+		sb.append("jobKey=" + jobKey.getGroup() + "." + jobKey.getName());
+		sb.append(", ");
+		sb.append("triggerKey=" + triggerKey.getGroup() + "." + triggerKey.getName());
+		sb.append("]");
+		return sb.toString();
+	}
 }
