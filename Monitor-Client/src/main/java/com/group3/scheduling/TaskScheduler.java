@@ -11,14 +11,28 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
+import com.group3.monitorClient.util.MonitorUtils;
 import com.group3.scheduling.task.AbstractTask;
 import com.group3.scheduling.task.CleanUpOldFailedMessagesTask;
 
+/**
+ * A functionality wrapper for the Quartz {@link Scheduler}.
+ * Provides functionality for configuring and scheduling tasks.
+ *
+ */
 public class TaskScheduler {
 	
 	private Map<String, TaskDetails> tasks;
 	private Scheduler scheduler;
 	
+	/**
+	 * Initializes the TaskScheduler.
+	 * This needs to be run before any configuring or scheduling of tasks can be done.
+	 * 
+	 * Also automatically schedules built-in tasks.
+	 * 
+	 * @throws SchedulerException
+	 */
 	public void Initialize() throws SchedulerException {
 		tasks = new HashMap<String, TaskDetails>();
 		scheduler = new StdSchedulerFactory().getScheduler();
@@ -27,11 +41,13 @@ public class TaskScheduler {
 	}
 	
 	public void ConfigureBuiltInTasks() throws TaskAlreadyExistsExecption, SchedulerException {
+		CheckIfInitialized();
 		CleanUpOldFailedMessagesTask cleanupMessageTask = new CleanUpOldFailedMessagesTask(CleanUpOldFailedMessagesTask.class.getName(), "cleanup", "0 0 22 ? * * *");
 		ScheduleTask(cleanupMessageTask);
 	}
 	
 	public void ScheduleTask(AbstractTask task) throws SchedulerException, TaskAlreadyExistsExecption {
+		CheckIfInitialized();
 		if(tasks.containsKey(task.GetName())) {
 			throw new TaskAlreadyExistsExecption("Task with name " + task.GetName() + ", have already been scheduled");
 		}
@@ -57,6 +73,7 @@ public class TaskScheduler {
 	}
 	
 	public boolean EnableTask(String taskName) {
+		CheckIfInitialized();
 		if (!tasks.containsKey(taskName)) {
 			return false;
 		}
@@ -78,6 +95,7 @@ public class TaskScheduler {
 	}
 	
 	public boolean DisableTask(String taskName) {
+		CheckIfInitialized();
 		if (!tasks.containsKey(taskName)) {
 			return false;
 		}
@@ -98,6 +116,7 @@ public class TaskScheduler {
 	}
 	
 	public boolean IsTaskEnabled(String taskName) {
+		CheckIfInitialized();
 		//If the map does not contain the task name return false
 		if (!tasks.containsKey(taskName)) {
 			return false;
@@ -110,6 +129,7 @@ public class TaskScheduler {
 	}
 	
 	public void Shutdown() throws SchedulerException {
+		CheckIfInitialized();
 		scheduler.shutdown();
 	}
 	
@@ -119,5 +139,11 @@ public class TaskScheduler {
 		.withIdentity(triggerName, task.GetGroup())
 		.withSchedule(CronScheduleBuilder.cronSchedule(task.GetCron()))
 		.build();
+	}
+	
+	private void CheckIfInitialized() {
+		if (tasks == null || scheduler == null) {
+			throw new NotInitializedException("Method \"Initialize()\" have to be called before <" + MonitorUtils.GetCallingMethodName(3) + "> on " + this.getClass().getSimpleName());
+		}
 	}
 }
