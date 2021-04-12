@@ -7,5 +7,5 @@ public interface MessageInterface {
      * Create SQL-query to save message data in SQL database
      * needed for messageQueue to function
      */
-    void MakeSQL(SQLManager sqlManager);
+    void MakeSQL(SQLManagerOLD sqlManagerOLD);
 }

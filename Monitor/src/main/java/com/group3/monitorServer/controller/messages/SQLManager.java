@@ -1,5 +1,7 @@
 package com.group3.monitorServer.controller.messages;
 
+import jdk.jshell.spi.ExecutionControl;
+
 import java.sql.*;
 
 /*
@@ -18,12 +20,8 @@ public class SQLManager {
         conn = Connect();
     }
 
-    public ResultSet SelectAllMessages(String TableName){
+    public ResultSet SelectAll(String TableName){
         return GenericStmt("SELECT * FROM " + TableName);
-    }
-
-    public ResultSet SelectMessages(String TableName, int Number){
-        return GenericStmt("SELECT * FROM " + TableName + " LIMIT " + Number);
     }
 
     /* returns the number of elements in a specified table */
@@ -42,21 +40,6 @@ public class SQLManager {
         return size;
     }
 
-    public int TableSize(String TableName, String WhereArgs){
-        int size = -1;
-        ResultSet rs = GenericStmt("SELECT COUNT(*) FROM " + TableName + " WHERE " + WhereArgs);
-
-        try {
-            if(rs.next()){
-                size = rs.getInt(1);
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return size;
-    }
-
     /* Creates a table with the given name, and columns as given by args */
     public void CreateNewTable(String tableName, String... args) {
         StringBuilder sql = new StringBuilder();
@@ -70,43 +53,13 @@ public class SQLManager {
         GenericPreparedStmt(sql.toString());
     }
 
-    /* Inserts and Message element into the given table */
-    public void InsertMessage(String tableName, long senderID, int messageType, String timeStamp, String message) {
-        //TODO: choose the prettiest in all the lands
-        GenericPreparedStmt("INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) " +
-                "VALUES(" +
-                        senderID + ',' +
-                        messageType + ",'" +
-                        timeStamp +"','" +
-                        message + "')");
-//        try {
-//            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) VALUES(?,?,?,?)");
-//            pstmt.setLong(1, senderID);
-//            pstmt.setInt(2, messageType);
-//            pstmt.setString(3, timeStamp);
-//            pstmt.setString(4, message);
-//            pstmt.executeUpdate();
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-    }
-
-    /* returns the first element of tableName, as ordered by the first column and has ToBeSent = 1 */
-    public ResultSet SelectFirstMessage(String tableName){
-        return GenericStmt("SELECT * FROM "+tableName+" WHERE ToBeSent = 1 ORDER BY 1 LIMIT 1");
-    }
-
-    /* returns the first element of tableName, as ordered by the first column and has ToBeSent = 0 */
-    public ResultSet SelectFirstFailedMessage(String tableName){
-        return GenericStmt("SELECT * FROM "+tableName+" WHERE ToBeSent = 0 ORDER BY 1 LIMIT 1");
-    }
-
-    public ResultSet SelectBySenderID(String tableName){
-        return GenericStmt("SELECT * FROM "+tableName+" WHERE ToBeSent = 0 ORDER BY SenderID");
+    /* returns the first element of tableName */
+    public ResultSet SelectFirst(String tableName){
+        return GenericStmt("SELECT * FROM "+tableName+" LIMIT 1");
     }
 
     /* Checks if a table with specified name exists in the database */
-    public boolean CheckIfExists(String tableName) {
+    public boolean CheckIfTableExists(String tableName) {
         try {
             return GenericStmt("SELECT name FROM sqlite_master WHERE name = '" + tableName +"'").next();
         } catch (SQLException throwables) {
@@ -120,59 +73,17 @@ public class SQLManager {
         GenericPreparedStmt("UPDATE sqlite_sequence SET seq = 0 WHERE name = '" + tableName + "'");
     }
 
-    /* Deletes the first element of a message Table, where ToBeSent = 1 */
-    public void DeleteFirstMessage(String tableName){
-        try {
-            long ID = SelectFirstMessage(tableName).getLong("ID");
-            GenericPreparedStmt("DELETE FROM " + tableName + " WHERE ID = " + ID);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-
-        }
+    /* Deletes the first element of a message Table */
+    public void DeleteFirst(String tableName){
+        //TODO: implement
+        //example:   DELETE FROM customers WHERE last_name = 'Smith'
     }
 
-    /* Deletes the first element of a message Table, where ToBeSent = 0 */
-    public void DeleteFirstFailedMessage(String tableName){
-        try {
-            long ID = SelectFirstFailedMessage(tableName).getLong("ID");
-            GenericPreparedStmt("DELETE FROM " + tableName + " WHERE ID = " + ID);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+    public void DeleteAll(String tableName){
+        //TODO: implement
     }
 
-    public void DeleteAllFailedMessages(String tableName){
-        String sql = "DELETE FROM " + tableName + " WHERE ToBeSent = 0";
-        GenericPreparedStmt(sql);
-    }
-
-    public void DeleteByID (String tableName, long id) {
-        String sql = "DELETE FROM " + tableName + " WHERE ID = " + id;
-        GenericPreparedStmt(sql);
-    }
-
-    public void ChangeStatusOfFirstToBeSentElement (String tableName) {
-        String sql = "SELECT * FROM "+tableName+" WHERE ToBeSent = 1 ORDER BY 1 LIMIT 1";
-        try {
-            long ID = GenericStmt(sql).getLong(1);
-            GenericPreparedStmt("UPDATE " + tableName + " SET ToBeSent = 0 WHERE ID = '" + ID + "'");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    public String getPath () {
-        return this.path;
-    }
-
-    public String getFileName () {
-        return this.fileName;
-    }
-
-    /*
-     * Made for testing
-     * Only statements allowed
-     */
+    /* Only statements allowed */
     public ResultSet GenericStmt(String query){
         try {
             return CreateNewStmt().executeQuery(query);
@@ -182,10 +93,7 @@ public class SQLManager {
         }
     }
 
-    /*
-     * Made for testing
-     * Only Prepared statements allowed
-     */
+    /* Only Prepared statements allowed */
     public void GenericPreparedStmt(String query){
         try {
             PreparedStatement pstmt = conn.prepareStatement(query);
@@ -195,6 +103,10 @@ public class SQLManager {
             System.out.println(e.getMessage());
 
         }
+    }
+
+    private Statement CreateNewStmt() throws SQLException {
+        return conn.createStatement();
     }
 
     private Connection Connect() {
@@ -207,12 +119,16 @@ public class SQLManager {
         return conn;
     }
 
-    private Statement CreateNewStmt() throws SQLException {
-        return conn.createStatement();
-    }
-
     /* Closes the connection to the database */
     public void CloseConnection () {
         try { conn.close(); } catch (Exception e) { /* Ignored */ }
+    }
+
+    public String getPath () {
+        return this.path;
+    }
+
+    public String getFileName () {
+        return this.fileName;
     }
 }

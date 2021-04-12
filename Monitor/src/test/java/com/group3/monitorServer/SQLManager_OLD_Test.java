@@ -2,8 +2,6 @@ package com.group3.monitorServer;
 
 import com.group3.monitorServer.controller.messages.MessageCreator;
 import com.group3.monitorServer.controller.messages.MessageInterface;
-import com.group3.monitorServer.controller.messages.SQLManager;
-import com.group3.monitorServer.controller.messages.TimingMonitorDataMessage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openapitools.model.TimingMonitorData;
@@ -12,14 +10,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 
-public class SQLManager_Test extends AbstractSQLTest {
+public class SQLManager_OLD_Test extends AbstractSQLTest {
     /* Tests that there is no issues crating multiple pointers to the sql database */
     @Test
     public void DoublePointer() throws SQLException {
         //Setup
         String tableName = "queue";
         TimingMonitorData timingMonitorData = new TimingMonitorData();
-        sqlManager.CreateNewTable(tableName,
+        sqlManagerOLD.CreateNewTable(tableName,
                 "ID integer PRIMARY KEY AUTOINCREMENT",
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
@@ -36,12 +34,12 @@ public class SQLManager_Test extends AbstractSQLTest {
 
         for (long i = 0; i < 3; i++) {
             timingMonitorData.setSenderID(i);
-            message.MakeSQL(sqlManager);
+            message.MakeSQL(sqlManagerOLD);
         }
 
         //act
-        ResultSet rs1 = sqlManager.GenericStmt("SELECT * FROM " + tableName);
-        ResultSet rs2 = sqlManager.GenericStmt("SELECT * FROM " + tableName);
+        ResultSet rs1 = sqlManagerOLD.GenericStmt("SELECT * FROM " + tableName);
+        ResultSet rs2 = sqlManagerOLD.GenericStmt("SELECT * FROM " + tableName);
 
         rs2.next();
         rs2.next();

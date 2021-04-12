@@ -2,7 +2,7 @@ package com.group3.monitorServer.controller.queue;
 
 import com.group3.monitorServer.controller.messages.MessageCreator;
 import com.group3.monitorServer.controller.messages.MessageInterface;
-import com.group3.monitorServer.controller.messages.SQLManager;
+import com.group3.monitorServer.controller.messages.SQLManagerOLD;
 
 import java.sql.ResultSet;
 
@@ -12,13 +12,13 @@ import java.sql.ResultSet;
  */
 public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
     private final MessageCreator messageCreator = new MessageCreator();
-    private final SQLManager sqlManager;
+    private final SQLManagerOLD sqlManagerOLD;
 
     /* Checks if the queue table exists in the specified database, otherwise creates it */
     public PersistentSQLQueue(String url, String fileName) {
-        sqlManager = new SQLManager(url, fileName);
-        if (!sqlManager.CheckIfExists("queue")) {
-            sqlManager.CreateNewTable("queue",
+        sqlManagerOLD = new SQLManagerOLD(url, fileName);
+        if (!sqlManagerOLD.CheckIfExists("queue")) {
+            sqlManagerOLD.CreateNewTable("queue",
                     "ID integer PRIMARY KEY AUTOINCREMENT",
                     "MessageType integer NOT NULL",
                     "SenderID integer NOT NULL",
@@ -31,14 +31,14 @@ public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
     /* puts the given message into the sql database */
     @Override
     public synchronized void Put(MessageInterface data) {
-        data.MakeSQL(sqlManager);
+        data.MakeSQL(sqlManagerOLD);
     }
 
     /* Takes the first element in the queue from the sql */
     @Override
     public MessageInterface Take() {
         if (Size() != 0) {
-            ResultSet rs = sqlManager.SelectFirstMessage("queue");
+            ResultSet rs = sqlManagerOLD.SelectFirstMessage("queue");
             return messageCreator.MakeMessageFromSQL(rs);
         } else {
             return null;
@@ -47,69 +47,69 @@ public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
 
     @Override
     public ResultSet Take(int Number) {
-        return sqlManager.SelectMessages("queue", Number);
+        return sqlManagerOLD.SelectMessages("queue", Number);
     }
 
     @Override
     public ResultSet TakeAll() {
-        return sqlManager.SelectAllMessages("queue");
+        return sqlManagerOLD.SelectAllMessages("queue");
     }
 
     @Override
     public void DeleteID(Long ID) {
-        sqlManager.DeleteByID("queue", ID);
+        sqlManagerOLD.DeleteByID("queue", ID);
     }
 
     /* Deletes the first message in the Queue */
     @Override
     public synchronized void Delete() {
-        sqlManager.DeleteFirstMessage("queue");
-        if(sqlManager.TableSize("queue") == 0){
-            sqlManager.ResetAutoIncrement("queue");
+        sqlManagerOLD.DeleteFirstMessage("queue");
+        if(sqlManagerOLD.TableSize("queue") == 0){
+            sqlManagerOLD.ResetAutoIncrement("queue");
         }
     }
 
     /* returns the number of messages in the queue */
     @Override
     public synchronized int Size() {
-        return sqlManager.TableSize("queue", "ToBeSent = 1");
+        return sqlManagerOLD.TableSize("queue", "ToBeSent = 1");
     }
 
     @Override
     public synchronized void Failed() {
-        sqlManager.ChangeStatusOfFirstToBeSentElement("queue");
+        sqlManagerOLD.ChangeStatusOfFirstToBeSentElement("queue");
     }
 
     @Override
     public synchronized MessageInterface TakeFailed() {
-        return messageCreator.MakeMessageFromSQL(sqlManager.SelectFirstFailedMessage("queue"));
+        return messageCreator.MakeMessageFromSQL(sqlManagerOLD.SelectFirstFailedMessage("queue"));
     }
 
     @Override
     public synchronized int SizeFailed() {
-        return sqlManager.TableSize("queue", "ToBeSent = 0");
+        return sqlManagerOLD.TableSize("queue", "ToBeSent = 0");
     }
 
     @Override
     public synchronized void DeleteFailed() {
-        sqlManager.DeleteFirstFailedMessage("queue");
+        sqlManagerOLD.DeleteFirstFailedMessage("queue");
     }
 
     @Override
     public synchronized void DeleteAllFailed() {
-        sqlManager.DeleteAllFailedMessages("queue");
+        sqlManagerOLD.DeleteAllFailedMessages("queue");
     }
 
     /* Closes the queues connection to the sql database */
     public synchronized void CloseConnection () {
-        sqlManager.CloseConnection();
+        sqlManagerOLD.CloseConnection();
     }
 
     public synchronized String getPath () {
-        return sqlManager.getPath();
+        return sqlManagerOLD.getPath();
     }
 
     public synchronized String getFileName () {
-        return sqlManager.getFileName();
+        return sqlManagerOLD.getFileName();
     }
 }
