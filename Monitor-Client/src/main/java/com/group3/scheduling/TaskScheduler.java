@@ -27,7 +27,7 @@ public class TaskScheduler {
 	}
 	
 	public void ConfigureBuiltInTasks() throws TaskAlreadyExistsExecption, SchedulerException {
-		CleanUpOldFailedMessagesTask cleanupMessageTask = new CleanUpOldFailedMessagesTask(CleanUpOldFailedMessagesTask.class.getName(), "cleanup", "0 * * ? * * *");
+		CleanUpOldFailedMessagesTask cleanupMessageTask = new CleanUpOldFailedMessagesTask(CleanUpOldFailedMessagesTask.class.getName(), "cleanup", "0 0 22 ? * * *");
 		ScheduleTask(cleanupMessageTask);
 	}
 	
@@ -37,9 +37,7 @@ public class TaskScheduler {
 		}
 		
 		//create a job based on task
-		JobDetail job = JobBuilder.newJob(task.getClass())
-				.withIdentity(task.GetName(), task.GetGroup())
-				.build();		
+		JobDetail job = CreateJobForTask(task);
 		//make a trigger for the job
 		Trigger trigger = CreateTriggerForTask(task);
 		//schedule job with trigger
@@ -50,6 +48,12 @@ public class TaskScheduler {
 		taskDetails.SetEnabled(true);
 		//save TaskDetails in hashMap
 		tasks.put(task.GetName(), taskDetails);
+	}
+
+	public JobDetail CreateJobForTask(AbstractTask task) {
+		return JobBuilder.newJob(task.getClass())
+				.withIdentity(task.GetName(), task.GetGroup())
+				.build();
 	}
 	
 	public boolean EnableTask(String taskName) {
@@ -102,7 +106,7 @@ public class TaskScheduler {
 		//Get the task details using the task name and assign it to a variable
 		TaskDetails taskDetails = tasks.get(taskName);
 		//Return taskDetails boolean
-		return taskDetails.GetEnabled();
+		return taskDetails.IsEnabled();
 	}
 	
 	public void Shutdown() throws SchedulerException {

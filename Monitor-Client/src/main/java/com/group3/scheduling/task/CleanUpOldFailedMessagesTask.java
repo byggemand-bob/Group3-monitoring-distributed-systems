@@ -25,6 +25,9 @@ public class CleanUpOldFailedMessagesTask extends AbstractTask {
 		
 		int daysToKeep = ConfigurationManager.getInstance().getPropertyAsInteger(ConfigurationManager.daysToKeepMessages);
 		
+		// Ensure that daysToKeep do not go below zero
+		daysToKeep = Math.max(0, daysToKeep);
+		
 		PersistentSQLQueue sqlQueue = new PersistentSQLQueue(PersistentSQLQueue.queueDBPath, PersistentSQLQueue.queueDBFile);
 		int removedMessagesCount = sqlQueue.cleanupOldMessages(cleanupSQL, daysToKeep);		
 		
