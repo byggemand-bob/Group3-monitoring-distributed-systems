@@ -5,8 +5,6 @@ import com.group3.monitorServer.controller.messages.MessageInterface;
 import com.group3.monitorServer.controller.messages.SQLManager;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.LinkedList;
 
 /*
  * This class serves as a persistent queue, utilizing sqlite to ensure

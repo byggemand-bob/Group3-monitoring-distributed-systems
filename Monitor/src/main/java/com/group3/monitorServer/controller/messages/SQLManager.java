@@ -4,25 +4,18 @@ import java.sql.*;
 
 /*
  * SQLManager handles queries to a given database
- * CAN ONLY MANAGE 1 QUERY PER DATABASE!
  */
 public class SQLManager {
     private final String path;
     private final String url;
     private final String fileName;
     private Connection conn;
-    private Statement stmt;
 
     public SQLManager(String path, String fileName) {
         this.path = path;
         this.url = "jdbc:sqlite:" + path;
         this.fileName = fileName;
         conn = Connect();
-        try {
-            stmt  = conn.createStatement();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
     }
 
     public ResultSet SelectAllMessages(String TableName){
@@ -182,8 +175,7 @@ public class SQLManager {
      */
     public ResultSet GenericStmt(String query){
         try {
-            ResultSet rs = stmt.executeQuery(query);
-            return rs;
+            return CreateNewStmt().executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -213,6 +205,10 @@ public class SQLManager {
             System.out.println(e.getMessage());
         }
         return conn;
+    }
+
+    private Statement CreateNewStmt() throws SQLException {
+        return conn.createStatement();
     }
 
     /* Closes the connection to the database */
