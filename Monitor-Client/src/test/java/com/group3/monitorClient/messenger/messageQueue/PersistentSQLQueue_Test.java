@@ -1,16 +1,19 @@
 package com.group3.monitorClient.messenger.messageQueue;
 
 import com.group3.monitorClient.AbstractPersistentSQLQueueTest;
-import com.group3.monitorClient.AbstractSQLTest;
 import com.group3.monitorClient.messenger.messages.MessageInterface;
 import com.group3.monitorClient.messenger.messages.MessageCreator;
 import com.group3.monitorClient.messenger.messages.SQLManager;
-import com.group3.monitorClient.messenger.queue.PersistentSQLQueue;
+import com.group3.scheduling.task.CleanUpOldFailedMessagesTask;
 import com.group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.openapitools.client.model.ErrorData;
 import org.openapitools.client.model.TimingMonitorData;
+import org.openapitools.client.model.ErrorData.ErrorMessageTypeEnum;
 import org.threeten.bp.OffsetDateTime;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -299,5 +302,80 @@ public class PersistentSQLQueue_Test extends AbstractPersistentSQLQueueTest {
         Assertions.assertEquals(1, SizeAfter);
         Assertions.assertEquals(0, FailedSizeBefore);
         Assertions.assertEquals(2, FailedSizeAfter);
+    }
+    
+    /* Ensures that the cleanupOldMessages method works as it could. 
+     * 	Delete the correct amount of messages with the specified DaysToKeep int
+     */
+    @Test
+    void CleanUpOfOldMessagesTest() {
+    	//Setup
+    	TimingMonitorData monitorData = new TimingMonitorData();
+    	MessageCreator messageCreator = new MessageCreator();
+    	ErrorData errorData = new ErrorData();
+    	SQLManager sqlManager = new SQLManager(messageQueue.getPath(), messageQueue.getFileName());
+    	
+    	EmptyQueue(sqlManager);
+    	
+    	monitorData.setEventID(1L);
+    	monitorData.setTargetEndpoint("/monitorClient");
+    	monitorData.setSenderID(3L);
+    	
+    	OffsetDateTime offsetDateTime = OffsetDateTime.now().minusDays(31);
+    	monitorData.setTimestamp(offsetDateTime);
+    	messageQueue.Put(messageCreator.MakeMessage(monitorData));
+    	
+    	offsetDateTime = OffsetDateTime.now().minusDays(52);
+    	monitorData.setTimestamp(offsetDateTime);
+    	messageQueue.Put(messageCreator.MakeMessage(monitorData));
+    	
+    	offsetDateTime = OffsetDateTime.now().minusDays(2);
+    	monitorData.setTimestamp(offsetDateTime);
+    	messageQueue.Put(messageCreator.MakeMessage(monitorData));
+    	
+    	offsetDateTime = OffsetDateTime.now().minusDays(12);
+    	monitorData.setTimestamp(offsetDateTime);
+    	messageQueue.Put(messageCreator.MakeMessage(monitorData));
+    	
+    	errorData.setSenderID(1L);
+    	errorData.setHttpResponse(410);
+    	errorData.errorMessageType(ErrorMessageTypeEnum.HTTPERROR);
+  
+    	offsetDateTime = OffsetDateTime.now().minusDays(8);
+    	errorData.setTimestamp(offsetDateTime);
+    	messageQueue.Put(messageCreator.MakeMessage(errorData));
+    	
+    	offsetDateTime = OffsetDateTime.now().minusDays(15);
+    	errorData.setTimestamp(offsetDateTime);
+    	messageQueue.Put(messageCreator.MakeMessage(errorData));
+    	
+    	offsetDateTime = OffsetDateTime.now().minusDays(48);
+    	errorData.setTimestamp(offsetDateTime);
+    	messageQueue.Put(messageCreator.MakeMessage(errorData));
+    	
+    	offsetDateTime = OffsetDateTime.now().minusDays(36);
+    	errorData.setTimestamp(offsetDateTime);
+    	messageQueue.Put(messageCreator.MakeMessage(errorData));
+    	
+    	String sqlStatement = "UPDATE queue SET TOBESENT = 0 WHERE (ID % 2) = 0";
+    	sqlManager.GenericPreparedStmt(sqlStatement);
+    	
+    	//Act
+    	int expectedSize = 6;
+        
+    	messageQueue.cleanupOldMessages(CleanUpOldFailedMessagesTask.cleanupSQL, 30);
+    	
+    	int SizeAfter = messageQueue.Size() + messageQueue.SizeFailed();
+    	
+    	//Assert
+    	assertEquals(expectedSize, SizeAfter);
+    	
+    	//Clean-up
+    	sqlManager.CloseConnection();
+    }
+    
+    private void EmptyQueue(SQLManager sqlManager) {
+    	String sqlCall = "Delete FROM queue";
+    	sqlManager.GenericPreparedStmt(sqlCall);
     }
 }

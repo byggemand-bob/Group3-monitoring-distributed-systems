@@ -43,10 +43,10 @@ public class TaskScheduler {
 	/**
 	 * Configures the built-in scheduled tasks of the monitoring framework.
 	 * 
-	 * @throws TaskAlreadyExistsExecption Thrown if a task with the same name has already been scheduled.
+	 * @throws TaskAlreadyExistsException Thrown if a task with the same name has already been scheduled.
 	 * @throws SchedulerException
 	 */
-	public void ConfigureBuiltInTasks() throws TaskAlreadyExistsExecption, SchedulerException {
+	public void ConfigureBuiltInTasks() throws TaskAlreadyExistsException, SchedulerException {
 		CheckIfInitialized();
 		CleanUpOldFailedMessagesTask cleanupMessageTask = new CleanUpOldFailedMessagesTask(CleanUpOldFailedMessagesTask.class.getName(), "cleanup", "0 0 22 ? * * *");
 		ScheduleTask(cleanupMessageTask);
@@ -56,13 +56,13 @@ public class TaskScheduler {
 	 * Schedules a new task in the TaskScheduler.
 	 * 
 	 * @param task The {@link AbstractTask} that is to be scheduled.
-	 * @throws TaskAlreadyExistsExecption Thrown if a task with the same name has already been scheduled.
+	 * @throws TaskAlreadyExistsException Thrown if a task with the same name has already been scheduled.
 	 * @throws SchedulerException
 	 */
-	public void ScheduleTask(AbstractTask task) throws TaskAlreadyExistsExecption, SchedulerException {
+	public void ScheduleTask(AbstractTask task) throws TaskAlreadyExistsException, SchedulerException {
 		CheckIfInitialized();
 		if(tasks.containsKey(task.GetName())) {
-			throw new TaskAlreadyExistsExecption("Task with name " + task.GetName() + ", have already been scheduled");
+			throw new TaskAlreadyExistsException("Task with name " + task.GetName() + ", have already been scheduled");
 		}
 		
 		//create a job based on task

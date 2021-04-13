@@ -4,12 +4,11 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import com.group3.monitorClient.configuration.ConfigurationManager;
-import com.group3.monitorClient.messenger.messages.SQLManager;
 import com.group3.monitorClient.messenger.queue.PersistentSQLQueue;
 
 public class CleanUpOldFailedMessagesTask extends AbstractTask {
 
-	private final String cleanupSQL = "DELETE FROM queue WHERE ToBeSent = 0 AND datetime(Timestamp) < datetime('now', ?)";
+	public static final String cleanupSQL = "DELETE FROM queue WHERE ToBeSent = 0 AND datetime(Timestamp) < datetime('now', ?)";
 	
 	/**
 	 * Constructor for the CleanUpOldFailedMessagesTask.

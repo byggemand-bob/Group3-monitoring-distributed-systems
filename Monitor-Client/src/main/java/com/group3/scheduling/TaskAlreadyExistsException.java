@@ -1,6 +1,6 @@
 package com.group3.scheduling;
 
-public class TaskAlreadyExistsExecption extends RuntimeException {
+public class TaskAlreadyExistsException extends RuntimeException {
 	
 	/**
 	 * Version ID used for serialization
@@ -13,7 +13,7 @@ public class TaskAlreadyExistsExecption extends RuntimeException {
 	 * 
 	 * @param errorMessage The error message displayed with the exception.
 	 */
-	public TaskAlreadyExistsExecption(String errorMessage) {
+	public TaskAlreadyExistsException(String errorMessage) {
 		super(errorMessage);
 	}
 }
