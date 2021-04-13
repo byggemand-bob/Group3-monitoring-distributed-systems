@@ -35,12 +35,12 @@ public class SQLMessageManager {
     /* Inserts and Message element into the given table */
     public void InsertMessage(long senderID, int messageType, String timeStamp, String message) {
         try {
-            PreparedStatement pstmt = sqlManager.getPstmt("INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) VALUES(?,?,?,?)");
+            PreparedStatement pstmt = sqlManager.getPreparedStmt("INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) VALUES(?,?,?,?)");
             pstmt.setLong(1, senderID);
             pstmt.setInt(2, messageType);
             pstmt.setString(3, timeStamp);
             pstmt.setString(4, message);
-            GenericPreparedStmt(pstmt.toString());
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -75,7 +75,7 @@ public class SQLMessageManager {
 
     /* Only Prepared statements allowed */
     public void GenericPreparedStmt(String query){
-        sqlManager.GenericPreparedStmt(query);
+        sqlManager.ExecutePreparedStmt(query);
     }
 
     /* Closes the connection to the database */

@@ -1,7 +1,5 @@
 package com.group3.monitorServer.controller.messages;
 
-import jdk.jshell.spi.ExecutionControl;
-
 import java.sql.*;
 
 /*
@@ -46,7 +44,7 @@ public class SQLManager {
         sql = new StringBuilder(sql.substring(0,sql.length()-2)).append("\n");
         sql.append(");");
 
-        GenericPreparedStmt(sql.toString());
+        ExecutePreparedStmt(sql.toString());
     }
 
     /* returns the first element of tableName */
@@ -70,12 +68,12 @@ public class SQLManager {
 
     /* Resets the AutoIncrement to the highest number contained in the column */
     public void ResetAutoIncrement(String tableName) {
-        GenericPreparedStmt("UPDATE sqlite_sequence SET seq = 0 WHERE name = '" + tableName + "'");
+        ExecutePreparedStmt("UPDATE sqlite_sequence SET seq = 0 WHERE name = '" + tableName + "'");
     }
 
     /* Deletes the first element of a message Table */
     public void Delete(String tableName, String... whereArgs){
-        GenericPreparedStmt(AppendWhereArgs("DELETE FROM " + tableName, whereArgs));
+        ExecutePreparedStmt(AppendWhereArgs("DELETE FROM " + tableName, whereArgs));
     }
 
     private String AppendWhereArgs(String string, String[] whereArgs) {
@@ -90,7 +88,7 @@ public class SQLManager {
     }
 
     public void DeleteAll(String tableName){
-        GenericPreparedStmt("DELETE FROM " + tableName);
+        ExecutePreparedStmt("DELETE FROM " + tableName);
     }
 
     /* Only statements allowed */
@@ -104,7 +102,7 @@ public class SQLManager {
     }
 
     /* Only Prepared statements allowed */
-    public void GenericPreparedStmt(String query){
+    public void ExecutePreparedStmt(String query){
         try {
             PreparedStatement pstmt = conn.prepareStatement(query);
             pstmt.executeUpdate();
@@ -142,15 +140,12 @@ public class SQLManager {
         return this.fileName;
     }
 
-    public Connection getConn () {
-        return this.conn;
-    }
-
-    public PreparedStatement getPstmt (String sql) {
+    public PreparedStatement getPreparedStmt (String sql) {
         try {
             return conn.prepareStatement(sql);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            return null;
         }
     }
 }
