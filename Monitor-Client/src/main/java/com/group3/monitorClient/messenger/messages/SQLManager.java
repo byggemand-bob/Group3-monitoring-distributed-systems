@@ -146,6 +146,24 @@ public class SQLManager {
             throwables.printStackTrace();
         }
     }
+    
+    /**
+     * Removes all messages from the queue that have been timestamped older than parameter 'days'
+     * 
+     * @param query The query for removing the failed messages with a timestamp older that 'days'
+     * @param days The number of days that old failed messages are kept before being removed
+     * @return The number of messages that have been removed, -1 if an exception occurred
+     */
+    public int CleanupOldMessages(String query, int days) {
+    	try {
+			PreparedStatement q = conn.prepareStatement(query);
+			q.setString(1, "-" + days +  " day");
+			return q.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	return -1;
+    }
 
     public String getPath () {
         return this.path;

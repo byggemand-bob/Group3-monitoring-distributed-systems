@@ -13,6 +13,8 @@ import java.sql.ResultSet;
 public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
     private final MessageCreator messageCreator = new MessageCreator();
     private final SQLManager sqlManager;
+    public static final String queueDBPath = "src/main/resources/sqlite/db/";
+    public static final String queueDBFile = "queue.db";
 
     /* Checks if the queue table exists in the specified database, otherwise creates it */
     public PersistentSQLQueue(String url, String fileName) {
@@ -96,5 +98,16 @@ public class PersistentSQLQueue implements QueueInterface<MessageInterface> {
 
     public String getFileName () {
         return sqlManager.getFileName();
+    }
+    
+    /**
+     * Removes all messages from the queue that have been timestamped older than parameter 'days'
+     * 
+     * @param query The query for removing the failed messages with a timestamp older that 'days'
+     * @param days The number of days that old failed messages are kept before being removed
+     * @return The number of messages that have been removed, -1 if an exception occurred
+     */
+    public int cleanupOldMessages(String sql, int days) {
+    	return sqlManager.CleanupOldMessages(sql, days);
     }
 }
