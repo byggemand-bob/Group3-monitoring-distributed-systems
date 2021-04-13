@@ -20,10 +20,6 @@ public class SQLManager {
         conn = Connect();
     }
 
-    public ResultSet SelectAll(String TableName){
-        return GenericStmt("SELECT * FROM " + TableName);
-    }
-
     /* returns the number of elements in a specified table */
     public int TableSize(String TableName){
         int size = -1;
@@ -58,6 +54,10 @@ public class SQLManager {
         return GenericStmt("SELECT * FROM "+tableName+" LIMIT 1");
     }
 
+    public ResultSet Select (String tableName, String... whereArgs) {
+        return GenericStmt(AppendWhereArgs("SELECT * FROM " + tableName, whereArgs));
+    }
+
     /* Checks if a table with specified name exists in the database */
     public boolean CheckIfTableExists(String tableName) {
         try {
@@ -74,13 +74,23 @@ public class SQLManager {
     }
 
     /* Deletes the first element of a message Table */
-    public void DeleteFirst(String tableName){
-        //TODO: implement
-        //example:   DELETE FROM customers WHERE last_name = 'Smith'
+    public void Delete(String tableName, String... whereArgs){
+        GenericPreparedStmt(AppendWhereArgs("DELETE FROM " + tableName, whereArgs));
+    }
+
+    private String AppendWhereArgs(String string, String[] whereArgs) {
+        if (whereArgs.length > 0) {
+            string += " WHERE ";
+            for (String arg: whereArgs){
+                string += arg + ", ";
+            }
+            return string.substring(0,string.length()-2);
+        }
+        return string;
     }
 
     public void DeleteAll(String tableName){
-        //TODO: implement
+        GenericPreparedStmt("DELETE FROM " + tableName);
     }
 
     /* Only statements allowed */
@@ -130,5 +140,17 @@ public class SQLManager {
 
     public String getFileName () {
         return this.fileName;
+    }
+
+    public Connection getConn () {
+        return this.conn;
+    }
+
+    public PreparedStatement getPstmt (String sql) {
+        try {
+            return conn.prepareStatement(sql);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }

@@ -1,9 +1,6 @@
 package com.group3.monitorServer.controller.MessageProcessor;
 
-import com.group3.monitorServer.controller.messages.MessageCreator;
-import com.group3.monitorServer.controller.messages.MessageInterface;
-import com.group3.monitorServer.controller.messages.MessageTypeID;
-import com.group3.monitorServer.controller.messages.TimingMonitorDataMessage;
+import com.group3.monitorServer.controller.messages.*;
 import com.group3.monitorServer.controller.queue.PersistentSQLQueue;
 
 import java.sql.ResultSet;
@@ -11,14 +8,14 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 
 public class Processor implements Runnable {
-    public PersistentSQLQueue queue;
+    private SQLMessageManager sqlMessageManager;
     private MessageCreator messageCreator = new MessageCreator();
     private boolean running = false;
     private boolean paused = false;
     private Thread thread;
 
-    public Processor(PersistentSQLQueue Queue){
-        this.queue = Queue;
+    public Processor(SQLMessageManager sqlMessageManager){
+        this.sqlMessageManager = sqlMessageManager;
     }
 
     public void Start(){
@@ -56,7 +53,7 @@ public class Processor implements Runnable {
                 }
             }
 
-            ResultSet rs = queue.TakeAll();
+            ResultSet rs = sqlMessageManager.SelectAllMessages();
 
             try {
                 while(rs.next()){

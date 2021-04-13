@@ -24,7 +24,7 @@ public class SQLMessageManager {
     }
 
     public ResultSet SelectAllMessages(){
-        return sqlManager.SelectAll(tableName);
+        return sqlManager.Select(tableName);
     }
 
     /* returns the number of elements in a specified table */
@@ -34,23 +34,16 @@ public class SQLMessageManager {
 
     /* Inserts and Message element into the given table */
     public void InsertMessage(long senderID, int messageType, String timeStamp, String message) {
-        //TODO: choose the prettiest in all the lands
-        GenericPreparedStmt("INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) " +
-                "VALUES(" +
-                        senderID + ',' +
-                        messageType + ",'" +
-                        timeStamp +"','" +
-                        message + "')");
-//        try {
-//            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) VALUES(?,?,?,?)");
-//            pstmt.setLong(1, senderID);
-//            pstmt.setInt(2, messageType);
-//            pstmt.setString(3, timeStamp);
-//            pstmt.setString(4, message);
-//            pstmt.executeUpdate();
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
+        try {
+            PreparedStatement pstmt = sqlManager.getPstmt("INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) VALUES(?,?,?,?)");
+            pstmt.setLong(1, senderID);
+            pstmt.setInt(2, messageType);
+            pstmt.setString(3, timeStamp);
+            pstmt.setString(4, message);
+            GenericPreparedStmt(pstmt.toString());
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /* returns the first element of tableName, as ordered by the first column and has ToBeSent = 1 */
@@ -58,9 +51,13 @@ public class SQLMessageManager {
         return sqlManager.SelectFirst(tableName);
     }
 
-    /* Deletes the first element of a message Table, where ToBeSent = 1 */
-    public void DeleteFirstMessage(){
-        sqlManager.DeleteFirst(tableName);
+    public ResultSet SelectMessage (String... whereArgs) {
+        return sqlManager.Select(tableName, whereArgs);
+    }
+
+    /* Deletes elements with specified where args from queue */
+    public void Delete(String... whereArgs){
+        sqlManager.Delete(tableName, whereArgs);
         if(sqlManager.TableSize(tableName) == 0){
             sqlManager.ResetAutoIncrement(tableName);
         }
