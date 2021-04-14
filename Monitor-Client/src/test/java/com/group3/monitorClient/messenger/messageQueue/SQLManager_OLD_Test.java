@@ -8,17 +8,17 @@ import org.threeten.bp.OffsetDateTime;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class SQLManager_Test extends AbstractSQLTest {
+public class SQLManager_OLD_Test extends AbstractSQLTest {
     /* verifies the CheckIfExists() is able to confirm the existence of a given table */
     @Test
     public void testCheckIfExistsTestPass () {
         //Setup
         String tableName = "test";
-        sqlManager.CreateNewTable(tableName, "id integer PRIMARY KEY", "name text NOT NULL", "capacity real");
+        sqlManagerOLD.CreateNewTable(tableName, "id integer PRIMARY KEY", "name text NOT NULL", "capacity real");
         //Act
 
         //Assert
-        Assertions.assertTrue(sqlManager.CheckIfExists(tableName));
+        Assertions.assertTrue(sqlManagerOLD.CheckIfExists(tableName));
     }
 
     /* verifies the function CheckIfExists() isn't able to find a none existent table */
@@ -29,8 +29,8 @@ public class SQLManager_Test extends AbstractSQLTest {
         //Act
 
         //Assert
-        Assertions.assertFalse(sqlManager.CheckIfExists(tableName));
-        Assertions.assertFalse(sqlManager.CheckIfExists("queue"));
+        Assertions.assertFalse(sqlManagerOLD.CheckIfExists(tableName));
+        Assertions.assertFalse(sqlManagerOLD.CheckIfExists("queue"));
     }
 
     /* verifies the function CreateNewTable() constructs a table as specified */
@@ -39,8 +39,8 @@ public class SQLManager_Test extends AbstractSQLTest {
         //Setup
         String tableName = "test";
         String[] args = {"id integer PRIMARY KEY", "name text NOT NULL", "capacity real DEFAULT 1"};
-        sqlManager.CreateNewTable(tableName, args);
-        ResultSet rs = sqlManager.GenericStmt("PRAGMA table_info(" + tableName + ")");
+        sqlManagerOLD.CreateNewTable(tableName, args);
+        ResultSet rs = sqlManagerOLD.GenericStmt("PRAGMA table_info(" + tableName + ")");
         //Act
         rs.next();
 
@@ -105,7 +105,7 @@ public class SQLManager_Test extends AbstractSQLTest {
         int messageType = 1;
         String timeStamp = OffsetDateTime.now().toString();
         String message = "Goddag :^)";
-        sqlManager.CreateNewTable(tableName,
+        sqlManagerOLD.CreateNewTable(tableName,
                 "ID integer PRIMARY KEY AUTOINCREMENT",
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
@@ -114,8 +114,8 @@ public class SQLManager_Test extends AbstractSQLTest {
                 "Message BLOB");
 
         //Act
-        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
-        ResultSet rs = sqlManager.SelectFirstMessage(tableName);
+        sqlManagerOLD.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        ResultSet rs = sqlManagerOLD.SelectFirstMessage(tableName);
         try {
             senderID_test = rs.getLong("senderID");
             messageType_test = rs.getInt("messageType");
@@ -141,7 +141,7 @@ public class SQLManager_Test extends AbstractSQLTest {
         int messageType = 2;
         String timeStamp = "test";
         String message = "test";
-        sqlManager.CreateNewTable(tableName,
+        sqlManagerOLD.CreateNewTable(tableName,
                 "ID integer PRIMARY KEY AUTOINCREMENT",
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
@@ -150,19 +150,19 @@ public class SQLManager_Test extends AbstractSQLTest {
                 "Message BLOB");
 
         //Act
-        sqlManager.InsertMessage(tableName, 1L, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, 2L, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, 3L, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, 1L, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, 2L, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, 3L, messageType, timeStamp, message);
 
-        int SizeBefore = sqlManager.TableSize(tableName);
+        int SizeBefore = sqlManagerOLD.TableSize(tableName);
 
-        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
+        sqlManagerOLD.ChangeStatusOfFirstToBeSentElement(tableName);
 
-        sqlManager.DeleteFirstMessage(tableName);
+        sqlManagerOLD.DeleteFirstMessage(tableName);
 
-        int SizeAfter = sqlManager.TableSize(tableName);
+        int SizeAfter = sqlManagerOLD.TableSize(tableName);
 
-        ResultSet rs = sqlManager.SelectFirstFailedMessage(tableName);
+        ResultSet rs = sqlManagerOLD.SelectFirstFailedMessage(tableName);
 
         //Assert
         Assertions.assertEquals(3, SizeBefore);
@@ -181,7 +181,7 @@ public class SQLManager_Test extends AbstractSQLTest {
         int messageType = 2;
         String timeStamp = "test";
         String message = "test";
-        sqlManager.CreateNewTable(tableName,
+        sqlManagerOLD.CreateNewTable(tableName,
                 "ID integer PRIMARY KEY AUTOINCREMENT",
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
@@ -190,22 +190,22 @@ public class SQLManager_Test extends AbstractSQLTest {
                 "Message BLOB");
 
         //Act
-        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, senderID, messageType, timeStamp, message);
 
-        ResultSet rs = sqlManager.SelectFirstMessage(tableName);
+        ResultSet rs = sqlManagerOLD.SelectFirstMessage(tableName);
 
         int firstID = rs.getInt("ID");
 
-        sqlManager.DeleteFirstMessage(tableName);
-        rs = sqlManager.SelectFirstMessage(tableName);
+        sqlManagerOLD.DeleteFirstMessage(tableName);
+        rs = sqlManagerOLD.SelectFirstMessage(tableName);
 
         int secondID = rs.getInt("ID");
 
-        sqlManager.DeleteFirstMessage(tableName);
-        sqlManager.ResetAutoIncrement(tableName);
-        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
-        rs = sqlManager.SelectFirstMessage(tableName);
+        sqlManagerOLD.DeleteFirstMessage(tableName);
+        sqlManagerOLD.ResetAutoIncrement(tableName);
+        sqlManagerOLD.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        rs = sqlManagerOLD.SelectFirstMessage(tableName);
 
         int thirdID = rs.getInt("ID");
 
@@ -224,7 +224,7 @@ public class SQLManager_Test extends AbstractSQLTest {
         int messageType = 2;
         String timeStamp = "test";
         String message = "test";
-        sqlManager.CreateNewTable(tableName,
+        sqlManagerOLD.CreateNewTable(tableName,
                 "ID integer PRIMARY KEY AUTOINCREMENT",
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
@@ -233,28 +233,28 @@ public class SQLManager_Test extends AbstractSQLTest {
                 "Message BLOB");
 
         //Act
-        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, senderID, messageType, timeStamp, message);
 
-        sqlManager.DeleteFirstMessage(tableName);
-        ResultSet rs = sqlManager.SelectFirstMessage(tableName);
+        sqlManagerOLD.DeleteFirstMessage(tableName);
+        ResultSet rs = sqlManagerOLD.SelectFirstMessage(tableName);
 
         int firstID = rs.getInt("ID");
 
-        sqlManager.ResetAutoIncrement(tableName);
-        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        sqlManagerOLD.ResetAutoIncrement(tableName);
+        sqlManagerOLD.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, senderID, messageType, timeStamp, message);
 
-        rs = sqlManager.SelectFirstMessage(tableName);
+        rs = sqlManagerOLD.SelectFirstMessage(tableName);
 
         int secondID = rs.getInt("ID");
-        sqlManager.DeleteFirstMessage(tableName);
+        sqlManagerOLD.DeleteFirstMessage(tableName);
 
-        rs = sqlManager.SelectFirstMessage(tableName);
+        rs = sqlManagerOLD.SelectFirstMessage(tableName);
         int thirdID = rs.getInt("ID");
-        sqlManager.DeleteFirstMessage(tableName);
+        sqlManagerOLD.DeleteFirstMessage(tableName);
 
-        rs = sqlManager.SelectFirstMessage(tableName);
+        rs = sqlManagerOLD.SelectFirstMessage(tableName);
         int fourthID = rs.getInt("ID");
 
         //Assert
@@ -271,7 +271,7 @@ public class SQLManager_Test extends AbstractSQLTest {
         int messageType = 1;
         String timeStamp = OffsetDateTime.now().toString();
         String message = "Goddag :^)";
-        sqlManager.CreateNewTable(tableName,
+        sqlManagerOLD.CreateNewTable(tableName,
                 "ID integer PRIMARY KEY AUTOINCREMENT",
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
@@ -280,23 +280,23 @@ public class SQLManager_Test extends AbstractSQLTest {
                 "Message BLOB");
 
         //Act
-        sqlManager.InsertMessage(tableName, 1L, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, 2L, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, 3L, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, 1L, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, 2L, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, 3L, messageType, timeStamp, message);
 
-        boolean rs1before = sqlManager.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 1").getBoolean("ToBeSent");
+        boolean rs1before = sqlManagerOLD.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 1").getBoolean("ToBeSent");
 
-        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
+        sqlManagerOLD.ChangeStatusOfFirstToBeSentElement(tableName);
 
-        boolean rs1after = sqlManager.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 1").getBoolean("ToBeSent");
+        boolean rs1after = sqlManagerOLD.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 1").getBoolean("ToBeSent");
 
-        boolean rs2before = sqlManager.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 2").getBoolean("ToBeSent");
+        boolean rs2before = sqlManagerOLD.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 2").getBoolean("ToBeSent");
 
-        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
+        sqlManagerOLD.ChangeStatusOfFirstToBeSentElement(tableName);
 
-        boolean rs2after = sqlManager.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 2").getBoolean("ToBeSent");
+        boolean rs2after = sqlManagerOLD.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 2").getBoolean("ToBeSent");
 
-        boolean rs3 = sqlManager.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 3").getBoolean("ToBeSent");
+        boolean rs3 = sqlManagerOLD.GenericStmt("SELECT * FROM 'queue' WHERE SenderID = 3").getBoolean("ToBeSent");
 
         //Assert
         Assertions.assertTrue(rs1before);
@@ -314,7 +314,7 @@ public class SQLManager_Test extends AbstractSQLTest {
         int messageType = 1;
         String timeStamp = OffsetDateTime.now().toString();
         String message = "Goddag :^)";
-        sqlManager.CreateNewTable(tableName,
+        sqlManagerOLD.CreateNewTable(tableName,
                 "ID integer PRIMARY KEY AUTOINCREMENT",
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
@@ -323,17 +323,17 @@ public class SQLManager_Test extends AbstractSQLTest {
                 "Message BLOB");
 
         //Act
-        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, senderID, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, senderID, messageType, timeStamp, message);
 
-        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
-        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
+        sqlManagerOLD.ChangeStatusOfFirstToBeSentElement(tableName);
+        sqlManagerOLD.ChangeStatusOfFirstToBeSentElement(tableName);
 
-        sqlManager.DeleteAllFailedMessages(tableName);
+        sqlManagerOLD.DeleteAllFailedMessages(tableName);
 
         //Assert
-        Assertions.assertEquals(1, sqlManager.TableSize(tableName));
+        Assertions.assertEquals(1, sqlManagerOLD.TableSize(tableName));
     }
 
     /* verifies the method DeleteFirstFailedMessage() deletes the first and only the first failed message of the given table */
@@ -344,7 +344,7 @@ public class SQLManager_Test extends AbstractSQLTest {
         int messageType = 2;
         String timeStamp = "test";
         String message = "test";
-        sqlManager.CreateNewTable(tableName,
+        sqlManagerOLD.CreateNewTable(tableName,
                 "ID integer PRIMARY KEY AUTOINCREMENT",
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
@@ -353,19 +353,19 @@ public class SQLManager_Test extends AbstractSQLTest {
                 "Message BLOB");
 
         //Act
-        sqlManager.InsertMessage(tableName, 1L, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, 2L, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, 3L, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, 1L, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, 2L, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, 3L, messageType, timeStamp, message);
 
-        int SizeBefore = sqlManager.TableSize(tableName);
+        int SizeBefore = sqlManagerOLD.TableSize(tableName);
 
-        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
+        sqlManagerOLD.ChangeStatusOfFirstToBeSentElement(tableName);
 
-        sqlManager.DeleteFirstFailedMessage(tableName);
+        sqlManagerOLD.DeleteFirstFailedMessage(tableName);
 
-        int SizeAfter = sqlManager.TableSize(tableName);
+        int SizeAfter = sqlManagerOLD.TableSize(tableName);
 
-        ResultSet rs = sqlManager.SelectFirstMessage(tableName);
+        ResultSet rs = sqlManagerOLD.SelectFirstMessage(tableName);
 
         //Assert
         Assertions.assertEquals(3, SizeBefore);
@@ -383,7 +383,7 @@ public class SQLManager_Test extends AbstractSQLTest {
         int messageType = 2;
         String timeStamp = "test";
         String message = "test";
-        sqlManager.CreateNewTable(tableName,
+        sqlManagerOLD.CreateNewTable(tableName,
                 "ID integer PRIMARY KEY AUTOINCREMENT",
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
@@ -392,20 +392,20 @@ public class SQLManager_Test extends AbstractSQLTest {
                 "Message BLOB");
 
         //Act
-        sqlManager.InsertMessage(tableName, 1L, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, 2L, messageType, timeStamp, message);
-        sqlManager.InsertMessage(tableName, 3L, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, 1L, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, 2L, messageType, timeStamp, message);
+        sqlManagerOLD.InsertMessage(tableName, 3L, messageType, timeStamp, message);
 
-        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
-        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
-        sqlManager.ChangeStatusOfFirstToBeSentElement(tableName);
+        sqlManagerOLD.ChangeStatusOfFirstToBeSentElement(tableName);
+        sqlManagerOLD.ChangeStatusOfFirstToBeSentElement(tableName);
+        sqlManagerOLD.ChangeStatusOfFirstToBeSentElement(tableName);
 
-        long rs1 = sqlManager.SelectFirstFailedMessage(tableName).getLong("SenderID");
-        long rs2 = sqlManager.SelectFirstFailedMessage(tableName).getLong("SenderID");
+        long rs1 = sqlManagerOLD.SelectFirstFailedMessage(tableName).getLong("SenderID");
+        long rs2 = sqlManagerOLD.SelectFirstFailedMessage(tableName).getLong("SenderID");
 
-        sqlManager.DeleteFirstFailedMessage(tableName);
+        sqlManagerOLD.DeleteFirstFailedMessage(tableName);
 
-        long rs3 = sqlManager.SelectFirstFailedMessage(tableName).getLong("SenderID");
+        long rs3 = sqlManagerOLD.SelectFirstFailedMessage(tableName).getLong("SenderID");
 
         //Assert
         Assertions.assertEquals(1L, rs1);

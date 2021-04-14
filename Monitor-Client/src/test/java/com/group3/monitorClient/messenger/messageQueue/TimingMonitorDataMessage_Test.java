@@ -32,15 +32,15 @@ public class TimingMonitorDataMessage_Test extends AbstractSQLTest {
         MessageInterface messageInterface = new TimingMonitorDataMessage(timingMonitorData);
 
         //Act
-        sqlManager.CreateNewTable(tableName,
+        sqlManagerOLD.CreateNewTable(tableName,
                 "ID integer PRIMARY KEY AUTOINCREMENT",
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
                 "Timestamp text NOT NULL",
                 "ToBeSent BOOLEAN DEFAULT 1",
                 "Message BLOB");
-        messageInterface.MakeSQL(sqlManager);
-        ResultSet rs = sqlManager.SelectFirstMessage("queue");
+        messageInterface.MakeSQL(sqlManagerOLD);
+        ResultSet rs = sqlManagerOLD.SelectFirstMessage("queue");
 
         try {
             String blob = rs.getString("Message");

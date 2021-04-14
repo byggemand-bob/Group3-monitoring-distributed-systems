@@ -24,7 +24,7 @@ public class TimingMonitorDataMessage implements MessageInterface {
 
     /* the message converts itself into an sql format, and saves itself using provided SQLManager */
     @Override
-    public void MakeSQL(SQLManager sqlManager) {
+    public void MakeSQL(SQLMessageManager sqlMessageManager) {
         List<String> errorMessages = new ArrayList<>();
         if (timingMonitorData.getEventID() == null) {
             errorMessages.add("EventID");
@@ -49,7 +49,7 @@ public class TimingMonitorDataMessage implements MessageInterface {
 
         String blob = timingMonitorData.getTargetEndpoint() + separator + timingMonitorData.getEventID() + separator + timingMonitorData.getEventCode().ordinal();
 
-        sqlManager.InsertMessage("queue", timingMonitorData.getSenderID(), messageTypeID, timingMonitorData.getTimestamp().toString(), blob);
+        sqlMessageManager.InsertMessage(timingMonitorData.getSenderID(), messageTypeID, timingMonitorData.getTimestamp().toString(), blob);
     }
 
     public int getMessageTypeID () {

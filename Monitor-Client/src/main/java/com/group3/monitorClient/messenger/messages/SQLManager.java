@@ -2,23 +2,20 @@ package com.group3.monitorClient.messenger.messages;
 
 import java.sql.*;
 
+/*
+ * SQLManager handles queries to a given database
+ */
 public class SQLManager {
     private final String path;
     private final String url;
     private final String fileName;
-    private Connection conn;
-    private Statement stmt;
+    private final Connection conn;
 
     public SQLManager(String path, String fileName) {
         this.path = path;
         this.url = "jdbc:sqlite:" + path;
         this.fileName = fileName;
         conn = Connect();
-        try {
-            stmt  = conn.createStatement();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
     }
 
     /* returns the number of elements in a specified table */
@@ -37,21 +34,6 @@ public class SQLManager {
         return size;
     }
 
-    public int TableSize(String TableName, String WhereArgs){
-        int size = -1;
-        ResultSet rs = GenericStmt("SELECT COUNT(*) FROM " + TableName + " WHERE " + WhereArgs);
-
-        try {
-            if(rs.next()){
-                size = rs.getInt(1);
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return size;
-    }
-
     /* Creates a table with the given name, and columns as given by args */
     public void CreateNewTable(String tableName, String... args) {
         StringBuilder sql = new StringBuilder();
@@ -62,42 +44,20 @@ public class SQLManager {
         sql = new StringBuilder(sql.substring(0,sql.length()-2)).append("\n");
         sql.append(");");
 
-        GenericPreparedStmt(sql.toString());
+        ExecutePreparedStmt(sql.toString());
     }
 
-    /* Inserts and Message element into the given table */
-    public void InsertMessage(String tableName, long senderID, int messageType, String timeStamp, String message) {
-        //TODO: choose the prettiest in all the lands
-        GenericPreparedStmt("INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) " +
-                "VALUES(" +
-                        senderID + ',' +
-                        messageType + ",'" +
-                        timeStamp +"','" +
-                        message + "')");
-//        try {
-//            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) VALUES(?,?,?,?)");
-//            pstmt.setLong(1, senderID);
-//            pstmt.setInt(2, messageType);
-//            pstmt.setString(3, timeStamp);
-//            pstmt.setString(4, message);
-//            pstmt.executeUpdate();
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
+    /* returns the first element of tableName */
+    public ResultSet SelectFirst(String tableName){
+        return GenericStmt("SELECT * FROM "+tableName+" LIMIT 1");
     }
 
-    /* returns the first element of tableName, as ordered by the first column and has ToBeSent = 1 */
-    public ResultSet SelectFirstMessage(String tableName){
-        return GenericStmt("SELECT * FROM "+tableName+" WHERE ToBeSent = 1 ORDER BY 1 LIMIT 1");
-    }
-
-    /* returns the first element of tableName, as ordered by the first column and has ToBeSent = 0 */
-    public ResultSet SelectFirstFailedMessage(String tableName){
-        return GenericStmt("SELECT * FROM "+tableName+" WHERE ToBeSent = 0 ORDER BY 1 LIMIT 1");
+    public ResultSet Select (String tableName, String... whereArgs) {
+        return GenericStmt(AppendWhereArgs("SELECT * FROM " + tableName, whereArgs));
     }
 
     /* Checks if a table with specified name exists in the database */
-    public boolean CheckIfExists(String tableName) {
+    public boolean CheckIfTableExists(String tableName) {
         try {
             return GenericStmt("SELECT name FROM sqlite_master WHERE name = '" + tableName +"'").next();
         } catch (SQLException throwables) {
@@ -108,80 +68,54 @@ public class SQLManager {
 
     /* Resets the AutoIncrement to the highest number contained in the column */
     public void ResetAutoIncrement(String tableName) {
-        GenericPreparedStmt("UPDATE sqlite_sequence SET seq = 0 WHERE name = '" + tableName + "'");
+        ExecutePreparedStmt("UPDATE sqlite_sequence SET seq = 0 WHERE name = '" + tableName + "'");
     }
 
-    /* Deletes the first element of a message Table, where ToBeSent = 1 */
-    public void DeleteFirstMessage(String tableName){
-        try {
-            long ID = SelectFirstMessage(tableName).getLong("ID");
-            GenericPreparedStmt("DELETE FROM " + tableName + " WHERE ID = " + ID);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+    /* Deletes the first element of a message Table */
+    public void Delete(String tableName, String... whereArgs){
+        ExecutePreparedStmt(AppendWhereArgs("DELETE FROM " + tableName, whereArgs));
+    }
 
+    private String AppendWhereArgs(String string, String[] whereArgs) {
+        if (whereArgs.length > 0) {
+            string += " WHERE ";
+            for (String arg: whereArgs){
+                string += arg + " AND ";
+            }
+            String returnString = string.substring(0,string.length()-5);
+            return returnString;
         }
+        return string;
     }
 
-    /* Deletes the first element of a message Table, where ToBeSent = 0 */
-    public void DeleteFirstFailedMessage(String tableName){
+    public void DeleteAll(String tableName){
+        ExecutePreparedStmt("DELETE FROM " + tableName);
+    }
+
+    /* Only statements allowed */
+    public ResultSet GenericStmt(String query){
         try {
-            long ID = SelectFirstFailedMessage(tableName).getLong("ID");
-            GenericPreparedStmt("DELETE FROM " + tableName + " WHERE ID = " + ID);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    public void DeleteAllFailedMessages(String tableName){
-        String sql = "DELETE FROM " + tableName + " WHERE ToBeSent = 0";
-        GenericPreparedStmt(sql);
-    }
-
-    public void ChangeStatusOfFirstToBeSentElement (String tableName) {
-        String sql = "SELECT * FROM "+tableName+" WHERE ToBeSent = 1 ORDER BY 1 LIMIT 1";
-        try {
-            long ID = GenericStmt(sql).getLong(1);
-            GenericPreparedStmt("UPDATE " + tableName + " SET ToBeSent = 0 WHERE ID = '" + ID + "'");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    public String getPath () {
-        return this.path;
-    }
-
-    public String getFileName () {
-        return this.fileName;
-    }
-
-    /*
-     * Made for testing
-     * Only statements allowed
-     */
-    public ResultSet GenericStmt(String quary){
-        try {
-            ResultSet rs = stmt.executeQuery(quary);
-            return rs;
+            return CreateNewStmt().executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    /*
-     * Made for testing
-     * Only Prepared statements allowed
-     */
-    public void GenericPreparedStmt(String quary){
+    /* Only Prepared statements allowed */
+    public void ExecutePreparedStmt(String query){
         try {
-            PreparedStatement pstmt = conn.prepareStatement(quary);
+            PreparedStatement pstmt = conn.prepareStatement(query);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
 
         }
+    }
+
+    private Statement CreateNewStmt() throws SQLException {
+        return conn.createStatement();
     }
 
     private Connection Connect() {
@@ -197,5 +131,22 @@ public class SQLManager {
     /* Closes the connection to the database */
     public void CloseConnection () {
         try { conn.close(); } catch (Exception e) { /* Ignored */ }
+    }
+
+    public String getPath () {
+        return this.path;
+    }
+
+    public String getFileName () {
+        return this.fileName;
+    }
+
+    public PreparedStatement getPreparedStmt (String sql) {
+        try {
+            return conn.prepareStatement(sql);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return null;
+        }
     }
 }

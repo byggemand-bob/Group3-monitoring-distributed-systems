@@ -1,11 +1,9 @@
 package com.group3.monitorClient.messenger.messageQueue;
 
 import com.group3.monitorClient.AbstractPersistentSQLQueueTest;
-import com.group3.monitorClient.AbstractSQLTest;
 import com.group3.monitorClient.messenger.messages.MessageInterface;
 import com.group3.monitorClient.messenger.messages.MessageCreator;
-import com.group3.monitorClient.messenger.messages.SQLManager;
-import com.group3.monitorClient.messenger.queue.PersistentSQLQueue;
+import com.group3.monitorClient.messenger.messages.SQLManagerOLD;
 import com.group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -27,10 +25,10 @@ public class PersistentSQLQueue_Test extends AbstractPersistentSQLQueueTest {
         String[] col5 = new String[0];
         String[] col6 = new String[0];
         String tableName = "queue";
-        SQLManager sqlManager = new SQLManager(messageQueue.getPath(), messageQueue.getFileName());
+        SQLManagerOLD sqlManagerOLD = new SQLManagerOLD(messageQueue.getPath(), messageQueue.getFileName());
 
         //Act
-        ResultSet rs = sqlManager.GenericStmt("PRAGMA table_info(" + tableName + ")");
+        ResultSet rs = sqlManagerOLD.GenericStmt("PRAGMA table_info(" + tableName + ")");
 
         try {
             rs.next();
@@ -125,7 +123,7 @@ public class PersistentSQLQueue_Test extends AbstractPersistentSQLQueueTest {
         Assertions.assertNull(col6[3]);
         Assertions.assertEquals("0", col6[4]);
 
-        sqlManager.CloseConnection();
+        sqlManagerOLD.CloseConnection();
     }
 
     /* test if the message order of the queue is preserved */

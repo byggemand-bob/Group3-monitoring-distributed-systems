@@ -3,9 +3,7 @@ package com.group3.monitorClient.messenger.lazyMessenger;
 import com.group3.monitorClient.messenger.GreedyMessenger;
 import com.group3.monitorClient.messenger.MessengerInterface;
 import com.group3.monitorClient.messenger.lazyMessenger.requirements.Requirement;
-import com.group3.monitorClient.messenger.messages.MessageCreator;
 import com.group3.monitorClient.messenger.messages.MessageInterface;
-import com.group3.monitorClient.messenger.queue.QueueInterface;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,8 +15,6 @@ import java.util.List;
  */
 public class LazyMessenger implements MessengerInterface {
     protected MessengerInterface subMessenger;
-    private MessageCreator messageCreator = new MessageCreator();
-    private QueueInterface<MessageInterface> messageQueue;
     private List<Requirement> requirementList = new LinkedList<Requirement>();
     private boolean running = true;
     private boolean paused = false;
@@ -28,14 +24,8 @@ public class LazyMessenger implements MessengerInterface {
      * specifies which SynchronizedQueue to utilize,
      * useful if multiple messengers should share the same queue.
      */
-    public LazyMessenger(String monitorIP, QueueInterface<MessageInterface> messageQueue){
-        subMessenger = new GreedyMessenger(monitorIP, messageQueue);
-        this.messageQueue = messageQueue;
-    }
-
-    /* Returns number of messages in messageQueue */
-    public int QueueSize(){
-        return messageQueue.Size();
+    public LazyMessenger(String monitorIP, String sqlPath, String sqlFileName){
+        subMessenger = new GreedyMessenger(monitorIP, sqlPath, sqlFileName);
     }
 
     /* starts a thread running current class.run() */
@@ -89,7 +79,12 @@ public class LazyMessenger implements MessengerInterface {
     /* Adds a message to the message-queue, to be sent later when requirements allow. */
     @Override
     public void AddMessage(MessageInterface message){
-        messageQueue.Put(message);
+        subMessenger.AddMessage(message);
+    }
+
+    @Override
+    public long MessageQueueSize() {
+        return subMessenger.MessageQueueSize();
     }
 
     /*

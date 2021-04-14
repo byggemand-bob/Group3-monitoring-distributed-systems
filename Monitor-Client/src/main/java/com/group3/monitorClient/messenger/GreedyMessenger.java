@@ -4,7 +4,7 @@ import com.group3.monitorClient.controller.MonitorClientInterface;
 import com.group3.monitorClient.messenger.messages.ErrorDataMessage;
 import com.group3.monitorClient.messenger.messages.MessageCreator;
 import com.group3.monitorClient.messenger.messages.MessageInterface;
-import com.group3.monitorClient.messenger.queue.QueueInterface;
+import com.group3.monitorClient.messenger.messages.SQLMessageManager;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.model.ErrorData;
 import org.threeten.bp.OffsetDateTime;
@@ -13,6 +13,8 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /*
  * The GreedyMessenger class runs a continues thread sending TimingMonitorData from a SynchronizedQueue.
@@ -22,7 +24,8 @@ public class GreedyMessenger implements MessengerInterface {
     protected MonitorClientInterface monitorClientInterface;
     private boolean running = true;
     private boolean paused = false;
-    private final QueueInterface<MessageInterface> messageQueue;
+    public final SQLMessageManager sqlMessageManager;
+    private final SQLMessageManager sqlFailedMessageManager;
     private final MessageCreator messageCreator = new MessageCreator();
     private Thread thread;
     private long senderID = 1L;//TODO: add real sender id instead of dummy data
@@ -31,9 +34,10 @@ public class GreedyMessenger implements MessengerInterface {
      * specifies which SynchronizedQueue to utilize,
      * useful if multiple messengers should share the same queue.
      */
-    public GreedyMessenger(String monitorIP, QueueInterface<MessageInterface> messageQueue){
+    public GreedyMessenger(String monitorIP, String sqlPath, String sqlFileName){
         monitorClientInterface = new MonitorClientInterface(monitorIP);
-        this.messageQueue = messageQueue;
+        sqlMessageManager = new SQLMessageManager(sqlPath, sqlFileName, "Messages");
+        sqlFailedMessageManager = new SQLMessageManager(sqlPath, sqlFileName, "FailedMessages");
     }
 
     /* starts a thread running current class.run() */
@@ -72,7 +76,12 @@ public class GreedyMessenger implements MessengerInterface {
     /* Adds a message to the message-queue */
     @Override
     public void AddMessage(MessageInterface message){
-        messageQueue.Put(message);
+        message.MakeSQL(sqlMessageManager);
+    }
+
+    @Override
+    public long MessageQueueSize() {
+        return sqlMessageManager.TableSize();
     }
 
     public boolean MessengerIsAlive(){
@@ -94,7 +103,8 @@ public class GreedyMessenger implements MessengerInterface {
 
     /* Sends next message in the messageQueue */
     private void SendMessage(){
-        MessageInterface message = messageQueue.Take();
+        ResultSet firstMessageRS = sqlMessageManager.SelectFirstMessage();
+        MessageInterface message = messageCreator.MakeMessageFromSQL(firstMessageRS);
 
         if (message != null) {
             int loop = 0, statusCode = -1;
@@ -147,7 +157,7 @@ public class GreedyMessenger implements MessengerInterface {
                 if (socketTimeout && !errorOccurrence) {
                     errorData.setComment(errorData.getComment() + "Connection re-established: " + OffsetDateTime.now().toString());
                     MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
-                    messageQueue.Put(errorDataMessage);
+                    errorDataMessage.MakeSQL(sqlMessageManager);
                     socketTimeout = false;
                 }
 
@@ -155,19 +165,24 @@ public class GreedyMessenger implements MessengerInterface {
                 if(!running || paused){ break; }
             } while(!(statusCode >= 200 && statusCode < 300) && loop < 10);
 
-            CheckResponse(statusCode, message.getClass() == ErrorDataMessage.class); //after 10 loops of none 200 response codes, check Response;
+            try {
+                CheckResponse(statusCode, message, firstMessageRS.getLong("ID")); //after 10 loops of none 200 response codes, check Response;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } else {
             ThreadWait(5000);
         }
     }
 
     /* Checks the Response of message.send() and takes the appropriate action */
-    private void CheckResponse(int response, boolean isErrorMessage){
+    private void CheckResponse(int response, MessageInterface message, long messageID){
         if(response >= 200 && response < 300){
-            messageQueue.Delete();
+            sqlMessageManager.Delete("ID = '" + messageID + "'");
         } else {
-            messageQueue.Failed();
-            if(!isErrorMessage){
+            message.MakeSQL(sqlFailedMessageManager);
+            sqlMessageManager.Delete("ID = '" + messageID + "'");
+            if(!(message.getClass() == ErrorDataMessage.class)){
                 ErrorData errorData = new ErrorData();
                 if(response == -1){
                     if(running && !paused){ //TODO: change - preferably change from UnknownError to a defined error
@@ -176,7 +191,7 @@ public class GreedyMessenger implements MessengerInterface {
                         errorData.setSenderID(senderID);
                         errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.UNKNOWNERROR);
                         MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
-                        messageQueue.Put(errorDataMessage);
+                        errorDataMessage.MakeSQL(sqlMessageManager);
                     }
                 } else {
                     //if a non-200 http response is gotten - add it to the message
@@ -185,7 +200,7 @@ public class GreedyMessenger implements MessengerInterface {
                     errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.HTTPERROR);
                     errorData.setHttpResponse(response);
                     MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
-                    messageQueue.Put(errorDataMessage);
+                    errorDataMessage.MakeSQL(sqlMessageManager);
                 }
             }
         }

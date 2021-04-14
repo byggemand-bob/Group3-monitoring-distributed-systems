@@ -12,4 +12,6 @@ public interface MessengerInterface extends Runnable {
     void Resume();
 
     void AddMessage(MessageInterface message);
+
+    long MessageQueueSize();
 }

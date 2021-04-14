@@ -50,7 +50,7 @@ public class MessageCreator_Test extends AbstractSQLTest {
         timingMonitorData.setEventCode(TimingMonitorData.EventCodeEnum.RECEIVEREQUEST);
 
         //Act
-        sqlManager.CreateNewTable(tableName,
+        sqlManagerOLD.CreateNewTable(tableName,
                 "ID integer PRIMARY KEY AUTOINCREMENT",
                 "MessageType integer NOT NULL",
                 "SenderID integer NOT NULL",
@@ -59,9 +59,9 @@ public class MessageCreator_Test extends AbstractSQLTest {
                 "Message BLOB");
         MessageInterface message = messageCreator.MakeMessage(timingMonitorData);
 
-        message.MakeSQL(sqlManager);
+        message.MakeSQL(sqlManagerOLD);
 
-        ResultSet rs = sqlManager.SelectFirstMessage(tableName);
+        ResultSet rs = sqlManagerOLD.SelectFirstMessage(tableName);
 
         MessageInterface messageReturn = messageCreator.MakeMessageFromSQL(rs);
         TimingMonitorData tmdReturn = ((TimingMonitorDataMessage)messageReturn).getTimingMonitorData();

@@ -1,6 +1,8 @@
-package com.group3.monitorServer.controller.messages;
+package com.group3.monitorClient.messenger.messages;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /*
  * SQLManager handles queries to a given database
