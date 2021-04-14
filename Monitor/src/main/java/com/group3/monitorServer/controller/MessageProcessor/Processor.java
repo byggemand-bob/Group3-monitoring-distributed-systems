@@ -46,6 +46,7 @@ public class Processor implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("running");
         RunningLoop: while(running){
             while(paused){
                 ThreadWait(0);
@@ -53,7 +54,7 @@ public class Processor implements Runnable {
                     break RunningLoop;
                 }
             }
-
+            System.out.println("Continuing");
             ResultSet allMessages = sqlMessageManager.SelectAllMessages();
 
             try {
@@ -82,6 +83,7 @@ public class Processor implements Runnable {
 
     private void AnalyzeTimingMessage(TimingMonitorDataMessage firstMessage, TimingMonitorDataMessage secondMessage) {
         //TODO: analyze TimingMessage and delete elements which have been analyzed
+        System.out.println(firstMessage.getTimingMonitorData().getEventCode() + " belong to " + secondMessage.getTimingMonitorData().getEventCode());
     }
 
     private TimingMonitorDataMessage FindMatch (TimingMonitorDataMessage message) {
@@ -110,9 +112,16 @@ public class Processor implements Runnable {
         whereArgs[1] = "SenderID = '" + message.getTimingMonitorData().getSenderID() + "'";
         ResultSet resultSetQuery = sqlMessageManager.SelectMessage(whereArgs);
         try {
-            if (resultSetQuery.next()) {
+            if (resultSetQuery != null && resultSetQuery.next()) {
                 //TODO: analyze TimingMessage
-                return (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(resultSetQuery);
+                TimingMonitorDataMessage result = (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(resultSetQuery);
+                if (!resultSetQuery.next()) {
+                    return result;
+                } else {
+                    System.out.println("");
+                }
+            } else {
+                System.out.println("resultsetquery is null");
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
