@@ -1,4 +1,4 @@
-package com.group3.scheduling.task;
+package com.group3.monitorClient.scheduling.task;
 
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

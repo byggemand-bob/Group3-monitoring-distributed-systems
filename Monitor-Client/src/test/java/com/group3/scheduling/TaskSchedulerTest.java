@@ -9,7 +9,10 @@ import org.quartz.JobDetail;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 
-import com.group3.scheduling.task.AbstractTask;
+import com.group3.monitorClient.scheduling.NotInitializedException;
+import com.group3.monitorClient.scheduling.TaskAlreadyExistsException;
+import com.group3.monitorClient.scheduling.TaskScheduler;
+import com.group3.monitorClient.scheduling.task.AbstractTask;
 import com.group3.scheduling.testClasses.PrintEvery5SecondsTestTask;
 
 class TaskSchedulerTest {

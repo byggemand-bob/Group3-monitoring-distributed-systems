@@ -5,7 +5,7 @@ import java.util.Date;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import com.group3.scheduling.task.AbstractTask;
+import com.group3.monitorClient.scheduling.task.AbstractTask;
 
 public class PrintEvery5SecondsTestTask extends AbstractTask {
 

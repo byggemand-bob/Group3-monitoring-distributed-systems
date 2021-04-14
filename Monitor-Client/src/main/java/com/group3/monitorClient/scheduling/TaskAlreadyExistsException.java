@@ -1,19 +1,19 @@
-package com.group3.scheduling;
+package com.group3.monitorClient.scheduling;
 
-public class NotInitializedException extends RuntimeException {
-
+public class TaskAlreadyExistsException extends RuntimeException {
+	
 	/**
 	 * Version ID used for serialization
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Constructor for the NotInitializedException.
+	 * Constructor for the TaskAlreadyExistsException.
 	 * This extends the Java built-in {@link RuntimeException}.
 	 * 
 	 * @param errorMessage The error message displayed with the exception.
 	 */
-	public NotInitializedException(String errorMessage) {
+	public TaskAlreadyExistsException(String errorMessage) {
 		super(errorMessage);
 	}
 }

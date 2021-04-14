@@ -1,6 +1,6 @@
-package com.group3.scheduling.examples;
+package com.group3.monitorClient.scheduling.examples;
 
-import com.group3.scheduling.TaskScheduler;
+import com.group3.monitorClient.scheduling.TaskScheduler;
 
 public class MyApp {
 

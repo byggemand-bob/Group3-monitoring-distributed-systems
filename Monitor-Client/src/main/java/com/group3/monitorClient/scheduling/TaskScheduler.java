@@ -1,4 +1,4 @@
-package com.group3.scheduling;
+package com.group3.monitorClient.scheduling;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,9 +11,9 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
+import com.group3.monitorClient.scheduling.task.AbstractTask;
+import com.group3.monitorClient.scheduling.task.CleanUpOldFailedMessagesTask;
 import com.group3.monitorClient.util.MonitorUtils;
-import com.group3.scheduling.task.AbstractTask;
-import com.group3.scheduling.task.CleanUpOldFailedMessagesTask;
 
 /**
  * A functionality wrapper for the Quartz {@link Scheduler}.

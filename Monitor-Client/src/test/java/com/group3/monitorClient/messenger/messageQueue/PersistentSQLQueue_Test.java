@@ -4,8 +4,9 @@ import com.group3.monitorClient.AbstractPersistentSQLQueueTest;
 import com.group3.monitorClient.messenger.messages.MessageInterface;
 import com.group3.monitorClient.messenger.messages.MessageCreator;
 import com.group3.monitorClient.messenger.messages.SQLManager;
-import com.group3.scheduling.task.CleanUpOldFailedMessagesTask;
 import com.group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
+import com.group3.monitorClient.scheduling.task.CleanUpOldFailedMessagesTask;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.ErrorData;

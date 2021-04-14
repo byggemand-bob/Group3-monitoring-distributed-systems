@@ -4,7 +4,7 @@ import org.quartz.SchedulerException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.group3.scheduling.TaskScheduler;
+import com.group3.monitorClient.scheduling.TaskScheduler;
 
 @SpringBootApplication
 public class MonitorClientApplication {
