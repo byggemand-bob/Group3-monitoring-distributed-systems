@@ -2,17 +2,19 @@ package com.group3.monitorServer.controller.MessageProcessor;
 
 import com.group3.monitorServer.controller.messages.*;
 import com.group3.monitorServer.controller.queue.PersistentSQLQueue;
+import org.openapitools.model.TimingMonitorData;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Processor implements Runnable {
-    private SQLMessageManager sqlMessageManager;
-    private MessageCreator messageCreator = new MessageCreator();
+    private final SQLMessageManager sqlMessageManager;
+    private final MessageCreator messageCreator = new MessageCreator();
     private boolean running = false;
     private boolean paused = false;
-    private Thread thread;
 
     public Processor(SQLMessageManager sqlMessageManager){
         this.sqlMessageManager = sqlMessageManager;
@@ -20,8 +22,7 @@ public class Processor implements Runnable {
 
     public void Start(){
         running = true;
-        thread = new Thread(this);
-        thread.start();
+        new Thread(this).start();
     }
 
     public void Stop(){
@@ -53,27 +54,70 @@ public class Processor implements Runnable {
                 }
             }
 
-            ResultSet rs = sqlMessageManager.SelectAllMessages();
+            ResultSet allMessages = sqlMessageManager.SelectAllMessages();
 
             try {
-                while(rs.next()){
-                    if(rs.getInt("MessageType") == MessageTypeID.TimingMonitorData.ordinal()){
-                        TimingMonitorDataMessage TimingMessage = (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(rs);
-                        LinkedList<TimingMonitorDataMessage> TimingMessagesList = new LinkedList<>();
-//                        TimingMessagesList = FindMatchingTimingMonitorData(TimingMessage, rs);
-//                        AnalyseTimingMessages(TimingMessagesList);
-                        //TODO: Add elements analyzed to deletelist
-                    } else if(rs.getInt("MessageType") == MessageTypeID.ErrorData.ordinal()){
-                        //TODO: Move Analyze ErrorData and add to delete list
+                while(allMessages.next()){
+                    if(allMessages.getInt("MessageType") == MessageTypeID.TimingMonitorData.ordinal()){
+                        TimingMonitorDataMessage firstMessage = (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(allMessages);
+                        TimingMonitorDataMessage secondMessage = FindMatch(firstMessage);
+                        if (secondMessage != null) {
+                            AnalyzeTimingMessage(firstMessage, secondMessage);
+                        }
+                    } else if(allMessages.getInt("MessageType") == MessageTypeID.ErrorData.ordinal()){
+                        AnalyzeErrorMessage(messageCreator.MakeMessageFromSQL(allMessages));
                     }
                 }
-
-                //TODO: Add foreach element in deletelist, DeleteByID()
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
         }
+    }
+
+    private void AnalyzeErrorMessage(MessageInterface message) {
+        //TODO: Move Analyze ErrorData and delete
+
+    }
+
+    private void AnalyzeTimingMessage(TimingMonitorDataMessage firstMessage, TimingMonitorDataMessage secondMessage) {
+        //TODO: analyze TimingMessage and delete elements which have been analyzed
+    }
+
+    private TimingMonitorDataMessage FindMatch (TimingMonitorDataMessage message) {
+        String[] whereArgs = new String[2];
+        TimingMonitorData.EventCodeEnum eventCodeEnum;
+        switch (message.getTimingMonitorData().getEventCode().toString()) {
+            case "SendRequest":
+                eventCodeEnum = TimingMonitorData.EventCodeEnum.RECEIVERESPONSE;
+                break;
+            case "ReceiveRequest":
+                eventCodeEnum = TimingMonitorData.EventCodeEnum.SENDRESPONSE;
+                break;
+            case "SendResponse":
+                eventCodeEnum = TimingMonitorData.EventCodeEnum.RECEIVEREQUEST;
+                break;
+            case "ReceiveResponse":
+                eventCodeEnum = TimingMonitorData.EventCodeEnum.SENDREQUEST;
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + message.getTimingMonitorData().getEventCode().toString());
+        }
+        String blob = message.getTimingMonitorData().getTargetEndpoint() + TimingMonitorDataMessage.separator +
+                message.getTimingMonitorData().getEventID() + TimingMonitorDataMessage.separator +
+                eventCodeEnum.ordinal();
+        whereArgs[0] = "Message = '" + blob + "'";
+        whereArgs[1] = "SenderID = '" + message.getTimingMonitorData().getSenderID() + "'";
+        ResultSet resultSetQuery = sqlMessageManager.SelectMessage(whereArgs);
+        try {
+            if (resultSetQuery.next()) {
+                //TODO: analyze TimingMessage
+                return (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(resultSetQuery);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 
     /* waits for specified amount of MilliSeconds if 0, waits until another calls thread.notify() */
