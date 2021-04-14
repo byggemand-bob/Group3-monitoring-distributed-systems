@@ -62,7 +62,7 @@ public class SQLMessageManager {
             sqlManager.ResetAutoIncrement(tableName);
         }
     }
-
+    /* Deletes everything in the table and resets AutoIncrement */
     public void ResetTable(){
         sqlManager.DeleteAll(tableName);
         sqlManager.ResetAutoIncrement(tableName);

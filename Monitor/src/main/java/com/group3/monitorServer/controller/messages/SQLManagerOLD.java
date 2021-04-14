@@ -72,7 +72,6 @@ public class SQLManagerOLD {
 
     /* Inserts and Message element into the given table */
     public void InsertMessage(String tableName, long senderID, int messageType, String timeStamp, String message) {
-        //TODO: choose the prettiest in all the lands
         GenericPreparedStmt("INSERT INTO "+tableName+"(SenderID, MessageType, Timestamp, Message) " +
                 "VALUES(" +
                         senderID + ',' +

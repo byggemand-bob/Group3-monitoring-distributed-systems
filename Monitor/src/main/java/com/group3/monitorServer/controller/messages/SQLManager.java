@@ -9,7 +9,7 @@ public class SQLManager {
     private final String path;
     private final String url;
     private final String fileName;
-    private Connection conn;
+    private final Connection conn;
 
     public SQLManager(String path, String fileName) {
         this.path = path;
