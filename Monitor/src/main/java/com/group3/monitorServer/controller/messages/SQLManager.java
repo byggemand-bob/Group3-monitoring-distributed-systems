@@ -80,9 +80,10 @@ public class SQLManager {
         if (whereArgs.length > 0) {
             string += " WHERE ";
             for (String arg: whereArgs){
-                string += arg + ", ";
+                string += arg + " AND ";
             }
-            return string.substring(0,string.length()-2);
+            String returnString = string.substring(0,string.length()-5);
+            return returnString;
         }
         return string;
     }
