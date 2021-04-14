@@ -7,16 +7,6 @@ def ChangeTemplateInConfig(filePath, replace):
     fin.write(data)
     fin.close()
 
-#Change the template file path in Client project
-#ChangeTemplateInConfig(
-#    "/home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Client/config.yaml", 
-#    "templateDir: Client/src/main/resources/cstTemplates")
-
-#Change the template file path in Monitor project
-#ChangeTemplateInConfig(
-#    '/home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Monitor/config.yaml', 
-#    'templateDir: Monitor/src/main/resources/cstTemplates')
-
 #Change the template file path in Server project
 ChangeTemplateInConfig(
     '/home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Server/config.yaml', 
@@ -31,3 +21,8 @@ ChangeTemplateInConfig(
 ChangeTemplateInConfig(
     '/home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Monitor/config.yaml', 
     'templateDir: Monitor/src/main/resources/cstTemplates')
+
+#Change the template file path in Monitor-Client project
+ChangeTemplateInConfig(
+    '/home/travis/build/byggemand-bob/Group3-monitoring-distributed-systems/Monitor-Client/config.yaml', 
+    'templateDir: Monitor-Client/src/main/resources/cstTemplates')
