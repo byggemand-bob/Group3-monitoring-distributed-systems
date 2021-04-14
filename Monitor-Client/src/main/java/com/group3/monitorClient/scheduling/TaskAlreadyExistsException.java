@@ -1,4 +1,4 @@
-package com.group3.scheduling;
+package com.group3.monitorClient.scheduling;
 
 public class TaskAlreadyExistsException extends RuntimeException {
 	

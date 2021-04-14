@@ -8,6 +8,7 @@ source = './Monitor-Client/src/main/java'
 dest = ['./Client/src/main/resources/cstTemplates/', './Server/src/main/resources/cstTemplates/']
 autogen = './Monitor-Client/target/generated-sources/openapi/src/gen/java/main'
 autogen_folders = ['\\org\\openapitools\\client\\api', '\\org\\openapitools\\client\\model']
+exclude_path = './Monitor-Client/src/main/java\\com\\group3\\monitorClient'
 
 def check_include_list(path: str, include_list: List) -> bool:
   if include_list == None:
@@ -31,6 +32,9 @@ def CopyRenameMove(path: str, file_name: str, include_dir_list: List = None) -> 
   if file_name.endswith('.java'):
     
     if not check_include_list(path, include_dir_list): return
+    if path == exclude_path: 
+      print('Excluded <' + file_name + '>...')
+      return
 
     subpath = path[len(source) + 1:]
 
@@ -41,7 +45,7 @@ def CopyRenameMove(path: str, file_name: str, include_dir_list: List = None) -> 
     del folder_structure[0:3]
 
     #Remove the files that starts with Test
-    source_file = os.path.join(path, file_name) if not (file_name.startswith('Test')) else ''
+    source_file = os.path.join(path, file_name)
     #Skip empty strings in array
     if len(source_file) == 0:
       return
@@ -66,8 +70,10 @@ def CopyRenameMove(path: str, file_name: str, include_dir_list: List = None) -> 
 
       #Copy files from soruce to dest
       shutil.copy(realpath_source, realpath_dest)
+      print('Converted and copied <' + realpath_source + '> to <' + realpath_dest + '>...')
 
 #For loop to get the root, dirs and files in the soruce target.
+print('Starting converting Java classes to mustache templates...')
 for root, dirs, files in os.walk(source, topdown=True):
   for name in files:
     CopyRenameMove(root, name)
@@ -77,3 +83,5 @@ for autogen_dir in autogen_folders:
   for root, dirs, files in os.walk(autogen, topdown=True):
     for name in files:
         CopyRenameMove(root, name, autogen_folders)
+
+print('Finished converting Java classes to mustache templates...')

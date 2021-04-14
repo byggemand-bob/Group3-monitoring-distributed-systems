@@ -1,14 +1,14 @@
-package com.group3.scheduling.task;
+package com.group3.monitorClient.scheduling.task;
 
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import com.group3.monitorClient.configuration.ConfigurationManager;
-import com.group3.monitorClient.messenger.queue.PersistentSQLQueue;
+import com.group3.monitorClient.messenger.messages.SQLManager;
 
 public class CleanUpOldFailedMessagesTask extends AbstractTask {
 
-	public static final String cleanupSQL = "DELETE FROM queue WHERE ToBeSent = 0 AND datetime(Timestamp) < datetime('now', ?)";
+	public static final String cleanupSQL = "DELETE FROM queue WHERE datetime(Timestamp) < datetime('now', ?)";
 	
 	/**
 	 * Constructor for the CleanUpOldFailedMessagesTask.
@@ -36,8 +36,8 @@ public class CleanUpOldFailedMessagesTask extends AbstractTask {
 		// Ensure that daysToKeep do not go below zero
 		daysToKeep = Math.max(0, daysToKeep);
 		
-		PersistentSQLQueue sqlQueue = new PersistentSQLQueue(PersistentSQLQueue.queueDBPath, PersistentSQLQueue.queueDBFile);
-		int removedMessagesCount = sqlQueue.cleanupOldMessages(cleanupSQL, daysToKeep);		
+		SQLManager sqlQueue = new SQLManager(SQLManager.queueDBPath, SQLManager.queueDBFile);
+		int removedMessagesCount = sqlQueue.CleanupOldMessages(cleanupSQL, daysToKeep);	
 		
 		if (removedMessagesCount > -1) {
 			System.out.println("Finished cleanup of old failed message, removed <" + removedMessagesCount + "> old messages...");			

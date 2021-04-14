@@ -1,9 +1,9 @@
-package com.group3.scheduling;
+package com.group3.monitorClient.scheduling;
 
 import org.quartz.JobKey;
 import org.quartz.TriggerKey;
 
-import com.group3.scheduling.task.AbstractTask;
+import com.group3.monitorClient.scheduling.task.AbstractTask;
 
 /**
  * Class to contain the details of an associated task, that is to be scheduled in the {@link TaskScheduler}.

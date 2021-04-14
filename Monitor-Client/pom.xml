@@ -36,6 +36,7 @@
 			<version>2.9.2</version>
 		</dependency>
 		
+		<!-- For task scheduling -->
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
