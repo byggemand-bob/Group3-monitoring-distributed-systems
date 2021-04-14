@@ -36,6 +36,13 @@
             <version>1.6.2</version>
         </dependency>
 
+		<!-- For task scheduling -->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+
         <!-- https://mvnrepository.com/artifact/io.gsonfire/gson-fire -->
         <dependency>
             <groupId>io.gsonfire</groupId>
@@ -196,12 +203,13 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <templateDirectory>${project.basedir}/src/main/resources/templates</templateDirectory>
+                            <!-- <templateDirectory>${project.basedir}/src/main/resources/templates</templateDirectory> --> <!-- Somehow this line breaks the autogeneration -->
                             <inputSpec>${project.basedir}/src/main/resources/monitor-api.yaml</inputSpec>
                             <generatorName>spring</generatorName>
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                             </configOptions>
+                            <configurationFile>${project.basedir}/config.yaml</configurationFile>
                         </configuration>
                     </execution>
                 </executions>
