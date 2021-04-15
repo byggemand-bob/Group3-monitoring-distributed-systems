@@ -128,4 +128,24 @@ public class Constraint {
 	public Integer getNodeID() {
 		return nodeID;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.getClass().getSimpleName());
+		sb.append("[");
+		sb.append("max=" + max);
+		sb.append(", ");
+		sb.append("endpoint=" + endpoint);
+		sb.append(", ");
+		sb.append("min=" + min);
+		sb.append(", ");
+		sb.append("name=" + name);
+		sb.append(", ");
+		sb.append("description=" + description);
+		sb.append(", ");
+		sb.append("nodeID=" + nodeID);
+		sb.append("]");
+		return sb.toString();
+	}
 }
