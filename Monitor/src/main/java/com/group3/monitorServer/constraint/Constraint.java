@@ -1,5 +1,13 @@
 package com.group3.monitorServer.constraint;
 
+/**
+ * Class to contain the information about Constraints defined on endpoints, with the possibility of also specifying the specific node ID with in the distributed system the endpoint is specified.
+ * <br>
+ * The nodeID is to be used if multiple nodes in the monitored distributed system have the same endpoint path defined and the Constraint information for the endpoints needs to be differentiated.
+ * <br>
+ * A general Constraint for an endpoint path can be created by omitting the nodeID information, this will make it so that if a specific Constraint can't be found, a search for a general can be triggered.
+ *
+ */
 public class Constraint {
 
 	// Required
@@ -16,7 +24,7 @@ public class Constraint {
 	 * Constructor for the Constraint class.
 	 * 
 	 * @param endpoint The path of the endpoint that the Constraint is associated with.
-	 * @param max The maximum amount of time allowed for a call to the specified endpoint in milliseconds.
+	 * @param max The maximum amount of time allowed for a call to the specified endpoint in milliseconds (inclusive).
 	 */
 	public Constraint(String endpoint, Integer max) {
 		this.endpoint = endpoint;
@@ -24,7 +32,7 @@ public class Constraint {
 	}
 	
 	/**
-	 * Sets the minimum value on the Constraint (optional).
+	 * Sets the minimum value on the Constraint (optional) (inclusive).
 	 * 
 	 * @param min The minimum time that a call needs to take.
 	 * @return The current Constraint instance.
@@ -68,9 +76,9 @@ public class Constraint {
 	}
 
 	/**
-	 * Get the maximum time specified for the Constraint.
+	 * Get the maximum time (inclusive) specified for the Constraint.
 	 * 
-	 * @return The maximum time specified for the Constraint.
+	 * @return The maximum time (inclusive) specified for the Constraint.
 	 */
 	public Integer getMax() {
 		return max;
@@ -86,9 +94,9 @@ public class Constraint {
 	}
 
 	/**
-	 * Get the minimum time specified for the Constraint.
+	 * Get the minimum time (inclusive) specified for the Constraint.
 	 * 
-	 * @return The minimum time specified for the Constraint.
+	 * @return The minimum time (inclusive) specified for the Constraint.
 	 */
 	public Integer getMin() {
 		return min;
