@@ -1,8 +1,8 @@
 package com.group3.monitorClient.messenger.messageQueue;
 
-import com.group3.monitorClient.AbstractSQLTest;
-import com.group3.monitorClient.messenger.messages.MessageInterface;
+import com.group3.monitorClient.AbstractSQLMessageManagerTest;
 import com.group3.monitorClient.messenger.messages.MessageCreator;
+import com.group3.monitorClient.messenger.messages.MessageInterface;
 import com.group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import org.threeten.bp.OffsetDateTime;
 
 import java.sql.ResultSet;
 
-public class MessageCreator_Test extends AbstractSQLTest {
+public class MessageCreator_Test extends AbstractSQLMessageManagerTest {
     /* Verifies the messageCreator is able to construct the message properly when given a TimingMonitorData instance */
     @Test
     public void testMakeMessageTimingMonitorDataPass () {
@@ -39,33 +39,17 @@ public class MessageCreator_Test extends AbstractSQLTest {
     @Test
     public void testMakeMessageFromSQLPass () {
         //Setup
-        String tableName = "queue";
-        TimingMonitorData timingMonitorData = new TimingMonitorData();
         MessageCreator messageCreator = new MessageCreator();
-        OffsetDateTime offsetDateTime = OffsetDateTime.now();
-        timingMonitorData.setSenderID(21L);
-        timingMonitorData.setTimestamp(offsetDateTime);
-        timingMonitorData.setTargetEndpoint("/monitor");
-        timingMonitorData.setEventID(22L);
-        timingMonitorData.setEventCode(TimingMonitorData.EventCodeEnum.RECEIVEREQUEST);
 
         //Act
-        sqlManagerOLD.CreateNewTable(tableName,
-                "ID integer PRIMARY KEY AUTOINCREMENT",
-                "MessageType integer NOT NULL",
-                "SenderID integer NOT NULL",
-                "Timestamp text NOT NULL",
-                "ToBeSent BOOLEAN DEFAULT 1",
-                "Message BLOB");
-        MessageInterface message = messageCreator.MakeMessage(timingMonitorData);
+        TimingMonitorDataMessage timingMessage = getDefaultTimingMessage();
+        timingMessage.MakeSQL(sqlMessageManager);
 
-        message.MakeSQL(sqlManagerOLD);
-
-        ResultSet rs = sqlManagerOLD.SelectFirstMessage(tableName);
+        ResultSet rs = sqlMessageManager.SelectFirstMessage();
 
         MessageInterface messageReturn = messageCreator.MakeMessageFromSQL(rs);
         TimingMonitorData tmdReturn = ((TimingMonitorDataMessage)messageReturn).getTimingMonitorData();
-        TimingMonitorData tmdBefore = ((TimingMonitorDataMessage)message).getTimingMonitorData();
+        TimingMonitorData tmdBefore = timingMessage.getTimingMonitorData();
 
         //Assert
         Assertions.assertEquals(tmdBefore.getSenderID(), tmdReturn.getSenderID());
