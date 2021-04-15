@@ -3,6 +3,9 @@ package com.group3.monitorServer.constraint.store;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.quartz.ObjectAlreadyExistsException;
+import org.springframework.aop.ThrowsAdvice;
+
 import com.group3.monitorServer.constraint.Constraint;
 import com.group3.monitorServer.constraint.ConstraintKey;
 
@@ -25,9 +28,15 @@ public class ConstraintStore {
 	 * Adds a {@link Constraint} to the store.
 	 * 
 	 * @param constraint The constraint to add to the store.
+	 * @throws ObjectAlreadyExistsException 
 	 */
-	public void addConstraint(Constraint constraint) {
+	public void addConstraint(Constraint constraint) throws ObjectAlreadyExistsException {
 		ConstraintKey key = new ConstraintKey(constraint.getEndpoint(), constraint.getNodeID());
+		
+		if(constraints.containsKey(key)) {
+			throw new ObjectAlreadyExistsException("The constraint <" + constraint + "> already exists");
+		}
+		
 		constraints.put(key, constraint);
 	}
 	
