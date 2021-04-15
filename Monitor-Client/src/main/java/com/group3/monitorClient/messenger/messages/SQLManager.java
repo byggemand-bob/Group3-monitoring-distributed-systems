@@ -19,7 +19,7 @@ public class SQLManager {
     }
 
     /* returns the number of elements in a specified table */
-    public int TableSize(String TableName){
+    public synchronized int TableSize(String TableName){
         int size = -1;
         ResultSet rs = GenericStmt("SELECT COUNT(*) FROM " + TableName);
 
@@ -35,7 +35,7 @@ public class SQLManager {
     }
 
     /* Creates a table with the given name, and columns as given by args */
-    public void CreateNewTable(String tableName, String... args) {
+    public synchronized void CreateNewTable(String tableName, String... args) {
         StringBuilder sql = new StringBuilder();
         sql.append("CREATE TABLE IF NOT EXISTS ").append(tableName).append(" (\n");
         for (String arg: args){
@@ -48,16 +48,16 @@ public class SQLManager {
     }
 
     /* returns the first element of tableName */
-    public ResultSet SelectFirst(String tableName){
+    public synchronized ResultSet SelectFirst(String tableName){
         return GenericStmt("SELECT * FROM "+tableName+" LIMIT 1");
     }
 
-    public ResultSet Select (String tableName, String... whereArgs) {
+    public synchronized ResultSet Select (String tableName, String... whereArgs) {
         return GenericStmt(AppendWhereArgs("SELECT * FROM " + tableName, whereArgs));
     }
 
     /* Checks if a table with specified name exists in the database */
-    public boolean CheckIfTableExists(String tableName) {
+    public synchronized boolean CheckIfTableExists(String tableName) {
         try {
             return GenericStmt("SELECT name FROM sqlite_master WHERE name = '" + tableName +"'").next();
         } catch (SQLException throwables) {
@@ -67,16 +67,16 @@ public class SQLManager {
     }
 
     /* Resets the AutoIncrement to the highest number contained in the column */
-    public void ResetAutoIncrement(String tableName) {
+    public synchronized void ResetAutoIncrement(String tableName) {
         ExecutePreparedStmt("UPDATE sqlite_sequence SET seq = 0 WHERE name = '" + tableName + "'");
     }
 
     /* Deletes the first element of a message Table */
-    public void Delete(String tableName, String... whereArgs){
+    public synchronized void Delete(String tableName, String... whereArgs){
         ExecutePreparedStmt(AppendWhereArgs("DELETE FROM " + tableName, whereArgs));
     }
 
-    private String AppendWhereArgs(String string, String[] whereArgs) {
+    private synchronized String AppendWhereArgs(String string, String[] whereArgs) {
         if (whereArgs.length > 0) {
             string += " WHERE ";
             for (String arg: whereArgs){
@@ -88,12 +88,12 @@ public class SQLManager {
         return string;
     }
 
-    public void DeleteAll(String tableName){
+    public synchronized void DeleteAll(String tableName){
         ExecutePreparedStmt("DELETE FROM " + tableName);
     }
 
     /* Only statements allowed */
-    public ResultSet GenericStmt(String query){
+    public synchronized ResultSet GenericStmt(String query){
         try {
             return CreateNewStmt().executeQuery(query);
         } catch (SQLException e) {
@@ -103,22 +103,21 @@ public class SQLManager {
     }
 
     /* Only Prepared statements allowed */
-    public void ExecutePreparedStmt(String query){
+    public synchronized void ExecutePreparedStmt(String query){
         try {
             PreparedStatement pstmt = conn.prepareStatement(query);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
-
         }
     }
 
-    private Statement CreateNewStmt() throws SQLException {
+    private synchronized Statement CreateNewStmt() throws SQLException {
         return conn.createStatement();
     }
 
-    private Connection Connect() {
+    private synchronized Connection Connect() {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url+fileName);
@@ -129,19 +128,19 @@ public class SQLManager {
     }
 
     /* Closes the connection to the database */
-    public void CloseConnection () {
+    public synchronized void CloseConnection () {
         try { conn.close(); } catch (Exception e) { /* Ignored */ }
     }
 
-    public String getPath () {
+    public synchronized String getPath () {
         return this.path;
     }
 
-    public String getFileName () {
+    public synchronized String getFileName () {
         return this.fileName;
     }
 
-    public PreparedStatement getPreparedStmt (String sql) {
+    public synchronized PreparedStatement getPreparedStmt (String sql) {
         try {
             return conn.prepareStatement(sql);
         } catch (SQLException throwables) {

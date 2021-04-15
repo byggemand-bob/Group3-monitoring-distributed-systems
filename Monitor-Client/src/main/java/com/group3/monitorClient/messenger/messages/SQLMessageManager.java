@@ -11,9 +11,9 @@ public class SQLMessageManager {
     private SQLManager sqlManager;
     private String tableName;
 
-    public SQLMessageManager(String path, String fileName, String tableName) {
+    public SQLMessageManager(SQLManager sqlManager, String tableName) {
         this.tableName = tableName;
-        sqlManager = new SQLManager(path, fileName);
+        this.sqlManager = sqlManager;
 
         if (!sqlManager.CheckIfTableExists(tableName)) {
             sqlManager.CreateNewTable(tableName,
@@ -30,7 +30,7 @@ public class SQLMessageManager {
     }
 
     /* returns the number of elements in a specified table */
-    public int TableSize(){
+    public long TableSize(){
         return sqlManager.TableSize(tableName);
     }
 

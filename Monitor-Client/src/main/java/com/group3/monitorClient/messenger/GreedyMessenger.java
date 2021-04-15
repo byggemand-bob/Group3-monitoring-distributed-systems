@@ -1,10 +1,7 @@
 package com.group3.monitorClient.messenger;
 
 import com.group3.monitorClient.controller.MonitorClientInterface;
-import com.group3.monitorClient.messenger.messages.ErrorDataMessage;
-import com.group3.monitorClient.messenger.messages.MessageCreator;
-import com.group3.monitorClient.messenger.messages.MessageInterface;
-import com.group3.monitorClient.messenger.messages.SQLMessageManager;
+import com.group3.monitorClient.messenger.messages.*;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.model.ErrorData;
 import org.threeten.bp.OffsetDateTime;
@@ -36,8 +33,9 @@ public class GreedyMessenger implements MessengerInterface {
      */
     public GreedyMessenger(String monitorIP, String sqlPath, String sqlFileName){
         monitorClientInterface = new MonitorClientInterface(monitorIP);
-        sqlMessageManager = new SQLMessageManager(sqlPath, sqlFileName, "Messages");
-        sqlFailedMessageManager = new SQLMessageManager(sqlPath, sqlFileName, "FailedMessages");
+        SQLManager sqlManager = new SQLManager(sqlPath, sqlFileName);
+        sqlMessageManager = new SQLMessageManager(sqlManager, "Messages");
+        sqlFailedMessageManager = new SQLMessageManager(sqlManager, "FailedMessages");
     }
 
     /* starts a thread running current class.run() */
@@ -215,5 +213,9 @@ public class GreedyMessenger implements MessengerInterface {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void CloseConnectionToSQL(){
+        sqlMessageManager.CloseConnection();
     }
 }
