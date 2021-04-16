@@ -1,7 +1,7 @@
 package com.group3.monitorServer;
 
-import com.group3.monitorServer.controller.messages.SQLManagerOLD;
-import com.group3.monitorServer.controller.messages.SQLMessageManager;
+import com.group3.monitorServer.messages.SQLManagerOLD;
+import com.group3.monitorServer.messages.SQLMessageManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

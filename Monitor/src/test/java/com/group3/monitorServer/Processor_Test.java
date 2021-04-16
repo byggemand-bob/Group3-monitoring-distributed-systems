@@ -1,9 +1,9 @@
 package com.group3.monitorServer;
 
-import com.group3.monitorServer.controller.MessageProcessor.Processor;
-import com.group3.monitorServer.controller.messages.MessageCreator;
-import com.group3.monitorServer.controller.messages.SQLMessageManager;
-import com.group3.monitorServer.controller.messages.TimingMonitorDataMessage;
+import com.group3.monitorServer.MessageProcessor.Processor;
+import com.group3.monitorServer.messages.MessageCreator;
+import com.group3.monitorServer.messages.SQLMessageManager;
+import com.group3.monitorServer.messages.TimingMonitorDataMessage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openapitools.model.TimingMonitorData;
