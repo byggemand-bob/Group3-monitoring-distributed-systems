@@ -97,4 +97,8 @@ public class SQLMessageManager {
     public String getFileName () {
         return sqlManager.getFileName();
     }
+
+    public SQLManager getSqlManager(){
+        return sqlManager;
+    }
 }

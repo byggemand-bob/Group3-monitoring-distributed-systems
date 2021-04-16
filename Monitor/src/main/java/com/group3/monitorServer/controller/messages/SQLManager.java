@@ -6,16 +6,29 @@ import java.sql.*;
  * SQLManager handles queries to a given database
  */
 public class SQLManager {
-    private final String path;
-    private final String url;
-    private final String fileName;
-    private final Connection conn;
+    private static SQLManager singleton = new SQLManager();
+    private String path;
+    private String fileName;
+    private Connection connection = null;
 
-    public SQLManager(String path, String fileName) {
-        this.path = path;
-        this.url = "jdbc:sqlite:" + path;
-        this.fileName = fileName;
-        conn = Connect();
+    public static SQLManager getInstance(){
+        return singleton;
+    }
+
+    private SQLManager() {
+
+    }
+
+    public synchronized void Connect(String sqlPath, String sqlFileName){
+        this.path = sqlPath;
+        String url = "jdbc:sqlite:" + path;
+        this.fileName = sqlFileName;
+
+        try {
+            connection = DriverManager.getConnection(url +fileName);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /* returns the number of elements in a specified table */
@@ -105,7 +118,7 @@ public class SQLManager {
     /* Only Prepared statements allowed */
     public synchronized void ExecutePreparedStmt(String query){
         try {
-            PreparedStatement pstmt = conn.prepareStatement(query);
+            PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -114,22 +127,12 @@ public class SQLManager {
     }
 
     private synchronized Statement CreateNewStmt() throws SQLException {
-        return conn.createStatement();
-    }
-
-    private synchronized Connection Connect() {
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(url+fileName);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return conn;
+        return connection.createStatement();
     }
 
     /* Closes the connection to the database */
     public synchronized void CloseConnection () {
-        try { conn.close(); } catch (Exception e) { /* Ignored */ }
+        try { connection.close(); } catch (Exception e) { /* Ignored */ }
     }
 
     public synchronized String getPath () {
@@ -142,7 +145,7 @@ public class SQLManager {
 
     public synchronized PreparedStatement getPreparedStmt (String sql) {
         try {
-            return conn.prepareStatement(sql);
+            return connection.prepareStatement(sql);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return null;
