@@ -33,7 +33,8 @@ public class GreedyMessenger implements MessengerInterface {
      */
     public GreedyMessenger(String monitorIP, String sqlPath, String sqlFileName){
         monitorClientInterface = new MonitorClientInterface(monitorIP);
-        SQLManager sqlManager = new SQLManager(sqlPath, sqlFileName);
+        SQLManager sqlManager = SQLManager.getInstance();
+        sqlManager.Connect(sqlPath, sqlFileName);
         sqlMessageManager = new SQLMessageManager(sqlManager, "Messages");
         sqlFailedMessageManager = new SQLMessageManager(sqlManager, "FailedMessages");
     }

@@ -29,7 +29,8 @@ public class AbstractSQLManagerTest {
     /* Creates a new sql database before each test */
     @BeforeEach
     public void setup () {
-        sqlManager = new SQLManager("src/main/resources/sqlite/db/", "test.db");
+        SQLManager sqlManager = SQLManager.getInstance();
+        sqlManager.Connect("src/main/resources/sqlite/db/", "test.db");
     }
 
     /* Deletes the sql database after each test */

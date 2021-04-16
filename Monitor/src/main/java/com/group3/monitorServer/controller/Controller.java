@@ -1,7 +1,8 @@
 package com.group3.monitorServer.controller;
 
 import com.group3.monitorServer.controller.messages.MessageCreator;
-import com.group3.monitorServer.controller.queue.PersistentSQLQueue;
+import com.group3.monitorServer.controller.messages.SQLManager;
+import com.group3.monitorServer.controller.messages.SQLMessageManager;
 import org.openapitools.api.ErrorApi;
 import org.openapitools.api.MonitorApi;
 import org.openapitools.model.ErrorData;
@@ -16,12 +17,15 @@ import java.util.Optional;
 
 @RestController
 public class Controller implements MonitorApi, ErrorApi {
-    PersistentSQLQueue messageQueue;
+    SQLMessageManager sqlMessageManager;
     MessageCreator messageCreator;
 
-    public Controller() {
-        messageQueue = new PersistentSQLQueue("src/main/resources/sqlite/db/", "queue.db");
+    public Controller(String sqlPath, String sqlFileName) {
+        SQLManager sqlManager = SQLManager.getInstance();
+        sqlManager.Connect(sqlPath, sqlFileName);
+        sqlMessageManager = new SQLMessageManager(sqlManager, "UnprocessedMessages");
         messageCreator = new MessageCreator();
+        //TODO: Create and start MessageProcessor
     }
 
     @Override
@@ -31,15 +35,13 @@ public class Controller implements MonitorApi, ErrorApi {
 
     @Override
     public ResponseEntity<Void> addMonitorData(@Valid TimingMonitorData timingMonitorData) {
-        messageQueue.Put(messageCreator.MakeMessage(timingMonitorData));
-        System.out.println(timingMonitorData);
+        messageCreator.MakeMessage(timingMonitorData).MakeSQL(sqlMessageManager);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Void> addErrorData(@Valid ErrorData errorData) {
-        messageQueue.Put(messageCreator.MakeMessage(errorData));
-        System.out.println(errorData);
+        messageCreator.MakeMessage(errorData).MakeSQL(sqlMessageManager);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

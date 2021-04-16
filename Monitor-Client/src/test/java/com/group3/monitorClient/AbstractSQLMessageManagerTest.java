@@ -27,7 +27,8 @@ public class AbstractSQLMessageManagerTest {
     /* Creates a new sql database before each test */
     @BeforeEach
     public void setup () {
-        SQLManager sqlManager = new SQLManager("src/main/resources/sqlite/db/", "test.db");
+        SQLManager sqlManager = SQLManager.getInstance();
+        sqlManager.Connect("src/main/resources/sqlite/db/", "test.db");
         sqlMessageManager = new SQLMessageManager(sqlManager, "Messages");
     }
 
