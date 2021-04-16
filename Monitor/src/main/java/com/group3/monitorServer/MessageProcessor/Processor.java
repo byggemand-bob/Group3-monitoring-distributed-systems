@@ -1,14 +1,9 @@
-package com.group3.monitorServer.controller.MessageProcessor;
+package com.group3.monitorServer.MessageProcessor;
 
-import com.group3.monitorServer.controller.messages.*;
-import com.group3.monitorServer.controller.queue.PersistentSQLQueue;
-import org.openapitools.model.TimingMonitorData;
+import com.group3.monitorServer.messages.*;
 
-import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.LinkedList;
 
 public class Processor implements Runnable {
     private final SQLMessageManager sqlMessageManager;

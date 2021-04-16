@@ -1,4 +1,4 @@
-package com.group3.monitorServer.controller.messages;
+package com.group3.monitorServer.messages;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

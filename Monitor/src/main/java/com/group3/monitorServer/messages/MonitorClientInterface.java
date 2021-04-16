@@ -1,4 +1,4 @@
-package com.group3.monitorServer.controller.messages;
+package com.group3.monitorServer.messages;
 
 /*
  * Dummy class needed for Messages

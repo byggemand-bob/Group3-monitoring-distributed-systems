@@ -1,4 +1,4 @@
-package com.group3.monitorServer.controller.messages;
+package com.group3.monitorServer.messages;
 
 public interface MessageInterface {
     String separator = ",";

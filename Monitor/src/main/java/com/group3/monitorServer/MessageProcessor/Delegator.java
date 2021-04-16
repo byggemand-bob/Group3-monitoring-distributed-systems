@@ -1,19 +1,39 @@
-package com.group3.monitorServer.controller.MessageProcessor;
+package com.group3.monitorServer.MessageProcessor;
 
-import com.group3.monitorServer.controller.messages.MessageCreator;
-import com.group3.monitorServer.controller.messages.SQLMessageManager;
-import com.group3.monitorServer.controller.messages.TimingMonitorDataMessage;
+import com.group3.monitorServer.controller.Controllable;
 import org.openapitools.model.TimingMonitorData;
+import com.group3.monitorServer.messages.SQLMessageManager;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Delegator implements Runnable{
+public class Delegator implements Controllable {
+
     private final SQLMessageManager sqlMessageManager;
     private final MessageCreator messageCreator = new MessageCreator();
 
     public Delegator(SQLMessageManager sqlMessageManager) {
         this.sqlMessageManager = sqlMessageManager;
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void pause() {
+
     }
 
     @Override
@@ -25,8 +45,8 @@ public class Delegator implements Runnable{
         String[] whereArgs = new String[2];
         TimingMonitorData.EventCodeEnum eventCodeEnum = matchingEventCode(message.getTimingMonitorData().getEventCode());
         String blob = message.getTimingMonitorData().getTargetEndpoint() + TimingMonitorDataMessage.separator +
-                      message.getTimingMonitorData().getEventID() + TimingMonitorDataMessage.separator +
-                      eventCodeEnum.ordinal();
+                message.getTimingMonitorData().getEventID() + TimingMonitorDataMessage.separator +
+                eventCodeEnum.ordinal();
         whereArgs[0] = "Message = '" + blob + "'";
         whereArgs[1] = "SenderID = '" + message.getTimingMonitorData().getSenderID() + "'";
         ResultSet resultSetQuery = sqlMessageManager.SelectMessage(whereArgs);
