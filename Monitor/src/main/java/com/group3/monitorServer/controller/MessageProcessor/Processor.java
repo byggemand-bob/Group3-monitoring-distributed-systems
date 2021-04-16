@@ -46,7 +46,6 @@ public class Processor implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("running");
         RunningLoop: while(running){
             while(paused){
                 ThreadWait(0);
@@ -54,7 +53,6 @@ public class Processor implements Runnable {
                     break RunningLoop;
                 }
             }
-            System.out.println("Continuing");
             ResultSet allMessages = sqlMessageManager.SelectAllMessages();
 
             try {
@@ -84,49 +82,6 @@ public class Processor implements Runnable {
     private void AnalyzeTimingMessage(TimingMonitorDataMessage firstMessage, TimingMonitorDataMessage secondMessage) {
         //TODO: analyze TimingMessage and delete elements which have been analyzed
         System.out.println(firstMessage.getTimingMonitorData().getEventCode() + " belong to " + secondMessage.getTimingMonitorData().getEventCode());
-    }
-
-    private TimingMonitorDataMessage FindMatch (TimingMonitorDataMessage message) {
-        String[] whereArgs = new String[2];
-        TimingMonitorData.EventCodeEnum eventCodeEnum;
-        switch (message.getTimingMonitorData().getEventCode().toString()) {
-            case "SendRequest":
-                eventCodeEnum = TimingMonitorData.EventCodeEnum.RECEIVERESPONSE;
-                break;
-            case "ReceiveRequest":
-                eventCodeEnum = TimingMonitorData.EventCodeEnum.SENDRESPONSE;
-                break;
-            case "SendResponse":
-                eventCodeEnum = TimingMonitorData.EventCodeEnum.RECEIVEREQUEST;
-                break;
-            case "ReceiveResponse":
-                eventCodeEnum = TimingMonitorData.EventCodeEnum.SENDREQUEST;
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + message.getTimingMonitorData().getEventCode().toString());
-        }
-        String blob = message.getTimingMonitorData().getTargetEndpoint() + TimingMonitorDataMessage.separator +
-                message.getTimingMonitorData().getEventID() + TimingMonitorDataMessage.separator +
-                eventCodeEnum.ordinal();
-        whereArgs[0] = "Message = '" + blob + "'";
-        whereArgs[1] = "SenderID = '" + message.getTimingMonitorData().getSenderID() + "'";
-        ResultSet resultSetQuery = sqlMessageManager.SelectMessage(whereArgs);
-        try {
-            if (resultSetQuery != null && resultSetQuery.next()) {
-                //TODO: analyze TimingMessage
-                TimingMonitorDataMessage result = (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(resultSetQuery);
-                if (!resultSetQuery.next()) {
-                    return result;
-                } else {
-                    System.out.println("");
-                }
-            } else {
-                System.out.println("resultsetquery is null");
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return null;
     }
 
     /* waits for specified amount of MilliSeconds if 0, waits until another calls thread.notify() */
