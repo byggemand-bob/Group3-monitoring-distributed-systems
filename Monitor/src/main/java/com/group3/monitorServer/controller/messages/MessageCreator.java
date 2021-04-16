@@ -2,14 +2,13 @@ package com.group3.monitorServer.controller.messages;
 
 import org.openapitools.model.ErrorData;
 import org.openapitools.model.TimingMonitorData;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class MessageCreator {
-
-
     /* receives a ResultSet, representing an message and converts it back into a message structure */
     public MessageInterface MakeMessageFromSQL(ResultSet rs){
         int TypeID = -1;
@@ -71,7 +70,7 @@ public class MessageCreator {
         try {
             errorData.setSenderID(rs.getLong("SenderID"));
             String dateTimeString = rs.getString("Timestamp");
-            errorData.setTimestamp(ConvertStringToDateTime((dateTimeString)));
+            errorData.setTimestamp(ConvertStringToDateTime(dateTimeString));
 
             String blob = rs.getString("Message");
             String[] blobSplit = blob.split(MessageInterface.separator);
@@ -93,7 +92,8 @@ public class MessageCreator {
     }
 
     /* Converts a given string into a Datetime data-structure */
-    public OffsetDateTime ConvertStringToDateTime(String string){
+    private OffsetDateTime ConvertStringToDateTime(String string){
         return OffsetDateTime.parse(string, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
+
 }

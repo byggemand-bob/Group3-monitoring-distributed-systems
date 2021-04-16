@@ -2,8 +2,7 @@ package com.group3.monitorServer.controller.messages;
 
 import org.openapitools.model.ErrorData;
 
-public class ErrorDataMessage implements MessageInterface {
-    //TODO: Make tests
+public class ErrorDataMessage implements MessageInterface{
     private ErrorData errorData;
     private int messageTypeID;
 
@@ -12,11 +11,17 @@ public class ErrorDataMessage implements MessageInterface {
         this.messageTypeID = MessageTypeID.ErrorData.ordinal();
     }
 
+    /* Message sends itself using the given MonitorClientInterface */
+    @Override
+    public int send(MonitorClientInterface monitorClientInterface) throws Exception {
+        throw new Exception("MessageInterface.send() was called. This function should never be called on the monitorServer");
+    }
+
     /* the message converts itself into an sql format, and saves itself using provided SQLManager */
     @Override
-    public void MakeSQL(SQLManagerOLD sqlManagerOLD) {
+    public void MakeSQL(SQLMessageManager sqlMessageManager) {
         String blob = errorData.getHttpResponse() + separator + errorData.getErrorMessageType().ordinal() + separator + errorData.getComment();
-        sqlManagerOLD.InsertMessage("queue", errorData.getSenderID(), messageTypeID, errorData.getTimestamp().toString(),blob);
+        sqlMessageManager.InsertMessage(errorData.getSenderID(), messageTypeID, errorData.getTimestamp().toString(),blob);
     }
 
     public ErrorData getErrorData () {
@@ -26,5 +31,4 @@ public class ErrorDataMessage implements MessageInterface {
     public int getMessageTypeID () {
         return messageTypeID;
     }
-
 }

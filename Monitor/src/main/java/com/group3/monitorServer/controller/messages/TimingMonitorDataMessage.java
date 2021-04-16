@@ -14,9 +14,15 @@ public class TimingMonitorDataMessage implements MessageInterface {
         this.messageTypeID = MessageTypeID.TimingMonitorData.ordinal();
     }
 
+    /* Message sends itself using the given MonitorClientInterface */
+    @Override
+    public int send(MonitorClientInterface monitorClientInterface) throws Exception {
+        throw new Exception("MessageInterface.send() was called. This function should never be called on the monitorServer");
+    }
+
     /* the message converts itself into an sql format, and saves itself using provided SQLManager */
     @Override
-    public void MakeSQL(SQLManagerOLD sqlManagerOLD) {
+    public void MakeSQL(SQLMessageManager sqlMessageManager) {
         List<String> errorMessages = new ArrayList<>();
         if (timingMonitorData.getEventID() == null) {
             errorMessages.add("EventID");
@@ -41,7 +47,7 @@ public class TimingMonitorDataMessage implements MessageInterface {
 
         String blob = timingMonitorData.getTargetEndpoint() + separator + timingMonitorData.getEventID() + separator + timingMonitorData.getEventCode().ordinal();
 
-        sqlManagerOLD.InsertMessage("queue", timingMonitorData.getSenderID(), messageTypeID, timingMonitorData.getTimestamp().toString(), blob);
+        sqlMessageManager.InsertMessage(timingMonitorData.getSenderID(), messageTypeID, timingMonitorData.getTimestamp().toString(), blob);
     }
 
     public int getMessageTypeID () {

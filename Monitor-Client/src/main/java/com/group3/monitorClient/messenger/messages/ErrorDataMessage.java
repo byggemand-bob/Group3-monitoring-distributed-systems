@@ -5,7 +5,6 @@ import org.openapitools.client.ApiException;
 import org.openapitools.client.model.ErrorData;
 
 public class ErrorDataMessage implements MessageInterface{
-    //TODO: Make tests
     private ErrorData errorData;
     private int messageTypeID;
 
@@ -34,5 +33,4 @@ public class ErrorDataMessage implements MessageInterface{
     public int getMessageTypeID () {
         return messageTypeID;
     }
-
 }
