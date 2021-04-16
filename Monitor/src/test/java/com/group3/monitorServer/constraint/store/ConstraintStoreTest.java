@@ -8,10 +8,10 @@ import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.quartz.ObjectAlreadyExistsException;
 
 import com.group3.monitorServer.constraint.Constraint;
 import com.group3.monitorServer.constraint.ConstraintKey;
+import com.group3.monitorServer.constraint.exception.ConstraintAlreadyExistsException;
 
 class ConstraintStoreTest {
 
@@ -24,16 +24,16 @@ class ConstraintStoreTest {
 		constraintStore = new ConstraintStore();
 	}
 	
+	// Add constraint tests
 	@Test
-	void addConstraintTest() throws ObjectAlreadyExistsException {
+	void addConstraintSuccessTest() {
 		//Setup
-		java.lang.reflect.Field field = null;
 		int SizeOfConstraintStore = 0;
 		
 		//Act
 		constraintStore.addConstraint(constraint);
 		try {
-			SizeOfConstraintStore = GetSizeOfHashMap(field);
+			SizeOfConstraintStore = GetConstraintHashMap().size();
 		} catch (Exception e) {}
 		
 		//Assert
@@ -41,7 +41,51 @@ class ConstraintStoreTest {
 	}
 	
 	@Test
-	void findConstraintTest() throws ObjectAlreadyExistsException {
+	void addConstraintThatAlreadyExistsThrowsError()  {
+		//Setup
+		constraintStore.addConstraint(constraint);
+				
+		//Assert
+		Assertions.assertThrows(ConstraintAlreadyExistsException.class, () -> {
+			constraintStore.addConstraint(constraint);
+		});
+	}
+	
+	@Test
+	void addConstraintDoesNotMutateInformationTest() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		// Setup
+		String expectedEndpoint = "/monitor/test";
+		String expectedDescription = "This be description";
+		String expectedName = "42";
+		Integer expectedMin = null;
+		Integer expectedMax = 7;
+		Integer expectedNodeID = 2;
+		
+		Constraint con = new Constraint(expectedEndpoint, expectedMax)
+				.withDescription(expectedDescription)
+				.withName(expectedName)
+				.withMin(expectedMin)
+				.withNodeID(expectedNodeID);
+		
+		// Act
+		constraintStore.addConstraint(con);
+		ConstraintKey key = new ConstraintKey(con.getEndpoint(), con.getNodeID());
+		Constraint storedConstraint = GetConstraintHashMap().get(key);
+		
+		// Assert
+		assertEquals(con, storedConstraint);
+		assertEquals(expectedEndpoint, storedConstraint.getEndpoint());
+		assertEquals(expectedDescription, storedConstraint.getDescription());
+		assertEquals(expectedName, storedConstraint.getName());
+		assertEquals(expectedMax.intValue(), storedConstraint.getMax().intValue());
+		assertEquals(expectedNodeID.intValue(), storedConstraint.getNodeID().intValue());
+		assertNull(storedConstraint.getMin());
+		assertEquals(expectedMin, storedConstraint.getMin());
+	}
+	
+	// Find constraint tests
+	@Test
+	void findConstraintSuccessTest() {
 		
 		//Setup
 		ConstraintKey key = new ConstraintKey(constraint.getEndpoint(), constraint.getNodeID());
@@ -52,65 +96,6 @@ class ConstraintStoreTest {
 		
 		//Assert
 		assertSame(constraint, foundConstraint);
-	}
-	
-	@Test
-	void removeConstraintTest() throws ObjectAlreadyExistsException {
-		//Setup
-		java.lang.reflect.Field field = null;
-		int SizeOfConstraintStore = 0;
-		ConstraintKey key = new ConstraintKey(constraint.getEndpoint(), constraint.getNodeID());
-		constraintStore.addConstraint(constraint);	
-		
-		//Act
-		constraintStore.removeConstraint(key);
-		try {
-			SizeOfConstraintStore = GetSizeOfHashMap(field);
-		} catch (Exception e) {}
-		
-		//Assert
-		assertEquals(0, SizeOfConstraintStore);
-	}
-	
-	@Test
-	void removeConstraintDoWeGetABooleanTest() throws ObjectAlreadyExistsException {
-		//Setup
-		ConstraintKey key = new ConstraintKey(constraint.getEndpoint(), constraint.getNodeID());
-		constraintStore.addConstraint(constraint);
-		boolean isDeleted = false;
-		
-		//Act
-		isDeleted = constraintStore.removeConstraint(key);
-		
-		//Assert
-		assertTrue(isDeleted);
-	}
-	
-	@Test
-	void addConstraintThatAlreadyExistsThrowsError() throws ObjectAlreadyExistsException {
-		//Setup
-		constraintStore.addConstraint(constraint);
-				
-		//Assert
-		Assertions.assertThrows(ObjectAlreadyExistsException.class, () -> {
-			constraintStore.addConstraint(constraint);
-		});
-	}
-	
-	@Test 
-	void removeConstraintsThatDoesNotExists() {
-		//Setup
-		ConstraintKey key = new ConstraintKey(constraint.getEndpoint(), constraint.getNodeID());
-		boolean isDeleted = false;
-		
-		System.out.println(key);
-		System.out.println(constraint);
-		
-		//Act
-		isDeleted = constraintStore.removeConstraint(key);
-		
-		//Assert
-		assertFalse(isDeleted);
 	}
 	
 	@Test
@@ -125,13 +110,129 @@ class ConstraintStoreTest {
 		assertNull(foundConstraint);
 	}
 	
-	private int GetSizeOfHashMap(java.lang.reflect.Field field) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	@Test
+	void findConstraintDoesNotFindGeneralIfNotAllowedIfSpecificExist() {
+		//Setup
+		String endpoint = "/test/endpoint";
+		Integer max = 13;
+		Integer nodeID = 7;
+		Constraint conSpecific = new Constraint(endpoint, max).withNodeID(nodeID);
+		Constraint conGeneral = new Constraint(endpoint, max);
+		
+		constraintStore.addConstraint(conSpecific);
+		constraintStore.addConstraint(conGeneral);
+		
+		//Act
+		ConstraintKey specificKey = new ConstraintKey(conSpecific.getEndpoint(), conSpecific.getNodeID());
+		Constraint foundConstraint = constraintStore.findConstraint(specificKey);
+		
+		//Assert
+		assertSame(conSpecific, foundConstraint);
+	}
+	
+	@Test
+	void findConstraintDoesNotFindGeneralIfNotAllowedIfSpecificDoesNotExist() {
+		//Setup
+		String endpoint = "/endpoint/test";
+		Integer max = 13;
+		Integer nodeID = 7;
+		Constraint conGeneral = new Constraint(endpoint, max);
+		
+		constraintStore.addConstraint(conGeneral);
+		
+		//Act
+		ConstraintKey specificKey = new ConstraintKey(endpoint, nodeID);
+		Constraint foundConstraint = constraintStore.findConstraint(specificKey);
+		
+		//Assert
+		assertNull(foundConstraint);
+	}
+	
+	@Test
+	void findConstraintDoesNotFindGeneralIfAllowedIfSpecificDoesExist() {
+		//Setup
+		String endpoint = "/test/endpoint";
+		Integer max = 13;
+		Integer nodeID = 7;
+		Constraint conSpecific = new Constraint(endpoint, max).withNodeID(nodeID);
+		Constraint conGeneral = new Constraint(endpoint, max);
+		boolean isGeneralAllowed = true;
+		
+		constraintStore.addConstraint(conSpecific);
+		constraintStore.addConstraint(conGeneral);
+		
+		//Act
+		ConstraintKey specificKey = new ConstraintKey(conSpecific.getEndpoint(), conSpecific.getNodeID());
+		Constraint foundConstraint = constraintStore.findConstraint(specificKey, isGeneralAllowed);
+		
+		//Assert
+		assertSame(conSpecific, foundConstraint);
+	}
+	
+	@Test
+	void findConstraintFindGeneralIfAllowedIfSpecificDoesNotExist() {
+		//Setup
+		String endpoint = "/test/endpoint";
+		Integer max = 13;
+		Integer nodeID = 7;
+		Constraint conGeneral = new Constraint(endpoint, max);
+		boolean isGeneralAllowed = true;
+		
+		constraintStore.addConstraint(conGeneral);
+		
+		//Act
+		ConstraintKey specificKey = new ConstraintKey(endpoint, nodeID);
+		Constraint foundConstraint = constraintStore.findConstraint(specificKey, isGeneralAllowed);
+		
+		//Assert
+		assertSame(conGeneral, foundConstraint);
+	}
+	
+	// Remove constraint tests
+	@Test
+	void removeConstraintSuccessTest() {
+		//Setup
+		int SizeOfConstraintStore = 0;
+		ConstraintKey key = new ConstraintKey(constraint.getEndpoint(), constraint.getNodeID());
+		constraintStore.addConstraint(constraint);	
+		
+		//Act
+		boolean removed = constraintStore.removeConstraint(key);
+		try {
+			SizeOfConstraintStore = GetConstraintHashMap().size();
+		} catch (Exception e) {}
+		
+		//Assert
+		assertEquals(0, SizeOfConstraintStore);
+		assertTrue(removed);
+	}
+	
+	@Test 
+	void removeConstraintsThatDoesNotExists() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		//Setup
+		ConstraintKey key = new ConstraintKey(constraint.getEndpoint(), constraint.getNodeID());
+		boolean isDeleted = false;
+		final int expectedSize = GetConstraintHashMap().size();
+		
+		//Act
+		isDeleted = constraintStore.removeConstraint(key);
+		final int actualSize = GetConstraintHashMap().size();
+		
+		//Assert
+		assertFalse(isDeleted);
+		assertEquals(expectedSize, actualSize);
+	}
+	
+	
+	// Utility methods
+	@SuppressWarnings({ "unchecked", "unused" })
+	private HashMap<ConstraintKey, Constraint> GetConstraintHashMap() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Map<ConstraintKey, Constraint> constraints;
-		field = constraintStore.getClass().getDeclaredField("constraints");
+		java.lang.reflect.Field field = constraintStore.getClass().getDeclaredField("constraints");
 		field.setAccessible(true);
 		constraints = (HashMap<ConstraintKey, Constraint>)field.get(constraintStore);
 		field.setAccessible(false);
-		return constraints.size();
+		return (HashMap<ConstraintKey, Constraint>) constraints;
 	}
 
 }
