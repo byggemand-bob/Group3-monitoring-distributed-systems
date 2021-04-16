@@ -1,9 +1,11 @@
 package com.group3.monitorClient;
 
-import com.group3.monitorClient.messenger.messages.*;
+import com.group3.monitorClient.messenger.messages.ErrorDataMessage;
+import com.group3.monitorClient.messenger.messages.MessageCreator;
+import com.group3.monitorClient.messenger.messages.MessageInterface;
+import com.group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.openapitools.client.model.ErrorData;
 import org.openapitools.client.model.TimingMonitorData;
 import org.threeten.bp.OffsetDateTime;

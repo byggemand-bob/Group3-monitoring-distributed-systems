@@ -3,15 +3,11 @@ package com.group3.monitorClient.messenger;
 import com.group3.monitorClient.AbstractSQLMessageManagerTest;
 import com.group3.monitorClient.messenger.messages.MessageTypeID;
 import com.group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
-import com.group3.monitorClient.testClasses.AddRemoveThread_TestClass;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
 
 public class SQLMessageManager_Test extends AbstractSQLMessageManagerTest {
     /* Test the constructor correctly creates the messageTable */

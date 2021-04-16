@@ -1,7 +1,6 @@
 package com.group3.monitorClient.messenger.lazyMessenger;
 
 import com.group3.monitorClient.AbstractSQLDeleter;
-import com.group3.monitorClient.AbstractSQLMessageManagerTest;
 import com.group3.monitorClient.testClasses.LazyMessenger_TestClass;
 import com.group3.monitorClient.testClasses.TrueFalseRequirement_TestClass;
 import org.junit.jupiter.api.Assertions;
