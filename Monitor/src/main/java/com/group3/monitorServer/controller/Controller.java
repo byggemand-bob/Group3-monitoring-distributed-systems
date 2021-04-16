@@ -1,47 +1,70 @@
 package com.group3.monitorServer.controller;
 
-import com.group3.monitorServer.controller.messages.MessageCreator;
-import com.group3.monitorServer.controller.messages.SQLManager;
-import com.group3.monitorServer.controller.messages.SQLMessageManager;
-import org.openapitools.api.ErrorApi;
-import org.openapitools.api.MonitorApi;
-import org.openapitools.model.ErrorData;
-import org.openapitools.model.TimingMonitorData;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.NativeWebRequest;
+import com.group3.monitorServer.controller.requirements.Requirement;
 
-import javax.validation.Valid;
-import java.util.Optional;
+import java.util.LinkedList;
+import java.util.List;
 
-@RestController
-public class Controller implements MonitorApi, ErrorApi {
-    SQLMessageManager sqlMessageManager;
-    MessageCreator messageCreator;
+public class Controller implements Runnable{
+    private List<Requirement> requirementList = new LinkedList<>();
+    private boolean running = true;
+    private List<Controllable> ControlledThreads = new LinkedList<>();
 
-    public Controller(String sqlPath, String sqlFileName) {
-        SQLManager sqlManager = SQLManager.getInstance();
-        sqlManager.Connect(sqlPath, sqlFileName);
-        sqlMessageManager = new SQLMessageManager(sqlManager, "UnprocessedMessages");
-        messageCreator = new MessageCreator();
-        //TODO: Create and start MessageProcessor
+    /*
+     * Tests every requirement in the requirementList.
+     * Returns true if everything tests true, else false
+     */
+    private boolean TestRequirements(){
+        if(requirementList.size() > 0) {
+            return requirementList.stream().allMatch(Requirement::Test);
+        } else {
+            return true;
+        }
     }
 
-    @Override
-    public Optional<NativeWebRequest> getRequest() {
-        return Optional.empty();
+    /*  */
+    private void AddRequirement(Requirement requirement){
+        requirementList.add(requirement);
     }
 
+    /* while running continues to test the requirementList, and pauses or resumes the Messenger */
     @Override
-    public ResponseEntity<Void> addMonitorData(@Valid TimingMonitorData timingMonitorData) {
-        messageCreator.MakeMessage(timingMonitorData).MakeSQL(sqlMessageManager);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public void run() {
+        ControlledThreads.forEach(Controllable::start);
+
+        RunningLoop: while(running){
+        //TODO: Decide if Controllers should be Controllable
+
+//            while(paused){
+//                ThreadWait(0);
+//                if(!running){
+//                    break RunningLoop;
+//                }
+//            }
+
+            if(TestRequirements()){
+                ControlledThreads.forEach(Controllable::resume);
+            } else {
+                ControlledThreads.forEach(Controllable::pause);
+            }
+
+            ThreadWait(5000);
+        }
     }
 
-    @Override
-    public ResponseEntity<Void> addErrorData(@Valid ErrorData errorData) {
-        messageCreator.MakeMessage(errorData).MakeSQL(sqlMessageManager);
-        return new ResponseEntity<>(HttpStatus.OK);
+    /* waits for specified amount of MilliSeconds if 0, waits until another calls thread.notify() */
+    private void ThreadWait(int MilliSeconds){
+        try {
+            synchronized(this){
+                wait(MilliSeconds);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void stop(){
+        ControlledThreads.forEach(Controllable::stop);
+        running = false;
     }
 }
