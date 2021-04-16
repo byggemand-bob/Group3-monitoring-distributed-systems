@@ -63,6 +63,7 @@ public class ConstraintImporter {
 	 * @return A {@link Constraint} instance based on the provided data.
 	 */
 	private Constraint convertData(String data) {
+		//TODO Make sure min value cant be greater then max value.
 		throw new NotImplementedException();
 	}
 }
