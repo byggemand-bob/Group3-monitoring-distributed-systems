@@ -1,7 +1,7 @@
 package com.group3.monitorServer.constraint.analyze;
 
-import org.threeten.bp.OffsetDateTime;
-import org.threeten.bp.temporal.ChronoUnit;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 
 import com.group3.monitorServer.constraint.Constraint;
 import com.group3.monitorServer.constraint.ConstraintKey;
@@ -67,12 +67,7 @@ public class ConstraintAnalyzer {
 		}
 		
 		// Calculate the difference between the timestamps
-		long diffInMillis = 0;
-		if (timestampOne.isBefore(timestampTwo)) {
-			diffInMillis = calculateDifference(timestampOne, timestampTwo);
-		} else if (timestampOne.isAfter(timestampTwo)) {
-			diffInMillis = calculateDifference(timestampTwo, timestampOne);
-		}
+		long diffInMillis = calculateDifference(timestampOne, timestampTwo);
 		
 		// Check whether the difference conforms to the constraint
 		return (constraint.getMin() == null || constraint.getMin() <= diffInMillis) &&
@@ -80,16 +75,22 @@ public class ConstraintAnalyzer {
 	}
 	
 	/**
-	 * Calculates the difference between two timestamps in milliseconds.
+	 * Calculates the positive difference between the two timestamps in milliseconds.
 	 * 
-	 * @param start The earliest timestamp.
-	 * @param end The latest timestamp.
+	 * @param first The first timestamp.
+	 * @param second The second timestamp.
 	 * 
-	 * @return The difference in milliseconds.
+	 * @return The postive difference in milliseconds.
 	 * 
-	 * @see org.threeten.bp.temporal.ChronoUnit#between
+	 * @see java.time.temporal.ChronoUnit#between
 	 */
-	private Long calculateDifference(OffsetDateTime start, OffsetDateTime end) {
-		return ChronoUnit.MILLIS.between(start, end);
+	private Long calculateDifference(OffsetDateTime first, OffsetDateTime second) {
+		if (first.isBefore(second)) {
+			return ChronoUnit.MILLIS.between(first, second);			
+		} else if (first.isAfter(second)) {
+			return ChronoUnit.MILLIS.between(second, first);
+		}
+		
+		return 0L;
 	}
 }
