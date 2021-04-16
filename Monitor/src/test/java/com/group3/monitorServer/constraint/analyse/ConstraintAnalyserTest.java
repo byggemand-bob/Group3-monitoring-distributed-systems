@@ -8,6 +8,7 @@ import java.time.OffsetDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.group3.monitorServer.constraint.Constraint;
 import com.group3.monitorServer.constraint.analyze.ConstraintAnalyzer;
 import com.group3.monitorServer.constraint.store.ConstraintStore;
 
@@ -23,35 +24,163 @@ class ConstraintAnalyserTest {
 	}
 
 	// Analyze timings tests
-	
-	// CheckForGeneral=False,NodeID=Null,GeneralExisits=True,FindsSpecific (Make sure that Constraint is satisfied)
-	// CheckForGeneral=False,NodeID=Null,GeneralExisits=True,DoesNotFindSpecificReturnTrue (because constraint does not exist)
-	// CheckForGeneral=False,NodeID=Null,GeneralExisits=False,FindsSpecific (Make sure that Constraint is satisfied)
-	// CheckForGeneral=False,NodeID=Null,GeneralExisits=False,DoesNotFindSpecificReturnTrue (because constraint does not exist)
-	// CheckForGeneral=True,NodeID=Null,GeneralExisits=True,FindsSpecific (Make sure that Constraint is satisfied)
-	// CheckForGeneral=True,NodeID=Null,GeneralExisits=True,DoesNotFindSpecificReturnTrue (because constraint does not exist)
-	// CheckForGeneral=True,NodeID=Null,GeneralExisits=False,FindsSpecific (Make sure that Constraint is satisfied)
-	// CheckForGeneral=True,NodeID=Null,GeneralExisits=False,DoesNotFindSpecificReturnTrue (because constraint does not exist)
-	
-	// ConstraintNotFound (return true by default)
-	
-	// 
-	
 	@Test
-	void test() {
-		fail("Not yet implemented");
+	void AnalyzeTimingConstraintNotfound() {
 		//Setup
-		
+		final String endpoint = "/monitor/test";
+		OffsetDateTime first = OffsetDateTime.now();
+		OffsetDateTime second = first.minusMinutes(3L);
+
 		//Act
+		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
 		
 		//Assert
+		assertTrue(isChecked);
+	}
+	
+	@Test
+	void AnalyseTimingCheckGeneralNotFound() {
+		//Setup		
+		OffsetDateTime first = OffsetDateTime.now();
+		OffsetDateTime second = first.minusSeconds(3);
+		final String endpoint = "/monitor/test";
+		final Integer max = 3;
+		final Integer nodeID = 52;
+		Constraint constraint = new Constraint(endpoint, max);
+		store.addConstraint(constraint);
+		
+		//Act
+		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint, false, nodeID);
+		
+		//Assert
+		assertTrue(isChecked);
+	}
+	
+	@Test
+	void AnalyseTimingMinIsNullMaxIsGreaterThenDiffInMillis() {
+		//Setup
+		OffsetDateTime first = OffsetDateTime.now();
+		OffsetDateTime second = first.minusSeconds(3);
+		final String endpoint = "/monitor/test";
+		final Integer max = 4000;
+		Constraint constraint = new Constraint(endpoint, max);
+		store.addConstraint(constraint);
+		
+		//Act
+		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		
+		//Assert
+		assertTrue(isChecked);
 	}
 
+	@Test
+	void AnalyseTimingMinLessThenDiffInMillisAndMaxGreaterThenDiffInMillis() {
+		//Setup
+		OffsetDateTime first = OffsetDateTime.now();
+		OffsetDateTime second = first.minusSeconds(3);
+		final String endpoint = "/monitor/test";
+		final Integer max = 4000;
+		final Integer min = 2000;
+		Constraint constraint = new Constraint(endpoint, max).withMin(min);
+		store.addConstraint(constraint);
+		
+		//Act
+		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		
+		//Assert
+		assertTrue(isChecked);
+	}
+	
+	@Test
+	void AnalyzseTimingMinIsGreaterThenDiffInMillisAndMaxGreaterThenDiffInMillis() {
+		//Setup
+		OffsetDateTime first = OffsetDateTime.now();
+		OffsetDateTime second = first.minusSeconds(2);
+		final String endpoint = "/monitor/test";
+		final Integer max = 4000;
+		final Integer min = 3000;
+		Constraint constraint = new Constraint(endpoint, max).withMin(min);
+		store.addConstraint(constraint);
+		
+		//Act
+		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		
+		//Assert
+		assertFalse(isChecked);
+	}
+		
+	@Test
+	void AnalyseTimingMinTheSameAsDiffInMillis() {
+		//Setup
+		OffsetDateTime first = OffsetDateTime.now();
+		OffsetDateTime second = first.minusSeconds(2);
+		final String endpoint = "/monitor/test";
+		final Integer max = 4000;
+		final Integer min = 2000;
+		Constraint constraint = new Constraint(endpoint, max).withMin(min);
+		store.addConstraint(constraint);
+		
+		//Act
+		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		
+		//Assert
+		assertTrue(isChecked);
+	}
+	
+	@Test
+	void AnalyzseTimingMaxTheSameAsDiffInMillis() {
+		//Setup
+		OffsetDateTime first = OffsetDateTime.now();
+		OffsetDateTime second = first.minusSeconds(3);
+		final String endpoint = "/monitor/test";
+		final Integer max = 3000;
+		final Integer min = 2000;
+		Constraint constraint = new Constraint(endpoint, max).withMin(min);
+		store.addConstraint(constraint);
+		
+		//Act
+		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		
+		//Assert
+		assertTrue(isChecked);
+	}
+	
+	@Test
+	void AnalyzseTimingMinAndMaxIsTheSameAsDiffInMillis() {
+		//Setup
+		OffsetDateTime first = OffsetDateTime.now();
+		OffsetDateTime second = first.minusSeconds(2);
+		final String endpoint = "/monitor/test";
+		final Integer max = 2000;
+		final Integer min = 2000;
+		Constraint constraint = new Constraint(endpoint, max).withMin(min);
+		store.addConstraint(constraint);
+		
+		//Act
+		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		
+		//Assert
+		assertTrue(isChecked);
+	}
+	
+	@Test
+	void AnalyzseTimingMinIsNullAndMaxIsLessThenDiffInMillis() {
+		//Setup
+		OffsetDateTime first = OffsetDateTime.now();
+		OffsetDateTime second = first.minusSeconds(3);
+		final String endpoint = "/monitor/test";
+		final Integer max = 2000;
+		Constraint constraint = new Constraint(endpoint, max);
+		store.addConstraint(constraint);
+		
+		//Act
+		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		
+		//Assert
+		assertFalse(isChecked);
+	}
 	
 	// Calculate Difference Tests
-	// CalculateDifferenceIfTimestamp1Before2ThenPositiveDifference
-	// CalculateDifferenceIfTimestamp1After2ThenPositiveDifference
-	
 	@Test
 	void CalculateDifferenceIfTimestamp1Before2ThenPositiveDifference() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		//Setup
