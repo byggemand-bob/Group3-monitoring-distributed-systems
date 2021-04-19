@@ -116,24 +116,26 @@ public class SQLManager {
     }
 
     /* Only Prepared statements allowed */
-    public synchronized void ExecutePreparedStmt(String query){
+    public synchronized int ExecutePreparedStmt(String query){
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.executeUpdate();
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
+        return -1;
     }
 
     /* Only Prepared statements allowed */
-    public synchronized void ExecutePreparedStmt(PreparedStatement pstmt){
+    public synchronized int ExecutePreparedStmt(PreparedStatement pstmt){
         try {
-            pstmt.executeUpdate();
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
+        return -1;
     }
 
     private synchronized Statement CreateNewStmt() throws SQLException {
