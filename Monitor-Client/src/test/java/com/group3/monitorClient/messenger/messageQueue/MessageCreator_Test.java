@@ -43,7 +43,7 @@ public class MessageCreator_Test extends AbstractSQLMessageManagerTest {
 
         //Act
         TimingMonitorDataMessage timingMessage = getDefaultTimingMessage();
-        timingMessage.MakeSQL(sqlMessageManager);
+        timingMessage.makeSQL(sqlMessageManager);
 
         ResultSet rs = sqlMessageManager.SelectFirstMessage();
 

@@ -35,13 +35,13 @@ public class Receiver implements MonitorApi, ErrorApi {
 
     @Override
     public ResponseEntity<Void> addMonitorData(@Valid TimingMonitorData timingMonitorData) {
-        messageCreator.MakeMessage(timingMonitorData).MakeSQL(sqlMessageManager);
+        messageCreator.MakeMessage(timingMonitorData).makeSQL(sqlMessageManager);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Void> addErrorData(@Valid ErrorData errorData) {
-        messageCreator.MakeMessage(errorData).MakeSQL(sqlMessageManager);
+        messageCreator.MakeMessage(errorData).makeSQL(sqlMessageManager);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

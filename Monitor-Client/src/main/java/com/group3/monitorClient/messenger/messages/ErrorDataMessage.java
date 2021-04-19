@@ -21,7 +21,7 @@ public class ErrorDataMessage implements MessageInterface{
 
     /* the message converts itself into an sql format, and saves itself using provided SQLManager */
     @Override
-    public void MakeSQL(SQLMessageManager sqlMessageManager) {
+    public void makeSQL(SQLMessageManager sqlMessageManager) {
         String blob = errorData.getHttpResponse() + separator + errorData.getErrorMessageType().ordinal() + separator + errorData.getComment();
         sqlMessageManager.InsertMessage(errorData.getSenderID(), messageTypeID, errorData.getTimestamp().toString(),blob);
     }

@@ -75,7 +75,7 @@ public class GreedyMessenger implements MessengerInterface {
     /* Adds a message to the message-queue */
     @Override
     public void AddMessage(MessageInterface message){
-        message.MakeSQL(sqlMessageManager);
+        message.makeSQL(sqlMessageManager);
     }
 
     @Override
@@ -156,7 +156,7 @@ public class GreedyMessenger implements MessengerInterface {
                 if (socketTimeout && !errorOccurrence) {
                     errorData.setComment(errorData.getComment() + "Connection re-established: " + OffsetDateTime.now().toString());
                     MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
-                    errorDataMessage.MakeSQL(sqlMessageManager);
+                    errorDataMessage.makeSQL(sqlMessageManager);
                     socketTimeout = false;
                 }
 
@@ -179,7 +179,7 @@ public class GreedyMessenger implements MessengerInterface {
         if(response >= 200 && response < 300){
             sqlMessageManager.Delete("ID = '" + messageID + "'");
         } else {
-            message.MakeSQL(sqlFailedMessageManager);
+            message.makeSQL(sqlFailedMessageManager);
             sqlMessageManager.Delete("ID = '" + messageID + "'");
             if(!(message.getClass() == ErrorDataMessage.class)){
                 ErrorData errorData = new ErrorData();
@@ -190,7 +190,7 @@ public class GreedyMessenger implements MessengerInterface {
                         errorData.setSenderID(senderID);
                         errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.UNKNOWNERROR);
                         MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
-                        errorDataMessage.MakeSQL(sqlMessageManager);
+                        errorDataMessage.makeSQL(sqlMessageManager);
                     }
                 } else {
                     //if a non-200 http response is gotten - add it to the message
@@ -199,7 +199,7 @@ public class GreedyMessenger implements MessengerInterface {
                     errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.HTTPERROR);
                     errorData.setHttpResponse(response);
                     MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
-                    errorDataMessage.MakeSQL(sqlMessageManager);
+                    errorDataMessage.makeSQL(sqlMessageManager);
                 }
             }
         }

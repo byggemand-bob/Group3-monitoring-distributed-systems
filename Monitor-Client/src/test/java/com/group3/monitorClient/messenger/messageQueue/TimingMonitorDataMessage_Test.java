@@ -25,7 +25,7 @@ public class TimingMonitorDataMessage_Test extends AbstractSQLMessageManagerTest
         int messageType_test = -9999;
 
         //Act
-        timingMonitorDataMessage.MakeSQL(sqlMessageManager);
+        timingMonitorDataMessage.makeSQL(sqlMessageManager);
         ResultSet rs = sqlMessageManager.SelectFirstMessage();
 
         String blob = rs.getString("Message");

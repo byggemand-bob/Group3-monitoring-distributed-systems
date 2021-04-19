@@ -19,6 +19,7 @@ public class SQLMessageManager_Test extends AbstractSQLMessageManagerTest {
         String[] col3 = new String[0];
         String[] col4 = new String[0];
         String[] col5 = new String[0];
+        String[] col6 = new String[0];
 
         //Act
         ResultSet rs = sqlMessageManager.GenericStmt("PRAGMA table_info(" + getSQLTableName() + ")");
@@ -66,6 +67,14 @@ public class SQLMessageManager_Test extends AbstractSQLMessageManagerTest {
                     rs.getString(5),//saves default value
                     rs.getString(6)};//saves primary key
             rs.next();
+
+            col6 = new String[]{
+                    rs.getString(2),//saves name
+                    rs.getString(3),//saves type
+                    rs.getString(4),//saves notnull
+                    rs.getString(5),//saves default value
+                    rs.getString(6)};//saves primary key
+            rs.next();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -74,34 +83,40 @@ public class SQLMessageManager_Test extends AbstractSQLMessageManagerTest {
 
         //checks col1
         Assertions.assertEquals("ID", col1[0]);
-        Assertions.assertEquals("integer", col1[1]);
+        Assertions.assertEquals("INTEGER", col1[1]);
         Assertions.assertEquals("0", col1[2]);
         Assertions.assertNull(col1[3]);
         Assertions.assertEquals("1", col1[4]);
         //checks col2
         Assertions.assertEquals("MessageType", col2[0]);
-        Assertions.assertEquals("integer", col2[1]);
+        Assertions.assertEquals("INTEGER", col2[1]);
         Assertions.assertEquals("1", col2[2]);
         Assertions.assertNull(col2[3]);
         Assertions.assertEquals("0", col2[4]);
         //checks col3
         Assertions.assertEquals("SenderID", col3[0]);
-        Assertions.assertEquals("integer", col3[1]);
+        Assertions.assertEquals("INTEGER", col3[1]);
         Assertions.assertEquals("1", col3[2]);
         Assertions.assertNull(col3[3]);
         Assertions.assertEquals("0", col3[4]);
         //checks col4
         Assertions.assertEquals("Timestamp", col4[0]);
-        Assertions.assertEquals("text", col4[1]);
+        Assertions.assertEquals("TEXT", col4[1]);
         Assertions.assertEquals("1", col4[2]);
         Assertions.assertNull(col4[3]);
         Assertions.assertEquals("0", col4[4]);
         //checks col5
-        Assertions.assertEquals("Message", col5[0]);
-        Assertions.assertEquals("BLOB", col5[1]);
+        Assertions.assertEquals("InUse", col5[0]);
+        Assertions.assertEquals("BOOLEAN", col5[1]);
         Assertions.assertEquals("0", col5[2]);
-        Assertions.assertNull(col5[3]);
+        Assertions.assertEquals("0",col5[3]);
         Assertions.assertEquals("0", col5[4]);
+        //checks col6
+        Assertions.assertEquals("Message", col6[0]);
+        Assertions.assertEquals("BLOB", col6[1]);
+        Assertions.assertEquals("0", col6[2]);
+        Assertions.assertNull(col6[3]);
+        Assertions.assertEquals("0", col6[4]);
     }
 
     /* test if the message order of the SQLMessageManager is preserved */
@@ -112,13 +127,13 @@ public class SQLMessageManager_Test extends AbstractSQLMessageManagerTest {
 
         //Act
         timingMessage.getTimingMonitorData().setSenderID(1L);
-        timingMessage.MakeSQL(sqlMessageManager);
+        timingMessage.makeSQL(sqlMessageManager);
 
         timingMessage.getTimingMonitorData().setSenderID(2L);
-        timingMessage.MakeSQL(sqlMessageManager);
+        timingMessage.makeSQL(sqlMessageManager);
 
         timingMessage.getTimingMonitorData().setSenderID(3L);
-        timingMessage.MakeSQL(sqlMessageManager);
+        timingMessage.makeSQL(sqlMessageManager);
 
         ResultSet firstMessage = sqlMessageManager.SelectFirstMessage();
 
@@ -136,7 +151,7 @@ public class SQLMessageManager_Test extends AbstractSQLMessageManagerTest {
     public void testSizePass() throws SQLException {
         //Setup
         for(int x = 0; x < 3; x++){
-            getDefaultTimingMessage().MakeSQL(sqlMessageManager);
+            getDefaultTimingMessage().makeSQL(sqlMessageManager);
         }
 
         //Act
@@ -165,7 +180,7 @@ public class SQLMessageManager_Test extends AbstractSQLMessageManagerTest {
                        + TimingMonitorDataMessage.separator + timingMessage.getTimingMonitorData().getEventCode().ordinal();
 
         //Act
-        timingMessage.MakeSQL(sqlMessageManager);
+        timingMessage.makeSQL(sqlMessageManager);
         ResultSet rs = sqlMessageManager.SelectFirstMessage();
 
         long senderID_test = rs.getLong("senderID");
@@ -187,13 +202,13 @@ public class SQLMessageManager_Test extends AbstractSQLMessageManagerTest {
         TimingMonitorDataMessage timingMessage = getDefaultTimingMessage();
 
         //Act
-        timingMessage.MakeSQL(sqlMessageManager);
-        timingMessage.MakeSQL(sqlMessageManager);
-        timingMessage.MakeSQL(sqlMessageManager);
+        timingMessage.makeSQL(sqlMessageManager);
+        timingMessage.makeSQL(sqlMessageManager);
+        timingMessage.makeSQL(sqlMessageManager);
 
         sqlMessageManager.ResetTable();
 
-        timingMessage.MakeSQL(sqlMessageManager);
+        timingMessage.makeSQL(sqlMessageManager);
 
         ResultSet rs = sqlMessageManager.SelectAllMessages();
 
@@ -211,8 +226,8 @@ public class SQLMessageManager_Test extends AbstractSQLMessageManagerTest {
         TimingMonitorDataMessage timingMessage = getDefaultTimingMessage();
 
         //Act
-        timingMessage.MakeSQL(sqlMessageManager);
-        timingMessage.MakeSQL(sqlMessageManager);
+        timingMessage.makeSQL(sqlMessageManager);
+        timingMessage.makeSQL(sqlMessageManager);
 
         ResultSet rs = sqlMessageManager.SelectFirstMessage();
 
@@ -224,7 +239,7 @@ public class SQLMessageManager_Test extends AbstractSQLMessageManagerTest {
         int secondID = rs.getInt("ID");
 
         sqlMessageManager.Delete("ID = '" + secondID + "'");
-        timingMessage.MakeSQL(sqlMessageManager);
+        timingMessage.makeSQL(sqlMessageManager);
         rs = sqlMessageManager.SelectFirstMessage();
 
         int thirdID = rs.getInt("ID");
@@ -233,6 +248,32 @@ public class SQLMessageManager_Test extends AbstractSQLMessageManagerTest {
         Assertions.assertEquals(1, firstID);
         Assertions.assertEquals(2, secondID);
         Assertions.assertEquals(1, thirdID);
+    }
+
+    @Test
+    public void testUpdateInUsePass () throws SQLException {
+        //setup
+        getDefaultTimingMessage().makeSQL(sqlMessageManager);
+        getDefaultTimingMessage().makeSQL(sqlMessageManager);
+        getDefaultErrorMessage().makeSQL(sqlMessageManager);
+        getDefaultErrorMessage().makeSQL(sqlMessageManager);
+
+        //act
+        sqlMessageManager.UpdateInUse(1,true);
+        sqlMessageManager.UpdateInUse(3,true);
+
+        ResultSet rs = sqlMessageManager.SelectMessages();
+
+        //assert
+        rs.next();
+        Assertions.assertTrue(rs.getBoolean("InUse"));
+        rs.next();
+        Assertions.assertFalse(rs.getBoolean("InUse"));
+        rs.next();
+        Assertions.assertTrue(rs.getBoolean("InUse"));
+        rs.next();
+        Assertions.assertFalse(rs.getBoolean("InUse"));
+
     }
 }
 

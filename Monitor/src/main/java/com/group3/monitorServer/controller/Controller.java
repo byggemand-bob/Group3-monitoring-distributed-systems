@@ -1,5 +1,6 @@
 package com.group3.monitorServer.controller;
 
+import com.group3.monitorServer.MessageProcessor.Delegator;
 import com.group3.monitorServer.controller.requirements.Requirement;
 
 import java.util.LinkedList;
@@ -23,8 +24,12 @@ public class Controller implements Runnable{
     }
 
     /*  */
-    private void AddRequirement(Requirement requirement){
+    public void addRequirement(Requirement requirement){
         requirementList.add(requirement);
+    }
+
+    public void addThread (Controllable thread) {
+        ControlledThreads.add(thread);
     }
 
     /* while running continues to test the requirementList, and pauses or resumes the Messenger */
@@ -34,7 +39,6 @@ public class Controller implements Runnable{
 
         RunningLoop: while(running){
         //TODO: Decide if Controllers should be Controllable
-
 //            while(paused){
 //                ThreadWait(0);
 //                if(!running){

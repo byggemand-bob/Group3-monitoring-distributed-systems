@@ -41,32 +41,32 @@ public class Processor implements Runnable {
 
     @Override
     public void run() {
-        RunningLoop: while(running){
-            while(paused){
-                ThreadWait(0);
-                if(!running){
-                    break RunningLoop;
-                }
-            }
-            ResultSet allMessages = sqlMessageManager.SelectAllMessages();
-
-            try {
-                while(allMessages.next()){
-                    if(allMessages.getInt("MessageType") == MessageTypeID.TimingMonitorData.ordinal()){
-                        TimingMonitorDataMessage firstMessage = (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(allMessages);
-                        TimingMonitorDataMessage secondMessage = FindMatch(firstMessage);
-                        if (secondMessage != null) {
-                            AnalyzeTimingMessage(firstMessage, secondMessage);
-                        }
-                    } else if(allMessages.getInt("MessageType") == MessageTypeID.ErrorData.ordinal()){
-                        AnalyzeErrorMessage(messageCreator.MakeMessageFromSQL(allMessages));
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-        }
+//        RunningLoop: while(running){
+//            while(paused){
+//                ThreadWait(0);
+//                if(!running){
+//                    break RunningLoop;
+//                }
+//            }
+//            ResultSet allMessages = sqlMessageManager.SelectAllMessages();
+//
+//            try {
+//                while(allMessages.next()){
+//                    if(allMessages.getInt("MessageType") == MessageTypeID.TimingMonitorData.ordinal()){
+//                        TimingMonitorDataMessage firstMessage = (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(allMessages);
+//                        TimingMonitorDataMessage secondMessage = FindMatch(firstMessage);
+//                        if (secondMessage != null) {
+//                            AnalyzeTimingMessage(firstMessage, secondMessage);
+//                        }
+//                    } else if(allMessages.getInt("MessageType") == MessageTypeID.ErrorData.ordinal()){
+//                        AnalyzeErrorMessage(messageCreator.MakeMessageFromSQL(allMessages));
+//                    }
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
     }
 
     private void AnalyzeErrorMessage(MessageInterface message) {

@@ -17,10 +17,11 @@ public class SQLMessageManager {
 
         if (!sqlManager.CheckIfTableExists(tableName)) {
             sqlManager.CreateNewTable(tableName,
-                    "ID integer PRIMARY KEY AUTOINCREMENT",
-                    "MessageType integer NOT NULL",
-                    "SenderID integer NOT NULL",
-                    "Timestamp text NOT NULL",
+                    "ID INTEGER PRIMARY KEY AUTOINCREMENT",
+                    "MessageType INTEGER NOT NULL",
+                    "SenderID INTEGER NOT NULL",
+                    "Timestamp TEXT NOT NULL",
+                    "InUse BOOLEAN DEFAULT 0",
                     "Message BLOB");
         }
     }
@@ -42,18 +43,18 @@ public class SQLMessageManager {
             pstmt.setInt(2, messageType);
             pstmt.setString(3, timeStamp);
             pstmt.setString(4, message);
-            pstmt.executeUpdate();
+            sqlManager.ExecutePreparedStmt(pstmt);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
     /* returns the first element of tableName, as ordered by the first column and has ToBeSent = 1 */
-    public ResultSet SelectFirstMessage(){
-        return sqlManager.SelectFirst(tableName);
+    public ResultSet SelectFirstMessage(String... whereArgs){
+        return sqlManager.SelectFirst(tableName, whereArgs);
     }
 
-    public ResultSet SelectMessage (String... whereArgs) {
+    public ResultSet SelectMessages(String... whereArgs) {
         return sqlManager.Select(tableName, whereArgs);
     }
 
@@ -63,6 +64,11 @@ public class SQLMessageManager {
         if(sqlManager.TableSize(tableName) == 0){
             sqlManager.ResetAutoIncrement(tableName);
         }
+    }
+
+    /*Update the InUse state*/
+    public void UpdateInUse (int msgId, boolean set) {
+        GenericPreparedStmt("UPDATE " + tableName + " SET InUse = " + set + " WHERE ID  = " + msgId);
     }
 
     /* Deletes everything in the table and resets AutoIncrement */

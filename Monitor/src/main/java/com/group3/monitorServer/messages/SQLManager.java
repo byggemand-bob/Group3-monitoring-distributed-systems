@@ -61,8 +61,8 @@ public class SQLManager {
     }
 
     /* returns the first element of tableName */
-    public synchronized ResultSet SelectFirst(String tableName){
-        return GenericStmt("SELECT * FROM "+tableName+" LIMIT 1");
+    public synchronized ResultSet SelectFirst(String tableName, String... whereArgs){
+        return GenericStmt(AppendWhereArgs("SELECT * FROM "+tableName+" LIMIT 1", whereArgs));
     }
 
     public synchronized ResultSet Select (String tableName, String... whereArgs) {
@@ -126,6 +126,16 @@ public class SQLManager {
         }
     }
 
+    /* Only Prepared statements allowed */
+    public synchronized void ExecutePreparedStmt(PreparedStatement pstmt){
+        try {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+    }
+
     private synchronized Statement CreateNewStmt() throws SQLException {
         return connection.createStatement();
     }
@@ -143,6 +153,9 @@ public class SQLManager {
         return this.fileName;
     }
 
+    /*
+     * Dangerous! Should always be executed afterwards by the "ExecutePreparedStmt".
+     */
     public synchronized PreparedStatement getPreparedStmt (String sql) {
         try {
             return connection.prepareStatement(sql);

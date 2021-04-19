@@ -1,8 +1,11 @@
 package com.group3.monitorServer.MessageProcessor;
 
+import com.group3.monitorServer.MessageProcessor.workers.ErrorMessageWorker;
+import com.group3.monitorServer.MessageProcessor.workers.TimingMonitorDataWorker;
 import com.group3.monitorServer.controller.Controllable;
+import com.group3.monitorServer.messages.*;
 import org.openapitools.model.TimingMonitorData;
-import com.group3.monitorServer.messages.SQLMessageManager;
+import com.group3.monitorServer.messages.ErrorDataMessage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,34 +14,66 @@ public class Delegator implements Controllable {
 
     private final SQLMessageManager sqlMessageManager;
     private final MessageCreator messageCreator = new MessageCreator();
+    private boolean running = false;
+    private boolean paused = false;
 
     public Delegator(SQLMessageManager sqlMessageManager) {
         this.sqlMessageManager = sqlMessageManager;
     }
 
     @Override
-    public void start() {
-
+    public void start(){
+        running = true;
+        new Thread(this).start();
     }
-
     @Override
-    public void stop() {
-
+    public void stop(){
+        running = false;
+        paused = false;
+        synchronized (this){
+            notify();
+        }
     }
-
     @Override
-    public void resume() {
-
+    public void resume(){
+        paused = false;
+        synchronized (this){
+            notify();
+        }
     }
-
     @Override
-    public void pause() {
-
+    public void pause(){
+        paused = true;
     }
+
 
     @Override
     public void run() {
+        RunningLoop: while(running){
+            while(paused){
+                ThreadWait(0);
+                if(!running){
+                    break RunningLoop;
+                }
+            }
+            ResultSet allMessages = sqlMessageManager.SelectMessages("InUse = 0");
+            try {
+                while(allMessages.next()){
+                    if(allMessages.getInt("MessageType") == MessageTypeID.TimingMonitorData.ordinal()){
+                        TimingMonitorDataMessage firstMessage = (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(allMessages);
+                        TimingMonitorDataMessage secondMessage = findTimingDataMatch(firstMessage);
+                        if (secondMessage != null) {
+                            new Thread(new TimingMonitorDataWorker(firstMessage, secondMessage)).start();
+                        }
+                    } else if(allMessages.getInt("MessageType") == MessageTypeID.ErrorData.ordinal()){
+                        new Thread(new ErrorMessageWorker((ErrorDataMessage) messageCreator.MakeMessageFromSQL(allMessages))).start();
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
+        }
     }
 
     private TimingMonitorDataMessage findTimingDataMatch (TimingMonitorDataMessage message) {
@@ -49,7 +84,7 @@ public class Delegator implements Controllable {
                 eventCodeEnum.ordinal();
         whereArgs[0] = "Message = '" + blob + "'";
         whereArgs[1] = "SenderID = '" + message.getTimingMonitorData().getSenderID() + "'";
-        ResultSet resultSetQuery = sqlMessageManager.SelectMessage(whereArgs);
+        ResultSet resultSetQuery = sqlMessageManager.SelectMessages(whereArgs);
         try {
             if (resultSetQuery != null && resultSetQuery.next()) {
                 //TODO: analyze TimingMessage
@@ -57,7 +92,7 @@ public class Delegator implements Controllable {
                 if (!resultSetQuery.next()) {
                     return result;
                 } else {
-                    System.out.println("");
+                    //TODO: Didnt find a matching message
                 }
             } else {
                 System.out.println("resultsetquery is null");
@@ -80,6 +115,17 @@ public class Delegator implements Controllable {
                 return TimingMonitorData.EventCodeEnum.SENDREQUEST;
             default:
                 throw new IllegalStateException("Unexpected value of event code enum: " + eventCodeEnum.toString());
+        }
+    }
+
+    /* waits for specified amount of MilliSeconds if 0, waits until another calls thread.notify() */
+    private void ThreadWait(int MilliSeconds){
+        try {
+            synchronized(this){
+                wait(MilliSeconds);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

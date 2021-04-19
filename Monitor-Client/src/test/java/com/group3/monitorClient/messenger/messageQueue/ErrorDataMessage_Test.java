@@ -27,7 +27,7 @@ public class ErrorDataMessage_Test extends AbstractSQLMessageManagerTest {
         ErrorData.ErrorMessageTypeEnum errorMessageType_test = null;
 
         //Act
-        errorDataMessage.MakeSQL(sqlMessageManager);
+        errorDataMessage.makeSQL(sqlMessageManager);
         ResultSet rs = sqlMessageManager.SelectFirstMessage();
 
         String blob = rs.getString("Message");

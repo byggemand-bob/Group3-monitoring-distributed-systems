@@ -1,9 +1,10 @@
-package com.group3.monitorServer;
+package com.group3.monitorServer.Tests;
 
-import com.group3.monitorServer.MessageProcessor.Processor;
-import com.group3.monitorServer.messages.MessageCreator;
-import com.group3.monitorServer.messages.SQLMessageManager;
-import com.group3.monitorServer.messages.TimingMonitorDataMessage;
+import com.group3.monitorServer.AbstractSQLMessageManagerTest;
+import com.group3.monitorServer.MessageProcessor.Delegator;
+import com.group3.monitorServer.TrueFalseRequirement_TestClass;
+import com.group3.monitorServer.controller.Controller;
+import com.group3.monitorServer.messages.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openapitools.model.TimingMonitorData;
@@ -14,18 +15,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 
-public class Processor_Test extends AbstractMessageManager{
+public class Processor_Test extends AbstractSQLMessageManagerTest {
 
     @Test
     public void blobTest () throws SQLException {
-        SQLMessageManager sqlMessageManager = new SQLMessageManager("src/main/resources/sqlite/db", "queue.db", "test");
         sqlMessageManager.InsertMessage(21L, 1, "test", "messageTest1");
         sqlMessageManager.InsertMessage(21L, 1, "test", "messageTest2");
         sqlMessageManager.InsertMessage(21L, 1, "test", "messageTest3");
         sqlMessageManager.InsertMessage(21L, 1, "test", "messageTest4");
 
         //Act
-        ResultSet rs = sqlMessageManager.SelectMessage("Message = 'messageTest3'");
+        ResultSet rs = sqlMessageManager.SelectMessages("Message = 'messageTest3'");
 
 
 
@@ -91,9 +91,9 @@ public class Processor_Test extends AbstractMessageManager{
         TimingMonitorDataMessage matchingMessage = null;
         try {
             Method method = null;
-            method = Processor.class.getDeclaredMethod("FindMatch", TimingMonitorDataMessage.class);
+            method = Delegator.class.getDeclaredMethod("findTimingDataMatch", TimingMonitorDataMessage.class);
             method.setAccessible(true);
-            Processor processor = new Processor(sqlMessageManager);
+            Delegator processor = new Delegator(sqlMessageManager);
             message = (TimingMonitorDataMessage) messageCreator.MakeMessage(timingMonitorData);
             matchingMessage = (TimingMonitorDataMessage) method.invoke(processor, message);
         } catch (NoSuchMethodException e) {
@@ -109,5 +109,49 @@ public class Processor_Test extends AbstractMessageManager{
         Assertions.assertEquals(message.getTimingMonitorData().getSenderID(),matchingMessage.getTimingMonitorData().getSenderID());
         Assertions.assertNotEquals(message.getTimingMonitorData().getEventCode(),matchingMessage.getTimingMonitorData().getEventCode());
         Assertions.assertEquals(TimingMonitorData.EventCodeEnum.SENDREQUEST,matchingMessage.getTimingMonitorData().getEventCode());
+    }
+
+    @Test
+    public void testControllerPass () {
+        //setup
+        TimingMonitorDataMessage timingMonitorDataMessage = getDefaultTimingMessage();
+        ErrorDataMessage errorDataMessage = getDefaultErrorMessage();
+
+        //msg1
+        errorDataMessage.getErrorData().setSenderID(1L);
+        errorDataMessage.makeSQL(sqlMessageManager);
+
+        //msg2
+        timingMonitorDataMessage.getTimingMonitorData().setEventCode(TimingMonitorData.EventCodeEnum.RECEIVEREQUEST);
+        timingMonitorDataMessage.makeSQL(sqlMessageManager);
+
+        //msg3
+        errorDataMessage.getErrorData().setSenderID(2L);
+        errorDataMessage.makeSQL(sqlMessageManager);
+
+        //msg4
+        timingMonitorDataMessage.getTimingMonitorData().setEventCode(TimingMonitorData.EventCodeEnum.RECEIVERESPONSE);
+        timingMonitorDataMessage.makeSQL(sqlMessageManager);
+
+        //msg5
+        errorDataMessage.getErrorData().setSenderID(3L);
+        errorDataMessage.makeSQL(sqlMessageManager);
+
+        //msg6
+        timingMonitorDataMessage.getTimingMonitorData().setEventCode(TimingMonitorData.EventCodeEnum.SENDREQUEST);
+        timingMonitorDataMessage.makeSQL(sqlMessageManager);
+
+        //msg7
+        timingMonitorDataMessage.getTimingMonitorData().setEventCode(TimingMonitorData.EventCodeEnum.SENDRESPONSE);
+        timingMonitorDataMessage.makeSQL(sqlMessageManager);
+
+        Delegator delegator = new Delegator(sqlMessageManager);
+        Controller controller = new Controller();
+
+        controller.addThread(delegator);
+        controller.addRequirement(new TrueFalseRequirement_TestClass(true));
+
+        //act
+        controller.run();
     }
 }

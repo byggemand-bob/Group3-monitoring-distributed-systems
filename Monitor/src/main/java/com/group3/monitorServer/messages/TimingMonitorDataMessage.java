@@ -22,7 +22,7 @@ public class TimingMonitorDataMessage implements MessageInterface {
 
     /* the message converts itself into an sql format, and saves itself using provided SQLManager */
     @Override
-    public void MakeSQL(SQLMessageManager sqlMessageManager) {
+    public void makeSQL(SQLMessageManager sqlMessageManager) {
         List<String> errorMessages = new ArrayList<>();
         if (timingMonitorData.getEventID() == null) {
             errorMessages.add("EventID");
