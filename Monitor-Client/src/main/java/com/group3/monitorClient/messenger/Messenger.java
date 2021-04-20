@@ -101,6 +101,7 @@ public class Messenger implements MessengerInterface {
     }
 
     /* Sends next message in the messageQueue */
+    //TODO: Multi thread this?
     private void SendMessage(){
         ResultSet firstMessageRS = sqlMessageManager.SelectFirstMessage();
         MessageInterface message = messageCreator.MakeMessageFromSQL(firstMessageRS);
