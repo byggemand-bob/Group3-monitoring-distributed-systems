@@ -1,4 +1,4 @@
-package com.group3.monitorClient.messenger.lazyMessenger.requirement;
+package com.group3.monitorClient.controller.requirement;
 
 import com.group3.monitorClient.testClasses.AvailableCPURequirement_TestClass;
 import org.junit.jupiter.api.Assertions;

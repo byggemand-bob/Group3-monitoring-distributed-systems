@@ -17,7 +17,7 @@ import java.sql.SQLException;
  * The GreedyMessenger class runs a continues thread sending TimingMonitorData from a SynchronizedQueue.
  * It Utilizes the MonitorApi and will indefinably probe the queue until stopped or paused.
  */
-public class GreedyMessenger implements MessengerInterface {
+public class Messenger implements MessengerInterface {
     protected MonitorClientInterface monitorClientInterface;
     private boolean running = true;
     private boolean paused = false;
@@ -31,7 +31,7 @@ public class GreedyMessenger implements MessengerInterface {
      * specifies which SynchronizedQueue to utilize,
      * useful if multiple messengers should share the same queue.
      */
-    public GreedyMessenger(String monitorIP, String sqlPath, String sqlFileName){
+    public Messenger(String monitorIP, String sqlPath, String sqlFileName){
         monitorClientInterface = new MonitorClientInterface(monitorIP);
         SQLManager sqlManager = SQLManager.getInstance();
         sqlManager.Connect(sqlPath, sqlFileName);

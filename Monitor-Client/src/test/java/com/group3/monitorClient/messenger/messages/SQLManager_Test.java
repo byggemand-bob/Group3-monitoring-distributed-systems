@@ -1,4 +1,4 @@
-package com.group3.monitorClient.messenger.messageQueue;
+package com.group3.monitorClient.messenger.messages;
 
 import com.group3.monitorClient.AbstractSQLManagerTest;
 import org.junit.jupiter.api.Assertions;

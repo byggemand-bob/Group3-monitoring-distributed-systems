@@ -22,7 +22,6 @@ public class Controller implements Runnable{
         }
     }
 
-    /*  */
     public void addRequirement(Requirement requirement){
         requirementList.add(requirement);
     }
@@ -66,8 +65,17 @@ public class Controller implements Runnable{
         }
     }
 
+    /* starts a thread running current class.run() */
+    public void start(){
+        running = true;
+        new Thread(this).start();
+    }
+
     public void stop(){
         ControlledThreads.forEach(Controllable::stop);
         running = false;
+        synchronized(this) {
+            notify();
+        }
     }
 }
