@@ -11,9 +11,7 @@ import java.io.File;
 import java.time.OffsetDateTime;
 
 public class AbstractSQLManagerTest {
-    public static SQLManager sqlManager;// = new SQLManager("src/main/resources/sqlite/db/", "test.db");
-
-
+    public static SQLManager sqlManager = SQLManager.getInstance();;// = new SQLManager("src/main/resources/sqlite/db/", "test.db");
 
     @BeforeAll
     static void setupDir() {
@@ -29,7 +27,6 @@ public class AbstractSQLManagerTest {
     /* Creates a new sql database before each test */
     @BeforeEach
     public void setup () {
-        SQLManager sqlManager = SQLManager.getInstance();
         sqlManager.Connect("src/main/resources/sqlite/db/", "test.db");
     }
 
