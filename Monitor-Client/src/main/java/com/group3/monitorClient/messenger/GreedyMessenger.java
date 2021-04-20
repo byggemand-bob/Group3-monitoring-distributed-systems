@@ -1,6 +1,6 @@
 package com.group3.monitorClient.messenger;
 
-import com.group3.monitorClient.controller.MonitorClientInterface;
+import com.group3.monitorClient.MonitorClientInterface;
 import com.group3.monitorClient.messenger.messages.*;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.model.ErrorData;
@@ -41,7 +41,7 @@ public class GreedyMessenger implements MessengerInterface {
 
     /* starts a thread running current class.run() */
     @Override
-    public void Start(){
+    public void start(){
         running = true;
         thread = new Thread(this);
         thread.start();
@@ -49,7 +49,7 @@ public class GreedyMessenger implements MessengerInterface {
 
     /* This terminates the thread, whoever it completes the current loop*/
     @Override
-    public void Stop(){
+    public void stop(){
         running = false;
         paused = false;
         synchronized(this) {
@@ -59,13 +59,13 @@ public class GreedyMessenger implements MessengerInterface {
 
     /* pauses the thread, however completing the current loop before doing so */
     @Override
-    public void Pause(){
+    public void pause(){
         paused = true;
     }
 
     /* resumes the thread */
     @Override
-    public void Resume(){
+    public void resume(){
         paused = false;
         synchronized(this) {
             notify();

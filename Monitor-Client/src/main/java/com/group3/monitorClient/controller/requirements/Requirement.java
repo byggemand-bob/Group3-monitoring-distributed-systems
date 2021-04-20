@@ -1,4 +1,4 @@
-package com.group3.monitorClient.messenger.lazyMessenger.requirements;
+package com.group3.monitorClient.controller.requirements;
 
 /*
 * The Requirement interface is an interface used in the LazyMessenger.

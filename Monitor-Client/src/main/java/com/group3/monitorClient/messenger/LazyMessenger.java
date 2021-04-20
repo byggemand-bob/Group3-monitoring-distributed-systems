@@ -1,8 +1,6 @@
-package com.group3.monitorClient.messenger.lazyMessenger;
+package com.group3.monitorClient.messenger;
 
-import com.group3.monitorClient.messenger.GreedyMessenger;
-import com.group3.monitorClient.messenger.MessengerInterface;
-import com.group3.monitorClient.messenger.lazyMessenger.requirements.Requirement;
+import com.group3.monitorClient.controller.requirements.Requirement;
 import com.group3.monitorClient.messenger.messages.MessageInterface;
 
 import java.util.LinkedList;
@@ -13,6 +11,8 @@ import java.util.List;
  * It periodically checks Requirements added to the class,
  * then pauses or resumes the Messenger based on how the requirements tests
  */
+
+// TODO: Refactor using Controller
 public class LazyMessenger implements MessengerInterface {
     protected MessengerInterface subMessenger;
     private List<Requirement> requirementList = new LinkedList<Requirement>();
@@ -30,10 +30,9 @@ public class LazyMessenger implements MessengerInterface {
 
     /* starts a thread running current class.run() */
     @Override
-    public void Start(){
+    public void start(){
         running = true;
-        subMessenger.Pause();
-        subMessenger.Start();
+        subMessenger.start();
         thread = new Thread(this);
         thread.start();
     }
@@ -43,14 +42,14 @@ public class LazyMessenger implements MessengerInterface {
      * however both the thread and the messenger completes their current loops first.
      */
     @Override
-    public void Pause(){
-        subMessenger.Pause();
+    public void pause(){
+        subMessenger.pause();
         paused = true;
     }
 
     /* resumes the thread as well as the messenger*/
     @Override
-    public void Resume(){
+    public void resume(){
         paused = false;
         synchronized (this) {
             notify();
@@ -59,10 +58,10 @@ public class LazyMessenger implements MessengerInterface {
 
     /* This terminates the thread, whoever it completes the current loop*/
     @Override
-    public void Stop(){
+    public void stop(){
         running = false;
         paused = false;
-        subMessenger.Stop();
+        subMessenger.stop();
         synchronized (this) {
             notify();
         }
@@ -115,9 +114,9 @@ public class LazyMessenger implements MessengerInterface {
             }
 
             if(TestRequirements()){
-                subMessenger.Resume();
+                subMessenger.resume();
             } else {
-                subMessenger.Pause();
+                subMessenger.pause();
             }
 
             ThreadWait(5000);

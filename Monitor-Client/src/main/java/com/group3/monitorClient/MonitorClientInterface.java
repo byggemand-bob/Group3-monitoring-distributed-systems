@@ -1,4 +1,4 @@
-package com.group3.monitorClient.controller;
+package com.group3.monitorClient;
 
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;

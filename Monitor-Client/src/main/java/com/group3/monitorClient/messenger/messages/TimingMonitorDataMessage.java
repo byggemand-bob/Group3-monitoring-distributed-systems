@@ -1,6 +1,6 @@
 package com.group3.monitorClient.messenger.messages;
 
-import com.group3.monitorClient.controller.MonitorClientInterface;
+import com.group3.monitorClient.MonitorClientInterface;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.model.TimingMonitorData;
 

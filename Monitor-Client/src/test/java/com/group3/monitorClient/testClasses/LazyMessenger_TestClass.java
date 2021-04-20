@@ -1,7 +1,7 @@
 package com.group3.monitorClient.testClasses;
 
 import com.group3.monitorClient.messenger.GreedyMessenger;
-import com.group3.monitorClient.messenger.lazyMessenger.LazyMessenger;
+import com.group3.monitorClient.messenger.LazyMessenger;
 
 /*
  * Test class set subMessenger in LazyMessenger to GreedyMessenger_TestClass,
