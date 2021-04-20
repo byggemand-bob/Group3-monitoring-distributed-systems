@@ -19,9 +19,9 @@ public class GreedyMessenger_Test extends AbstractSQLDeleter {
         /* Confirms no messages was send before the messenger was started */
         Assertions.assertEquals(5, messenger.MessageQueueSize());
 
-        messenger.Start();
+        messenger.start();
         Thread.sleep(100);
-        messenger.Pause();
+        messenger.pause();
 
         /* confirms the messenger is now sending messages */
         Assertions.assertTrue(messenger.MessageQueueSize() < 5);
@@ -37,9 +37,9 @@ public class GreedyMessenger_Test extends AbstractSQLDeleter {
 
         SizeOfQueueBefore = messenger.MessageQueueSize();
 
-        messenger.Resume();
+        messenger.resume();
         Thread.sleep(100);
-        messenger.Stop();
+        messenger.stop();
 
         /* confirms the messenger was sending messages again after being resumed */
         Assertions.assertTrue(SizeOfQueueBefore > messenger.MessageQueueSize());
@@ -74,9 +74,9 @@ public class GreedyMessenger_Test extends AbstractSQLDeleter {
         messenger.AddMessage(getDefaultErrorMessage());
 
         //Act
-        messenger.Start();
+        messenger.start();
         Thread.sleep(1000);
-        messenger.Stop();
+        messenger.stop();
 
         //Assert
         Assertions.assertEquals(0, messenger.MessageQueueSize());

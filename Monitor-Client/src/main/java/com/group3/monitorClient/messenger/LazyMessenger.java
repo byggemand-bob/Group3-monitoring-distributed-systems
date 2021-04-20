@@ -32,6 +32,7 @@ public class LazyMessenger implements MessengerInterface {
     @Override
     public void start(){
         running = true;
+        subMessenger.pause();
         subMessenger.start();
         thread = new Thread(this);
         thread.start();

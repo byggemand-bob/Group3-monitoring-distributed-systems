@@ -22,9 +22,9 @@ public class LazyMessenger_Test extends AbstractSQLDeleter {
         /* Confirms no messages was send before the messenger was started */
         Assertions.assertEquals(5, messenger.MessageQueueSize());
 
-        messenger.Start();
+        messenger.start();
         Thread.sleep(100);
-        messenger.Pause();
+        messenger.pause();
 
         /* confirms the messenger is now sending messages */
         Assertions.assertTrue(messenger.MessageQueueSize() < 5);
@@ -40,9 +40,9 @@ public class LazyMessenger_Test extends AbstractSQLDeleter {
 
         SizeOfQueueBefore = messenger.MessageQueueSize();
 
-        messenger.Resume();
+        messenger.resume();
         Thread.sleep(100);
-        messenger.Stop();
+        messenger.stop();
 
         /* confirms the messenger was sending messages again after being resumed */
         Assertions.assertTrue(SizeOfQueueBefore > messenger.MessageQueueSize());
@@ -84,14 +84,10 @@ public class LazyMessenger_Test extends AbstractSQLDeleter {
         /* ensures the the messenger isn't sending messages before being started */
         Assertions.assertEquals(5, messenger.MessageQueueSize());
 
-        messenger.Start();
+        messenger.start();
         Thread.sleep(100);
 
-        /* Test that the messenger continues to not send messages, as all requirements report false */
-        Assertions.assertEquals(5, messenger.MessageQueueSize());
-
         Requirement1.bool = true;
-        messenger.Resume();
         Thread.sleep(100);
 
         /* Test that the messenger continues to not send messages, as only one requirement is true */
@@ -99,7 +95,7 @@ public class LazyMessenger_Test extends AbstractSQLDeleter {
 
         Requirement2.bool = true;
         Requirement3.bool = true;
-        messenger.Resume();
+        messenger.resume();
         Thread.sleep(100);
 
         /* tests that the messenger is now sending messages as all requirements tests true */
