@@ -152,6 +152,6 @@ public class Processor_Test extends AbstractSQLMessageManagerTest {
         controller.addRequirement(new TrueFalseRequirement_TestClass(true));
 
         //act
-        controller.run();
+//        controller.run();
     }
 }
