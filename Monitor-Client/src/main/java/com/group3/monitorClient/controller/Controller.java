@@ -1,4 +1,4 @@
-package com.group3.monitorServer.controller;
+package com.group3.monitorClient.controller;
 
 import com.group3.monitorServer.controller.requirements.Requirement;
 

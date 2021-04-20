@@ -1,16 +1,9 @@
 package com.group3.monitorClient.messenger;
 
+import com.group3.monitorClient.controller.Controllable;
 import com.group3.monitorClient.messenger.messages.MessageInterface;
 
-public interface MessengerInterface extends Runnable {
-    void Start();
-
-    void Stop();
-
-    void Pause();
-
-    void Resume();
-
+public interface MessengerInterface extends Runnable, Controllable {
     void AddMessage(MessageInterface message);
 
     long MessageQueueSize();
