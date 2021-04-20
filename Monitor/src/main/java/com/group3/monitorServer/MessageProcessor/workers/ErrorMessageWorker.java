@@ -1,8 +1,6 @@
 package com.group3.monitorServer.MessageProcessor.workers;
 
 import com.group3.monitorServer.messages.ErrorDataMessage;
-import com.group3.monitorServer.messages.MessageInterface;
-import com.group3.monitorServer.messages.TimingMonitorDataMessage;
 
 public class ErrorMessageWorker implements Runnable{
     ErrorDataMessage msg;
