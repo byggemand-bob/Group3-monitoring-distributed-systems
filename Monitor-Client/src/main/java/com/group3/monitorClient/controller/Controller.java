@@ -1,6 +1,6 @@
 package com.group3.monitorClient.controller;
 
-import com.group3.monitorServer.controller.requirements.Requirement;
+import com.group3.monitorClient.controller.requirements.Requirement;
 
 import java.util.LinkedList;
 import java.util.List;
