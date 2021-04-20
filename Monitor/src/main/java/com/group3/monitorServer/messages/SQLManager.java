@@ -6,7 +6,7 @@ import java.sql.*;
  * SQLManager handles queries to a given database
  */
 public class SQLManager {
-    private static SQLManager singleton = new SQLManager();
+    private static final SQLManager singleton = new SQLManager();
     private String path;
     private String fileName;
     private Connection connection = null;
@@ -16,7 +16,6 @@ public class SQLManager {
     }
 
     private SQLManager() {
-
     }
 
     public synchronized void Connect(String sqlPath, String sqlFileName){
