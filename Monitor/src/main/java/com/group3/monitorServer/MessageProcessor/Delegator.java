@@ -87,12 +87,9 @@ public class Delegator implements Controllable {
         ResultSet resultSetQuery = sqlMessageManager.SelectMessages(whereArgs);
         try {
             if (resultSetQuery != null && resultSetQuery.next()) {
-                //TODO: analyze TimingMessage
                 TimingMonitorDataMessage result = (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(resultSetQuery);
                 if (!resultSetQuery.next()) {
                     return result;
-                } else {
-                    //TODO: Didnt find a matching message
                 }
             } else {
                 System.out.println("resultsetquery is null");
