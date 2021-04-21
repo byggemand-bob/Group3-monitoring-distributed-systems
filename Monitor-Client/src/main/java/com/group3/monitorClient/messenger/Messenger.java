@@ -106,6 +106,7 @@ public class Messenger implements MessengerInterface {
     	// Start by checking if any messages are available for sending
     	boolean availableMessages = sqlMessageManager.TableSize() > 0;
     	if (!availableMessages) {
+    		ThreadWait(5000);
     		return;
     	}
     	
@@ -176,8 +177,6 @@ public class Messenger implements MessengerInterface {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        } else {
-            ThreadWait(5000);
         }
     }
 
