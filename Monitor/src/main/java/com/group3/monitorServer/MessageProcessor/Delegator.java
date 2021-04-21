@@ -1,7 +1,7 @@
-package com.group3.monitorServer.MessageProcessor;
+package com.group3.monitorServer.messageProcessor;
 
-import com.group3.monitorServer.MessageProcessor.workers.ErrorMessageWorker;
-import com.group3.monitorServer.MessageProcessor.workers.TimingMonitorDataWorker;
+import com.group3.monitorServer.messageProcessor.workers.ErrorMessageWorker;
+import com.group3.monitorServer.messageProcessor.workers.TimingMonitorDataWorker;
 import com.group3.monitorServer.controller.Controllable;
 import com.group3.monitorServer.messages.*;
 import org.openapitools.model.TimingMonitorData;
@@ -16,6 +16,7 @@ public class Delegator implements Controllable {
     private final MessageCreator messageCreator = new MessageCreator();
     private boolean running = false;
     private boolean paused = false;
+    private Thread thread = null;
 
     public Delegator(SQLMessageManager sqlMessageManager) {
         this.sqlMessageManager = sqlMessageManager;
@@ -24,8 +25,10 @@ public class Delegator implements Controllable {
     @Override
     public void start(){
         running = true;
-        new Thread(this).start();
+        thread = new Thread(this);
+        thread.start();
     }
+
     @Override
     public void stop(){
         running = false;
@@ -45,7 +48,6 @@ public class Delegator implements Controllable {
     public void pause(){
         paused = true;
     }
-
 
     @Override
     public void run() {
@@ -123,6 +125,14 @@ public class Delegator implements Controllable {
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    public boolean isAlive(){
+        if(thread == null){
+            return false;
+        } else {
+            return thread.isAlive();
         }
     }
 }
