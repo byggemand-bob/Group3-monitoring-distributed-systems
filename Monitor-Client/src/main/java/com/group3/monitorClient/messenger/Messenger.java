@@ -177,8 +177,6 @@ public class Messenger implements MessengerInterface {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        } else {
-            ThreadWait(5000);
         }
     }
 
