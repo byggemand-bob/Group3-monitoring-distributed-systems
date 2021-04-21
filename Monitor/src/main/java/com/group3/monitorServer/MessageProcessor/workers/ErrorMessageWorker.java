@@ -1,14 +1,17 @@
 package com.group3.monitorServer.MessageProcessor.workers;
 
 import com.group3.monitorServer.messages.ErrorDataMessage;
+import com.group3.monitorServer.messages.SQLMessageManager;
 
 public class ErrorMessageWorker implements Runnable{
+    SQLMessageManager sqlMessageManager;
     ErrorDataMessage msg;
     long msgID;
 
-    public ErrorMessageWorker(ErrorDataMessage msg, long msgID) {
+    public ErrorMessageWorker(SQLMessageManager sqlMessageManager, ErrorDataMessage msg, long msgID) {
         this.msg = msg;
         this.msgID = msgID;
+        this.sqlMessageManager = sqlMessageManager;
     }
 
     @Override
