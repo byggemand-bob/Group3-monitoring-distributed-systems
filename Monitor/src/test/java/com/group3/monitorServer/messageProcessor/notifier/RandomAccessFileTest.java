@@ -1,4 +1,4 @@
-package com.group3.monitorServer.Tests;
+package com.group3.monitorServer.messageProcessor.notifier;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

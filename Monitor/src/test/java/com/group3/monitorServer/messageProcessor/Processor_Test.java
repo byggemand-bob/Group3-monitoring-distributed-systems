@@ -1,8 +1,7 @@
-package com.group3.monitorServer.Tests;
+package com.group3.monitorServer.messageProcessor;
 
-import com.group3.monitorServer.AbstractSQLMessageManagerTest;
-import com.group3.monitorServer.MessageProcessor.Delegator;
-import com.group3.monitorServer.TrueFalseRequirement_TestClass;
+import com.group3.monitorServer.testClasses.AbstractSQLMessageManagerTest;
+import com.group3.monitorServer.testClasses.TrueFalseRequirement_TestClass;
 import com.group3.monitorServer.controller.Controller;
 import com.group3.monitorServer.messages.*;
 import org.junit.jupiter.api.Assertions;

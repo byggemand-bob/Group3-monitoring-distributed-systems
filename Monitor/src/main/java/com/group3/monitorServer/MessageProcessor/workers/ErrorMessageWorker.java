@@ -1,4 +1,4 @@
-package com.group3.monitorServer.MessageProcessor.workers;
+package com.group3.monitorServer.messageProcessor.workers;
 
 import com.group3.monitorServer.messages.ErrorDataMessage;
 import com.group3.monitorServer.messages.SQLMessageManager;
@@ -27,6 +27,6 @@ public class ErrorMessageWorker implements Runnable{
         System.out.println(message.getErrorData().getTimestamp());
         System.out.println(message.getErrorData().getHttpResponse());
 
-
+        sqlMessageManager.Delete("ID = " + msgID);
     }
 }

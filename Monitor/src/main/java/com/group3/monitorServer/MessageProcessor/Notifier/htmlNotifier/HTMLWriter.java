@@ -1,4 +1,4 @@
-package com.group3.monitorServer.MessageProcessor.Notifier.htmlNotifier;
+package com.group3.monitorServer.messageProcessor.notifier.htmlNotifier;
 
 public class HTMLWriter {
 

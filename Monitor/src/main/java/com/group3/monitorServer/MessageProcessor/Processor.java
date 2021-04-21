@@ -1,9 +1,6 @@
-package com.group3.monitorServer.MessageProcessor;
+package com.group3.monitorServer.messageProcessor;
 
 import com.group3.monitorServer.messages.*;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class Processor implements Runnable {
     private final SQLMessageManager sqlMessageManager;

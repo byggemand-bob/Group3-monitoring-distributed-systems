@@ -1,4 +1,4 @@
-package com.group3.monitorServer.MessageProcessor.Notifier;
+package com.group3.monitorServer.messageProcessor.notifier;
 
 import com.group3.monitorServer.messages.ErrorDataMessage;
 import com.group3.monitorServer.messages.TimingMonitorDataMessage;

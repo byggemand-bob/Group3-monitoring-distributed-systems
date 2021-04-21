@@ -1,6 +1,5 @@
-package com.group3.monitorServer.MessageProcessor.workers;
+package com.group3.monitorServer.messageProcessor.workers;
 
-import com.group3.monitorServer.messages.MessageInterface;
 import com.group3.monitorServer.messages.SQLMessageManager;
 import com.group3.monitorServer.messages.TimingMonitorDataMessage;
 
@@ -27,5 +26,7 @@ public class TimingMonitorDataWorker implements Runnable{
     private void AnalyzeTimingMessage(TimingMonitorDataMessage firstMessage, TimingMonitorDataMessage secondMessage) {
         //TODO: analyze TimingMessage and delete elements which have been analyzed
         System.out.println(firstMessage.getTimingMonitorData().getEventCode() + " belong to " + secondMessage.getTimingMonitorData().getEventCode());
+        sqlMessageManager.Delete("ID = " + msg1ID);
+        sqlMessageManager.Delete("ID = " + msg2ID);
     }
 }

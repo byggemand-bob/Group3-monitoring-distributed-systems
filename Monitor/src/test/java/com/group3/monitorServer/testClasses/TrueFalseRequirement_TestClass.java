@@ -1,4 +1,4 @@
-package com.group3.monitorServer;
+package com.group3.monitorServer.testClasses;
 
 import com.group3.monitorServer.controller.requirements.Requirement;
 
