@@ -4,9 +4,11 @@ import com.group3.monitorServer.messages.ErrorDataMessage;
 
 public class ErrorMessageWorker implements Runnable{
     ErrorDataMessage msg;
+    long msgID;
 
-    public ErrorMessageWorker(ErrorDataMessage msg) {
+    public ErrorMessageWorker(ErrorDataMessage msg, long msgID) {
         this.msg = msg;
+        this.msgID = msgID;
     }
 
     @Override
