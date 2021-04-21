@@ -8,7 +8,7 @@ import java.sql.SQLException;
  * SQLManager handles queries to a given database
  */
 public class SQLMessageManager {
-    private SQLManager sqlManager;
+    private SQLManager sqlManager = SQLManager.getInstance();
     private String tableName;
 
     public SQLMessageManager(SQLManager sqlManager, String tableName) {
