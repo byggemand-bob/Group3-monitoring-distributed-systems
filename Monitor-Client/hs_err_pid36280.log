@@ -37,8 +37,8 @@ j  org.sqlite.core.NativeDB.column_int(JI)I+0
 j  org.sqlite.jdbc3.JDBC3ResultSet.getInt(I)I+18
 j  org.sqlite.jdbc3.JDBC3ResultSet.getInt(Ljava/lang/String;)I+6
 j  com.group3.monitorClient.messenger.messages.MessageCreator.MakeMessageFromSQL(Ljava/sql/ResultSet;)Lcom/group3/monitorClient/messenger/messages/MessageInterface;+5
-j  com.group3.monitorClient.messenger.GreedyMessenger.SendMessage()V+17
-j  com.group3.monitorClient.messenger.GreedyMessenger.run()V+30
+j  com.group3.monitorClient.messenger.Messenger.SendMessage()V+17
+j  com.group3.monitorClient.messenger.Messenger.run()V+30
 j  java.lang.Thread.run()V+11 java.base@14
 v  ~StubRoutines::call_stub
 

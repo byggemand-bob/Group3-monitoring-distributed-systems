@@ -35,8 +35,8 @@ Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
 j  org.sqlite.core.NativeDB.column_long(JI)J+0
 j  org.sqlite.jdbc3.JDBC3ResultSet.getLong(I)J+18
 j  org.sqlite.jdbc3.JDBC3ResultSet.getLong(Ljava/lang/String;)J+6
-j  com.group3.monitorClient.messenger.GreedyMessenger.SendMessage()V+402
-j  com.group3.monitorClient.messenger.GreedyMessenger.run()V+30
+j  com.group3.monitorClient.messenger.Messenger.SendMessage()V+402
+j  com.group3.monitorClient.messenger.Messenger.run()V+30
 j  java.lang.Thread.run()V+11 java.base@14.0.2
 v  ~StubRoutines::call_stub
 

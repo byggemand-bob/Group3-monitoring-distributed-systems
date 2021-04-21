@@ -1,9 +1,6 @@
-package com.group3.monitorClient.messenger.messageQueue;
+package com.group3.monitorClient.messenger.messages;
 
 import com.group3.monitorClient.AbstractSQLMessageManagerTest;
-import com.group3.monitorClient.messenger.messages.ErrorDataMessage;
-import com.group3.monitorClient.messenger.messages.MessageInterface;
-import com.group3.monitorClient.messenger.messages.MessageTypeID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.ErrorData;

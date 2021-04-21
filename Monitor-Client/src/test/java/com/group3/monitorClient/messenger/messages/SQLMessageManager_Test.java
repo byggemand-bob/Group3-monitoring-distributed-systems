@@ -1,8 +1,6 @@
-package com.group3.monitorClient.messenger;
+package com.group3.monitorClient.messenger.messages;
 
 import com.group3.monitorClient.AbstractSQLMessageManagerTest;
-import com.group3.monitorClient.messenger.messages.MessageTypeID;
-import com.group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
