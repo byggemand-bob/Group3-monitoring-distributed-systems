@@ -35,7 +35,7 @@ public class Processor_Test extends AbstractSQLMessageManagerTest {
     }
 
     @Test
-    public void testFindMatchPass () throws SQLException { //TODO: refactor to match returns of the new analyzed messages
+    public void testFindTimingDataMatchPass () throws SQLException { //TODO: refactor to match returns of the new analyzed messages
         //Setup
         MessageCreator messageCreator = new MessageCreator();
         OffsetDateTime offsetDateTime = OffsetDateTime.now();
@@ -93,9 +93,9 @@ public class Processor_Test extends AbstractSQLMessageManagerTest {
             Method method = null;
             method = Delegator.class.getDeclaredMethod("findTimingDataMatch", TimingMonitorDataMessage.class);
             method.setAccessible(true);
-            Delegator processor = new Delegator(sqlMessageManager);
+            Delegator delegator = new Delegator(sqlMessageManager);
             message = (TimingMonitorDataMessage) messageCreator.MakeMessage(timingMonitorData);
-            matchingMessage = (TimingMonitorDataMessage) method.invoke(processor, message);
+            matchingMessage = ((TimingMonitorDataMessageID) method.invoke(delegator, message)).timingMonitorDataMessage;
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
