@@ -11,11 +11,6 @@ public class ConstraintImporterTest {
 	
 	@Test
 	void importConstraintsWithWrongFilePath() {
-		
-	}
-	
-	@Test
-	void importConstraintsWithWrongFileThrowExecptionTest() {
-		
+		//filenotfound execption
 	}
 }
