@@ -1,5 +1,6 @@
 package com.group3.monitorServer.messageProcessor;
 
+import com.group3.monitorServer.MessageProcessor.TimingMonitorDataMessageID;
 import com.group3.monitorServer.messageProcessor.workers.ErrorMessageWorker;
 import com.group3.monitorServer.messageProcessor.workers.TimingMonitorDataWorker;
 import com.group3.monitorServer.controller.Controllable;
@@ -63,12 +64,21 @@ public class Delegator implements Controllable {
                 while(allMessages.next()){
                     if(allMessages.getInt("MessageType") == MessageTypeID.TimingMonitorData.ordinal()){
                         TimingMonitorDataMessage firstMessage = (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(allMessages);
-                        TimingMonitorDataMessage secondMessage = findTimingDataMatch(firstMessage);
+                        TimingMonitorDataMessageID matchingMessage = findTimingDataMatch(firstMessage);
+                        TimingMonitorDataMessage secondMessage = matchingMessage.timingMonitorDataMessage;
                         if (secondMessage != null) {
-                            new Thread(new TimingMonitorDataWorker(firstMessage, secondMessage)).start();
+                            sqlMessageManager.UpdateInUse(allMessages.getInt("ID"), true);
+                            sqlMessageManager.UpdateInUse(matchingMessage.id, true);
+                            new Thread(new TimingMonitorDataWorker(sqlMessageManager,
+                                                                   firstMessage,
+                                                                   allMessages.getInt("ID"),
+                                                                   secondMessage,
+                                                                   matchingMessage.id)).start();
                         }
                     } else if(allMessages.getInt("MessageType") == MessageTypeID.ErrorData.ordinal()){
-                        new Thread(new ErrorMessageWorker((ErrorDataMessage) messageCreator.MakeMessageFromSQL(allMessages))).start();
+                        new Thread(new ErrorMessageWorker(sqlMessageManager,
+                                                          (ErrorDataMessage) messageCreator.MakeMessageFromSQL(allMessages),
+                                                          allMessages.getInt("ID"))).start();
                     }
                 }
             } catch (SQLException e) {
@@ -78,7 +88,7 @@ public class Delegator implements Controllable {
         }
     }
 
-    private TimingMonitorDataMessage findTimingDataMatch (TimingMonitorDataMessage message) {
+    private TimingMonitorDataMessageID findTimingDataMatch (TimingMonitorDataMessage message) {
         String[] whereArgs = new String[2];
         TimingMonitorData.EventCodeEnum eventCodeEnum = matchingEventCode(message.getTimingMonitorData().getEventCode());
         String blob = message.getTimingMonitorData().getTargetEndpoint() + TimingMonitorDataMessage.separator +
@@ -87,11 +97,14 @@ public class Delegator implements Controllable {
         whereArgs[0] = "Message = '" + blob + "'";
         whereArgs[1] = "SenderID = '" + message.getTimingMonitorData().getSenderID() + "'";
         ResultSet resultSetQuery = sqlMessageManager.SelectMessages(whereArgs);
+
         try {
             if (resultSetQuery != null && resultSetQuery.next()) {
-                TimingMonitorDataMessage result = (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(resultSetQuery);
+                TimingMonitorDataMessageID result = getTimingMonitorDataMessageAndID(resultSetQuery);
                 if (!resultSetQuery.next()) {
                     return result;
+                } else {
+                    System.out.println("resultsetquery returns multiple matching messages");
                 }
             } else {
                 System.out.println("resultsetquery is null");
@@ -100,6 +113,18 @@ public class Delegator implements Controllable {
             throwables.printStackTrace();
         }
         return null;
+    }
+
+    private static TimingMonitorDataMessageID getTimingMonitorDataMessageAndID (ResultSet rs) {
+        MessageCreator messageCreator = new MessageCreator();
+        TimingMonitorDataMessageID result  = new TimingMonitorDataMessageID();
+        try {
+            result.id = rs.getInt("ID");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        result.timingMonitorDataMessage = (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(rs);
+        return result;
     }
 
     private TimingMonitorData.EventCodeEnum matchingEventCode (TimingMonitorData.EventCodeEnum eventCodeEnum) {
