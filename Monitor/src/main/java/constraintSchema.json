@@ -1,0 +1,40 @@
+{
+   "type":"object",
+   "properties":{
+      "items":{
+         "type":"array",
+         "items":{
+            "properties":{
+               "min":{
+                  "type":"number",
+                  "minimum": 0
+               },
+               "max":{
+                  "type":"number",
+                  "minimum": 0
+               },
+               "endpoint":{
+                  "type":"string"
+               },
+               "name":{
+                  "type":"string"
+               },
+               "description":{
+                  "type":"string"
+               },
+               "nodeID": {
+                  "type": "number",
+                  "minimum": 0
+               }
+            },
+
+            "required":[
+               "max",
+               "endpoint"
+            ],
+  
+            "additionalProperties":false
+         }
+      }
+   }
+}

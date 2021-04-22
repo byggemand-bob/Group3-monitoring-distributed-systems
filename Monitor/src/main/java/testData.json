@@ -1,0 +1,10 @@
+[
+    {
+        "max": 1,
+        "endpoint": "monitor/test"
+    },
+    {
+        "max": 2,
+        "endpoint": "monitor/error"
+    }
+]
