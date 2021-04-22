@@ -1,49 +1,93 @@
 package com.group3.monitorServer.messageProcessor;
 
+import com.group3.monitorServer.messages.ErrorDataMessage;
+import com.group3.monitorServer.messages.SQLMessageManager;
+import com.group3.monitorServer.messages.TimingMonitorDataMessage;
 import com.group3.monitorServer.testClasses.AbstractSQLMessageManagerTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.openapitools.model.TimingMonitorData;
 
 public class Delegator_Tests extends AbstractSQLMessageManagerTest {
     /* Tests the control functions start(), stop(), pause() and resume() */
     @Test
     public void ThreadControl() throws InterruptedException {
         //setup
+        int loopCount;
         Delegator delegator = new Delegator(sqlMessageManager);
 
-        for(int i = 0; i < 5; i++){
-            getDefaultTimingMessage().makeSQL(sqlMessageManager);
-        }
+        AddMessages();
 
         //Act & Assert
         /* verifies there is five messages in the table, before the Delegator is started */
-        Assertions.assertEquals(5L, sqlMessageManager.TableSize());
+        Assertions.assertEquals(7L, sqlMessageManager.TableSize());
 
         delegator.start();
-        Thread.sleep(500);
+
+        loopCount = 0;
+        while(sqlMessageManager.TableSize() != 0 && loopCount < 50){
+            Thread.sleep(50);
+            loopCount++;
+        }
+
         delegator.pause();
 
-        /* Tests that the Delegator was processing messages after being started */
-        Assertions.assertTrue(sqlMessageManager.TableSize() < 5);
+        /* Tests that the Delegator processed all messages before continuing */
+        Assertions.assertEquals(0, sqlMessageManager.TableSize());
 
-        for(long i = sqlMessageManager.TableSize(); i < 5; i++){
-            getDefaultTimingMessage().makeSQL(sqlMessageManager);
-        }
-        Thread.sleep(500);
+        AddMessages();
+        Thread.sleep(100);
 
         /* verifies the Delegator wasn't running while paused */
-        Assertions.assertEquals(5L, sqlMessageManager.TableSize());
+        Assertions.assertEquals(7L, sqlMessageManager.TableSize());
 
         delegator.resume();
-        Thread.sleep(500);
+        loopCount = 0;
+        while(sqlMessageManager.TableSize() != 0 && loopCount < 50){
+            Thread.sleep(50);
+            loopCount++;
+        }
         delegator.stop();
 
         /* tests the Delegator was running again after being unpaused */
-        Assertions.assertTrue(sqlMessageManager.TableSize() < 5);
+        Assertions.assertEquals(0, sqlMessageManager.TableSize());
 
-        Thread.sleep(500);
+        Thread.sleep(100);
 
         /* verifies that the delegator thread was terminated after calling stop() */
-        Assertions.assertTrue(delegator.isAlive());
+        Assertions.assertFalse(delegator.isAlive());
+    }
+
+    private void AddMessages(){
+        TimingMonitorDataMessage timingMonitorDataMessage = getDefaultTimingMessage();
+        ErrorDataMessage errorDataMessage = getDefaultErrorMessage();
+
+        //msg1
+        errorDataMessage.getErrorData().setSenderID(1L);
+        errorDataMessage.makeSQL(sqlMessageManager);
+
+        //msg2
+        timingMonitorDataMessage.getTimingMonitorData().setEventCode(TimingMonitorData.EventCodeEnum.RECEIVEREQUEST);
+        timingMonitorDataMessage.makeSQL(sqlMessageManager);
+
+        //msg3
+        errorDataMessage.getErrorData().setSenderID(2L);
+        errorDataMessage.makeSQL(sqlMessageManager);
+
+        //msg4
+        timingMonitorDataMessage.getTimingMonitorData().setEventCode(TimingMonitorData.EventCodeEnum.RECEIVERESPONSE);
+        timingMonitorDataMessage.makeSQL(sqlMessageManager);
+
+        //msg5
+        errorDataMessage.getErrorData().setSenderID(3L);
+        errorDataMessage.makeSQL(sqlMessageManager);
+
+        //msg6
+        timingMonitorDataMessage.getTimingMonitorData().setEventCode(TimingMonitorData.EventCodeEnum.SENDREQUEST);
+        timingMonitorDataMessage.makeSQL(sqlMessageManager);
+
+        //msg7
+        timingMonitorDataMessage.getTimingMonitorData().setEventCode(TimingMonitorData.EventCodeEnum.SENDRESPONSE);
+        timingMonitorDataMessage.makeSQL(sqlMessageManager);
     }
 }
