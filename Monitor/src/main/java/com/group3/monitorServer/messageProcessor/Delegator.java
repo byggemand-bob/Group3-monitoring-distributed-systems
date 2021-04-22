@@ -65,7 +65,13 @@ public class Delegator implements Controllable {
                     if(allMessages.getInt("MessageType") == MessageTypeID.TimingMonitorData.ordinal()){
                         TimingMonitorDataMessage firstMessage = (TimingMonitorDataMessage) messageCreator.MakeMessageFromSQL(allMessages);
                         TimingMonitorDataMessageID matchingMessage = findTimingDataMatch(firstMessage);
-                        TimingMonitorDataMessage secondMessage = matchingMessage.timingMonitorDataMessage;
+                        TimingMonitorDataMessage secondMessage;
+                        if (matchingMessage != null) {
+                            secondMessage = matchingMessage.timingMonitorDataMessage;
+                        } else {
+                            secondMessage = null;
+                        }
+
                         if (secondMessage != null) {
                             sqlMessageManager.UpdateInUse(allMessages.getInt("ID"), true);
                             sqlMessageManager.UpdateInUse(matchingMessage.id, true);
