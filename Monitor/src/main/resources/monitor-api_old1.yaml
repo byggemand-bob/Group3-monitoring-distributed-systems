@@ -1,0 +1,66 @@
+openapi: 3.0.3
+info:
+  version: "1.0.0"
+  title: "Monitor Communication"
+  description: "This is a specification for the communication for the monitor system"
+
+paths:
+  /monitor:
+    post:
+      tags:
+        - "Monitor"
+      summary: "Receive data from the client(s) and server(s)"
+      description: "Create a monitor data record"
+      operationId: "addMonitorData"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/TimingMonitorData'
+      responses:
+        "201":
+          description: "The request has been fulfilled"
+        "404":
+          description: "The requested resource could not be found but may be available in the future"
+        "500":
+          description: "Internal Server Error"
+
+components:
+  schemas:
+    TimingMonitorData:
+      type: object
+      description: "Contain the required data, that is needed to check timing constraints"
+      properties:
+        Timestamp:
+          type: string
+          format: date-time
+          description: "The timestamp of the triggering a event"
+          example: "1990-12-31T23:59:60Z"
+        SenderID:
+          type: integer
+          format: int64
+          description: "The ID of the sender of the monitoring data"
+          example: 21
+        TargetEndpoint:
+          type: string
+          description: "The target endpoint of a client side request"
+          example: "/example/target/endpoint"
+        EventID:
+          type: integer
+          format: int64
+          description: "The unique ID of the event chain"
+          example: 57
+        EventCode:
+          type: string
+          enum:
+           - SendRequest
+           - ReceiveResponse
+           - ReceiveRequest
+           - SendResponse
+          description: Describes the event that triggered the generation of a timing event
+          example: "SendRequest"
+      required:
+        - Timestamp
+        - SenderID
+        - EventID
+        - EventCode

@@ -25,8 +25,60 @@ paths:
         "500":
           description: "Internal Server Error"
 
+  /error:
+    post:
+      tags:
+        - "Error"
+      summary: "Wrap the failing messages in errors"
+      description: "Create an error message"
+      operationId: "addErrorData"
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: '#/components/schemas/ErrorData'
+      responses:
+        "200":
+          description: "OK"
+
 components:
   schemas:
+    ErrorData:
+      type: object
+      description: "Contain information about errors"
+      properties:
+        Timestamp:
+          type: string
+          format: date-time
+          description: "The timestamp of when the error occurred"
+          example: "1990-12-31T23:59:60Z"
+        SenderID:
+          type: integer
+          format: int64
+          description: "The ID of the node on which the error occurred"
+          example: 21
+        HttpResponse:
+          type: integer
+          format: int32
+          description: "HttpResponse gotten when the error occurred"
+          example: 404
+        ErrorMessageType:
+          type: string
+          enum:
+            - noConnection
+            - HttpError
+            - unknownError
+          description: "Error message type for when fx connection is lost"
+          example: HttpError
+        Comment:
+          type: string
+          description: "For further elaboration about a given error"
+          example: "Trying to contact node 3, error code 404 was received"
+      required:
+        - Timestamp
+        - SenderID
+        - ErrorMessageType
+
     TimingMonitorData:
       type: object
       description: "Contain the required data, that is needed to check timing constraints"
@@ -50,7 +102,17 @@ components:
           format: int64
           description: "The unique ID of the event chain"
           example: 57
+        EventCode:
+          type: string
+          enum:
+            - SendRequest
+            - ReceiveResponse
+            - ReceiveRequest
+            - SendResponse
+          description: Describes the event that triggered the generation of a timing event
+          example: "SendRequest"
       required:
         - Timestamp
         - SenderID
         - EventID
+        - EventCode

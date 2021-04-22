@@ -8,14 +8,12 @@ import org.openapitools.client.api.MonitorApi;
 import org.openapitools.client.model.TimingMonitorData;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.threeten.bp.OffsetDateTime;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
 import java.net.SocketTimeoutException;
-
-import org.threeten.bp.OffsetDateTime;
 
 @SpringBootApplication
 public class TestCall {

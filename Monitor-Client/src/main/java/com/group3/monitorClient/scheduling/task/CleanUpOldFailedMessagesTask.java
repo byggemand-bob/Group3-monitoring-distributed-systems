@@ -4,11 +4,11 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import com.group3.monitorClient.configuration.ConfigurationManager;
-import com.group3.monitorClient.messenger.queue.PersistentSQLQueue;
+import com.group3.monitorClient.messenger.messages.SQLMessageManager;
 
 public class CleanUpOldFailedMessagesTask extends AbstractTask {
 
-	public static final String cleanupSQL = "DELETE FROM queue WHERE ToBeSent = 0 AND datetime(Timestamp) < datetime('now', ?)";
+	public static final String cleanupWhere = "datetime(Timestamp) < datetime('now', '-%d day')";
 	
 	/**
 	 * Constructor for the CleanUpOldFailedMessagesTask.
@@ -34,19 +34,21 @@ public class CleanUpOldFailedMessagesTask extends AbstractTask {
 		int daysToKeep = ConfigurationManager.getInstance().getPropertyAsInteger(ConfigurationManager.daysToKeepMessages);
 		
 		// Ensure that daysToKeep do not go below zero
-		daysToKeep = Math.max(0, daysToKeep);
+		final String whereClause = generateWhereClause(daysToKeep);
 		
-		PersistentSQLQueue sqlQueue = new PersistentSQLQueue(PersistentSQLQueue.queueDBPath, PersistentSQLQueue.queueDBFile);
-		int removedMessagesCount = sqlQueue.cleanupOldMessages(cleanupSQL, daysToKeep);		
+		SQLMessageManager failedMessageManager = new SQLMessageManager(SQLMessageManager.failed_message_table_name);
+		int removedMessagesCount = failedMessageManager.Delete(whereClause);
 		
 		if (removedMessagesCount > -1) {
 			System.out.println("Finished cleanup of old failed message, removed <" + removedMessagesCount + "> old messages...");			
 		} else {
 			System.err.println("Failed in running cleanup of old failed messages!!!");
 		}
-		
-		// Always remember to close connection
-		sqlQueue.CloseConnection();
+	}
+	
+	public String generateWhereClause(int daysToKeep) {
+		daysToKeep = Math.max(0, daysToKeep);
+		return String.format(cleanupWhere, daysToKeep);
 	}
 
 }

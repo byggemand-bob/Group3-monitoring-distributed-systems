@@ -1,11 +1,10 @@
 package com.group3.monitorClient.messenger.messages;
 
-import com.group3.monitorClient.controller.MonitorClientInterface;
+import com.group3.monitorClient.MonitorClientInterface;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.model.ErrorData;
 
 public class ErrorDataMessage implements MessageInterface{
-    //TODO: Make tests
     private ErrorData errorData;
     private int messageTypeID;
 
@@ -22,9 +21,9 @@ public class ErrorDataMessage implements MessageInterface{
 
     /* the message converts itself into an sql format, and saves itself using provided SQLManager */
     @Override
-    public void MakeSQL(SQLManager sqlManager) {
+    public void makeSQL(SQLMessageManager sqlMessageManager) {
         String blob = errorData.getHttpResponse() + separator + errorData.getErrorMessageType().ordinal() + separator + errorData.getComment();
-        sqlManager.InsertMessage("queue", errorData.getSenderID(), messageTypeID, errorData.getTimestamp().toString(),blob);
+        sqlMessageManager.InsertMessage(errorData.getSenderID(), messageTypeID, errorData.getTimestamp().toString(),blob);
     }
 
     public ErrorData getErrorData () {
@@ -34,5 +33,4 @@ public class ErrorDataMessage implements MessageInterface{
     public int getMessageTypeID () {
         return messageTypeID;
     }
-
 }

@@ -102,7 +102,17 @@ components:
           format: int64
           description: "The unique ID of the event chain"
           example: 57
+        EventCode:
+          type: string
+          enum:
+            - SendRequest
+            - ReceiveResponse
+            - ReceiveRequest
+            - SendResponse
+          description: Describes the event that triggered the generation of a timing event
+          example: "SendRequest"
       required:
         - Timestamp
         - SenderID
         - EventID
+        - EventCode
