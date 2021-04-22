@@ -1,7 +1,7 @@
 package com.group3.monitorServer.constraint.store;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
@@ -26,21 +26,14 @@ public class ConstraintImporter {
 	 * @param path The path the the file specifying the {@link Constraint}s for the Monitor Server.
 	 * 
 	 * @return A {@link ConstraintStore} containing all the {@link Constraint}s specified in the file.
+	 * @throws FileNotFoundException
 	 */
-	public ConstraintStore importConstraints(String path) {
-		
+	public ConstraintStore importConstraints(String path) throws FileNotFoundException {
 		ConstraintUserInputValidation inputValidation = new ConstraintUserInputValidation();
 		inputValidation.validate(path);
-
-		//the file is correct -- read all data from file and put into a array of strings
-		String[] constraints  = readData(path);
-
-		//convert String[] to ConstraintStore
-		//ConstraintStore constraintStore = convertData(constraints);
-		
-		//add each constraint to the constraintStore and returns it
-		//return constraintStore;
-		return null;
+		Constraint[] constraints  = readData(path);
+		ConstraintStore constraintStore = convertData(constraints);;
+		return constraintStore;
 	}
 	
 	/**
@@ -50,6 +43,7 @@ public class ConstraintImporter {
 	 */
 	public String getDefaultConstraintPath() {
 		//get the path in the configuration.properties (needs to be created)
+		//TODO do this!
 		throw new NotImplementedException();
 	}
 	
@@ -59,48 +53,22 @@ public class ConstraintImporter {
 	 * @param path The path to the {@link Constraint} specification file for import.
 	 * 
 	 * @return An array containing each {@link Constraint} encoded as a String.
+	 * @throws FileNotFoundException Throws an exception if the file cant be found using @param Path
 	 */
-	private String[] readData(String path) {
-		//read json and convert them to a string using private method convertData(String[] data)
-		
+	private Constraint[] readData(String path) throws FileNotFoundException {
 		Constraint[] constraints = null;	
 		String data = "";
-		
 		Gson gson = new Gson();
-
-
-		
-
-		try {
-
-			JsonReader reader2 = new JsonReader(new FileReader(path));
-
-			data = JsonParser.parseReader(reader2).toString();
-
-			constraints = gson.fromJson(data, Constraint[].class);
-
-			for (int i = 0; i< constraints.length; i++) {
-				System.out.println(constraints[i]);
-			}
-
+		JsonReader reader2 = new JsonReader(new FileReader(path));
+		data = JsonParser.parseReader(reader2).toString();
+		constraints = gson.fromJson(data, Constraint[].class);
+		if(constraints.length <= 0) {
+			//there is nothing in the array
+			//TODO maybe throw something instead of returning null?
+			return null;
 		}
-		catch (IOException e) {
-			//TODO return a custom error?
-		}
-
-
-
-		
-		//convert each constrint into a string[] and return it
-		
-
-
-		//TODO check if it is null before returning
-		return null;
-		
-		//open file and read it
-		//spilt the constraint into each string
-		//store them in a array[string]
+		//there is something in the array
+		return constraints;
 	}
 	
 	/**
@@ -110,20 +78,16 @@ public class ConstraintImporter {
 	 * 
 	 * @return A {@link ConstraintStore} containing information about the {@link Constraint}s encoded in the data.
 	 */
-	private ConstraintStore convertData(String[] data) {
-		//convert all strings into a ConstraintStore
-	
+	private ConstraintStore convertData(Constraint[] constraints) {	
 		ConstraintStore constraintStore = new ConstraintStore();
-		Constraint constraint;
-
-		//foreach string in string array
-		constraint = convertData(data[0]);
-		constraintStore.addConstraint(constraint);
-
-		//once done return the store
+		for (int i = 0; i < constraints.length; i++) {
+			constraintStore.addConstraint(constraints[i]);
+		}
 		return constraintStore;
 	}
 	
+
+	//TODO can be removed?
 	/**
 	 * Converts a single encoding of a {@link Constraint} into its class representation.
 	 * 
@@ -131,13 +95,17 @@ public class ConstraintImporter {
 	 * 
 	 * @return A {@link Constraint} instance based on the provided data.
 	 */
-	private Constraint convertData(String data) {
+	private Constraint convertData(Constraint data) {
+		//Constraint constraint = 
+		//	new Constraint(endpoint, max)
+		//		.withMin(min)
+		//		.withName(name)
+		//		.withDescription(description)
+		//		.withNodeID(nodeID);
+		
+		//return constraint;
 
-		String endpoint = "";
-		Integer max = 0;
-
-		Constraint constraint = new Constraint(endpoint, max);
-		return constraint;
+		return null;
 		//TODO Make sure min value cant be greater then max value.
 		
 		//convert a single line in the string array into a Constraint
