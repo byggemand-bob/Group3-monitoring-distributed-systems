@@ -1,6 +1,9 @@
 package com.group3.monitorServer.constraint.validator;
 
-import org.everit.json.schema.ArraySchema;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONArray;
@@ -8,28 +11,37 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 public class ConstraintUserInputValidation {
+
+	private final String schemaJSON = "..\\Monitor\\src\\main\\resources\\cstTemplates\\validation\\constraintSchema.json";
 	
 	public void validate(String jsonFilePath) {
 
+		InputStream schemaInputStream = null;
+		//TODO fix this 
+		InputStream dataInputStream = null;
 
-		//TODO change to use the method parameter path needs to be converted to stream
+		System.out.println(jsonFilePath);
+
+		try {
+			schemaInputStream = new FileInputStream(schemaJSON);
+			dataInputStream = new FileInputStream(jsonFilePath);
+		}
+		catch (FileNotFoundException e) {
+			System.err.println(e.getMessage());
+		}
+		
 		System.out.println("Started to validate JSON file");
-	    JSONObject jsonSchema = new JSONObject(new JSONTokener(ConstraintUserInputValidation.class.getResourceAsStream("/constraintSchema.json")));
+	    JSONObject jsonSchema = new JSONObject(schemaInputStream);
 		JSONArray jsonSubject = new JSONArray(new JSONTokener(ConstraintUserInputValidation.class.getResourceAsStream("/testData.json")));
 
-		SchemaLoader loader = SchemaLoader.builder()
-			.schemaJson(jsonSchema).draftV7Support().build();
-
-		
-		//ArraySchema arraySchema = SchemaLoader.builder();
-
+		SchemaLoader loader = SchemaLoader
+			.builder()
+				.schemaJson(jsonSchema)
+				.draftV7Support()
+				.build();
 
 	    Schema schema = loader.load().build();
 		schema.validate(jsonSubject);
-
-		//ArraySchema arraySchema = (ArraySchema) schema;
-
-	    //arraySchema.validate(jsonSubject);
 		System.out.println("The JSON file passed!");
 	}
 }
