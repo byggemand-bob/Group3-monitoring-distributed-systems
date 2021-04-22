@@ -1,4 +1,4 @@
-package com.group3.monitorClient.messenger.messages;
+package com.group3.monitorClient.messenger;
 
 import com.group3.monitorClient.controller.Controllable;
 import com.group3.monitorClient.messenger.messages.MessageInterface;
