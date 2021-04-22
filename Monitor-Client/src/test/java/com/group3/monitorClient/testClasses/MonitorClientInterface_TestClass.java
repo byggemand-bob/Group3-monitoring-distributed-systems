@@ -28,7 +28,7 @@ public class MonitorClientInterface_TestClass extends MonitorClientInterface {
     }
 
     @Override
-    public  int addErrorData (ErrorData errorData) throws ApiException {
+    public void addErrorData (ErrorData errorData) throws ApiException {
         return responseCode;
     }
 }

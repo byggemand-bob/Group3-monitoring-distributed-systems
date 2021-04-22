@@ -2,11 +2,11 @@ package com.group3.monitorClient.messenger.messages;
 
 import org.openapitools.client.model.ErrorData;
 import org.openapitools.client.model.TimingMonitorData;
+import org.threeten.bp.OffsetDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class MessageCreator {
     /* receives a ResultSet, representing an message and converts it back into a message structure */

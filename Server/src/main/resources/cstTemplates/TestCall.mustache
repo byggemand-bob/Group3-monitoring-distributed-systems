@@ -8,7 +8,7 @@ import org.openapitools.client.api.MonitorApi;
 import org.openapitools.client.model.TimingMonitorData;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import java.time.OffsetDateTime;
+import org.threeten.bp.OffsetDateTime;
 
 import java.io.BufferedReader;
 import java.io.IOException;
