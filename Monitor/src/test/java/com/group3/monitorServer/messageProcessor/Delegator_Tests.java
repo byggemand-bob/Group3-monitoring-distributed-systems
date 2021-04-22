@@ -3,7 +3,6 @@ package com.group3.monitorServer.messageProcessor;
 import com.group3.monitorServer.testClasses.AbstractSQLMessageManagerTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import com.group3.monitorServer.MessageProcessor.Delegator;
 
 public class Delegator_Tests extends AbstractSQLMessageManagerTest {
     /* Tests the control functions start(), stop(), pause() and resume() */

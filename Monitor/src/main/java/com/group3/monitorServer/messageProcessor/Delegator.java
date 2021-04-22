@@ -1,6 +1,6 @@
 package com.group3.monitorServer.messageProcessor;
 
-import com.group3.monitorServer.MessageProcessor.TimingMonitorDataMessageID;
+import com.group3.monitorServer.messageProcessor.TimingMonitorDataMessageID;
 import com.group3.monitorServer.messageProcessor.workers.ErrorMessageWorker;
 import com.group3.monitorServer.messageProcessor.workers.TimingMonitorDataWorker;
 import com.group3.monitorServer.controller.Controllable;

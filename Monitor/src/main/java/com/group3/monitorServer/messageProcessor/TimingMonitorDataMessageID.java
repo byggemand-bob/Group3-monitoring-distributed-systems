@@ -1,4 +1,4 @@
-package com.group3.monitorServer.MessageProcessor;
+package com.group3.monitorServer.messageProcessor;
 
 import com.group3.monitorServer.messages.TimingMonitorDataMessage;
 

@@ -4,6 +4,7 @@ import com.group3.monitorServer.testClasses.AbstractSQLMessageManagerTest;
 import com.group3.monitorServer.testClasses.TrueFalseRequirement_TestClass;
 import com.group3.monitorServer.controller.Controller;
 import com.group3.monitorServer.messages.*;
+import com.group3.monitorServer.messageProcessor.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openapitools.model.TimingMonitorData;
