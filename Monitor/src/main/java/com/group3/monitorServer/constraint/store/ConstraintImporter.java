@@ -2,6 +2,9 @@ package com.group3.monitorServer.constraint.store;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+
+import javax.validation.ValidationException;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
@@ -26,9 +29,9 @@ public class ConstraintImporter {
 	 * @param path The path the the file specifying the {@link Constraint}s for the Monitor Server.
 	 * 
 	 * @return A {@link ConstraintStore} containing all the {@link Constraint}s specified in the file.
-	 * @throws FileNotFoundException
+	 * @throws IOException is thrown if there was a I/O operations that failed
 	 */
-	public ConstraintStore importConstraints(String path) throws FileNotFoundException {
+	public ConstraintStore importConstraints(String path) throws IOException {
 		ConstraintUserInputValidation inputValidation = new ConstraintUserInputValidation();
 		inputValidation.validate(path);
 		Constraint[] constraints  = readData(path);
@@ -52,8 +55,8 @@ public class ConstraintImporter {
 	 * 
 	 * @param path The path to the {@link Constraint} specification file for import.
 	 * 
-	 * @return An array containing each {@link Constraint} encoded as a String.
-	 * @throws FileNotFoundException Throws an exception if the file cant be found using @param Path
+	 * @return An array containing each {@link Constraint}.
+	 * @throws FileNotFoundException Throws an exception if the file can't be found using @param Path
 	 */
 	private Constraint[] readData(String path) throws FileNotFoundException {
 		Constraint[] constraints = null;	
@@ -62,12 +65,7 @@ public class ConstraintImporter {
 		JsonReader reader2 = new JsonReader(new FileReader(path));
 		data = JsonParser.parseReader(reader2).toString();
 		constraints = gson.fromJson(data, Constraint[].class);
-		if(constraints.length <= 0) {
-			//there is nothing in the array
-			//TODO maybe throw something instead of returning null?
-			return null;
-		}
-		//there is something in the array
+
 		return constraints;
 	}
 	
@@ -81,33 +79,21 @@ public class ConstraintImporter {
 	private ConstraintStore convertData(Constraint[] constraints) {	
 		ConstraintStore constraintStore = new ConstraintStore();
 		for (int i = 0; i < constraints.length; i++) {
-			constraintStore.addConstraint(constraints[i]);
+			Constraint constraint = constraints[i];
+
+			if(constraint.getMin() != null) {
+				if(constraint.getMax() < constraint.getMin()) {
+					System.out.println(constraint.toString());
+					throw new ValidationException(constraint.toString() + " has a max value that is less than min value, which is not allowed");
+				}			
+			}
+
+			if(constraint.getMin() == null || constraint.getMin() != null && constraint.getMax() >= constraint.getMin()) {
+				System.out.println(constraint.toString());
+				constraintStore.addConstraint(constraint);
+			}
 		}
+
 		return constraintStore;
-	}
-	
-
-	//TODO can be removed?
-	/**
-	 * Converts a single encoding of a {@link Constraint} into its class representation.
-	 * 
-	 * @param data The {@link Constraint} encoded as a String.
-	 * 
-	 * @return A {@link Constraint} instance based on the provided data.
-	 */
-	private Constraint convertData(Constraint data) {
-		//Constraint constraint = 
-		//	new Constraint(endpoint, max)
-		//		.withMin(min)
-		//		.withName(name)
-		//		.withDescription(description)
-		//		.withNodeID(nodeID);
-		
-		//return constraint;
-
-		return null;
-		//TODO Make sure min value cant be greater then max value.
-		
-		//convert a single line in the string array into a Constraint
 	}
 }
