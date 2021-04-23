@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javax.validation.ValidationException;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
@@ -43,8 +45,7 @@ public class ConstraintImporter {
 	 * @return The path to the {@link Constraint} specification as defined in the configuration.properties file.
 	 */
 	public String getDefaultConstraintPath() {
-		
-		String constraintsSpecificationFilePath = "";
+		String constraintsSpecificationFilePath = null;
 		
 		try {
 			constraintsSpecificationFilePath = ConfigurationManager.getInstance().getProperty(ConfigurationManager.constraintsSpecificationFilePath);
@@ -100,7 +101,9 @@ public class ConstraintImporter {
 	 */
 	private boolean isMaxGreaterThanMin(Integer min, Integer max) {
 		if (min == null) {return true;} //if there is not set a min value return true
-		if (max < min) { return false;} //if max is less than min return false
+		if (max < min) { //if max is less than min throw a ValidationException back
+			throw new ValidationException("The constraint max value is less than min value, which is not allowed");
+			} 
 		
 		return true; //max is grater than min return true
 	}
