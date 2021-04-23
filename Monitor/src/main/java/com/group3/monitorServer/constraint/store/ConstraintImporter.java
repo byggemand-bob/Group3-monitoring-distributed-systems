@@ -4,15 +4,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import javax.validation.ValidationException;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import com.group3.monitorClient.configuration.ConfigurationManager;
 import com.group3.monitorServer.constraint.Constraint;
 import com.group3.monitorServer.constraint.validator.ConstraintUserInputValidation;
 
-import org.apache.commons.lang3.NotImplementedException;
 
 /**
  * Responsible for importing the {@link Constraint}s specified in a file into the Monitor Server to make them available to use in the system when analyzing the data.
@@ -45,9 +43,14 @@ public class ConstraintImporter {
 	 * @return The path to the {@link Constraint} specification as defined in the configuration.properties file.
 	 */
 	public String getDefaultConstraintPath() {
-		//get the path in the configuration.properties (needs to be created)
-		//TODO do this!
-		throw new NotImplementedException();
+		
+		String constraintsSpecificationFilePath = "";
+		
+		try {
+			constraintsSpecificationFilePath = ConfigurationManager.getInstance().getProperty(ConfigurationManager.constraintsSpecificationFilePath);
+		} catch (Exception e){}
+		
+		return constraintsSpecificationFilePath;
 	}
 	
 	/**
@@ -81,19 +84,24 @@ public class ConstraintImporter {
 		for (int i = 0; i < constraints.length; i++) {
 			Constraint constraint = constraints[i];
 
-			if(constraint.getMin() != null) {
-				if(constraint.getMax() < constraint.getMin()) {
-					System.out.println(constraint.toString());
-					throw new ValidationException(constraint.toString() + " has a max value that is less than min value, which is not allowed");
-				}			
-			}
-
-			if(constraint.getMin() == null || constraint.getMin() != null && constraint.getMax() >= constraint.getMin()) {
-				System.out.println(constraint.toString());
+			if(isMaxGreaterThanMin(constraint.getMin(), constraint.getMax())) {
 				constraintStore.addConstraint(constraint);
 			}
 		}
 
 		return constraintStore;
+	}
+	
+	/**
+	 * Method to check if the {@link Constraint} min value is less then the max value.
+	 * @param min is the min value of the {@link Constraint}.
+	 * @param max is the max value of the {@link Constraint}.
+	 * @return return true if min value is less than max value, if that is not true it will return false.
+	 */
+	private boolean isMaxGreaterThanMin(Integer min, Integer max) {
+		if (min == null) {return true;} //if there is not set a min value return true
+		if (max < min) { return false;} //if max is less than min return false
+		
+		return true; //max is grater than min return true
 	}
 }
