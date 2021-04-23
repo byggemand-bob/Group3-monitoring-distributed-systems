@@ -4,7 +4,7 @@ import com.group3.monitorClient.AbstractSQLMessageManagerTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openapitools.client.model.TimingMonitorData;
-import org.threeten.bp.OffsetDateTime;
+import java.time.OffsetDateTime;
 
 import java.sql.ResultSet;
 

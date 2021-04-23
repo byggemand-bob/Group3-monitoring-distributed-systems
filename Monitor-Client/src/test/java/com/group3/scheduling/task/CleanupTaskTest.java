@@ -8,7 +8,7 @@ import org.openapitools.client.model.ErrorData;
 import org.openapitools.client.model.ErrorData.ErrorMessageTypeEnum;
 import org.openapitools.client.model.TimingMonitorData;
 import org.openapitools.client.model.TimingMonitorData.EventCodeEnum;
-import org.threeten.bp.OffsetDateTime;
+import java.time.OffsetDateTime;
 
 import com.group3.monitorClient.AbstractSQLMessageManagerTest;
 import com.group3.monitorClient.messenger.messages.MessageCreator;
