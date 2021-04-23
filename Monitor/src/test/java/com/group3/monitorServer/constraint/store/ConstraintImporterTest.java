@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.ValidationException;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +18,7 @@ import com.group3.monitorServer.constraint.ConstraintKey;
 
 public class ConstraintImporterTest {
 	
-	private final String path = ".."+ File.separator + "Monitor"+ File.separator +"src"+ File.separator +"test"+ File.separator +"java"+ File.separator +"com"+ File.separator +"group3"+ File.separator +"monitorServer"+ File.separator +"constraint"+ File.separator +"validator"+ File.separator +"testFiles"+ File.separator +"";
+	private final String path = ".."+ File.separator + "Monitor"+ File.separator +"src"+ File.separator +"main"+ File.separator +"resources"+ File.separator +"validation"+ File.separator +"testFiles"+ File.separator +"";
 	ConstraintImporter importer = new ConstraintImporter();
 	ConstraintStore constraintStore = new ConstraintStore();
 
@@ -40,14 +43,11 @@ public class ConstraintImporterTest {
 	@Test
 	void importConstraintsWithMaxLessThanMin() throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		//setup
-		final String file = path + "MaxLessThanMin.json";
-		final int expected = 0;
-		int SizeOfConstraintStore = 0;
-		//act
-		constraintStore = importer.importConstraints(file);
-		SizeOfConstraintStore = GetConstraintHashMap().size();
+		final String file = path + "MaxLessThanMin.json";		
 		//assert
-		assertEquals(expected, SizeOfConstraintStore);
+		Assertions.assertThrows(ValidationException.class, () -> {
+			constraintStore = importer.importConstraints(file);
+		});
 	}
 	
 	@Test

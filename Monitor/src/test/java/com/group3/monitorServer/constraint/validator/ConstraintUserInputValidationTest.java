@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 public class ConstraintUserInputValidationTest {
 	
-	private final String path = ".."+ File.separator + "Monitor"+ File.separator +"src"+ File.separator +"test"+ File.separator +"java"+ File.separator +"com"+ File.separator +"group3"+ File.separator +"monitorServer"+ File.separator +"constraint"+ File.separator +"validator"+ File.separator +"testFiles"+ File.separator +"";
+	private final String path = ".."+ File.separator + "Monitor"+ File.separator +"src"+ File.separator +"main"+ File.separator +"resources"+ File.separator +"validation"+ File.separator +"testFiles"+ File.separator +"";
 	ConstraintUserInputValidation inputValidation = new ConstraintUserInputValidation();
 	
 	@Test
