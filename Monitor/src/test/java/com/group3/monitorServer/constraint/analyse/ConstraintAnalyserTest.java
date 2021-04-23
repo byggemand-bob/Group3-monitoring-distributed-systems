@@ -1,16 +1,16 @@
 package com.group3.monitorServer.constraint.analyse;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.group3.monitorServer.constraint.Constraint;
+import com.group3.monitorServer.constraint.analyze.ConstraintAnalyzer;
+import com.group3.monitorServer.constraint.store.ConstraintStore;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.OffsetDateTime;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import com.group3.monitorServer.constraint.Constraint;
-import com.group3.monitorServer.constraint.analyze.ConstraintAnalyzer;
-import com.group3.monitorServer.constraint.store.ConstraintStore;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConstraintAnalyserTest {
 	

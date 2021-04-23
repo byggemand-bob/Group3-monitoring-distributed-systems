@@ -1,8 +1,7 @@
 package com.group3.monitorServer.constraint.store;
 
-import org.apache.commons.lang3.NotImplementedException;
-
 import com.group3.monitorServer.constraint.Constraint;
+import org.apache.commons.lang3.NotImplementedException;
 
 /**
  * Responsible for importing the {@link Constraint}s specified in a file into the Monitor Server to make them available to use in the system when analyzing the data.

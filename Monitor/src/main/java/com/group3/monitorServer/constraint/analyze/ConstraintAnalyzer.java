@@ -1,11 +1,11 @@
 package com.group3.monitorServer.constraint.analyze;
 
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
-
 import com.group3.monitorServer.constraint.Constraint;
 import com.group3.monitorServer.constraint.ConstraintKey;
 import com.group3.monitorServer.constraint.store.ConstraintStore;
+
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 
 /**
  * Is the class responsible for analyzing the data that are received by the Monitor Server.
