@@ -1,7 +1,5 @@
 package com.group3.monitorServer.constraint.validator;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.FileNotFoundException;
 
 import org.everit.json.schema.ValidationException;
@@ -10,61 +8,60 @@ import org.junit.jupiter.api.Test;
 
 public class ConstraintUserInputValidationTest {
 	
-	private final String data = "..\\Monitor\\src\\test\\java\\com\\group3\\monitorServer\\constraint\\validator\\testFiles\\";
+	private final String path = "..\\Monitor\\src\\test\\java\\com\\group3\\monitorServer\\constraint\\validator\\testFiles\\";
 	ConstraintUserInputValidation inputValidation = new ConstraintUserInputValidation();
 	
 	@Test
 	void validateCorrectFile() throws FileNotFoundException {
 		//setup
-		final String fileName = "CorrectData.json";
+		final String file = path + "CorrectData.json";
 		//act
-		inputValidation.validate(data + fileName);
-		
+		inputValidation.validate(file);
 	}
 	
 	@Test
 	void validateIncorrectFile() throws FileNotFoundException {
 		//setup
-		final String fileName = "InCorrectData.json";
+		final String file = path + "InCorrectData.json";
 		//assert
 		Assertions.assertThrows(ValidationException.class, () -> {
-			inputValidation.validate(data + fileName);
+			inputValidation.validate(file);
 		});
 	}
 	
 	@Test
 	void ValidateEmptyFile() throws FileNotFoundException {
 		//setup
-		final String fileName = "EmptyArrayData.json";
+		final String file = path + "EmptyArrayData.json";
 		//act
-		inputValidation.validate(data + fileName);
+		inputValidation.validate(file);
 	}
 	
 	@Test
 	void ValidateCorrectFileWithOptionalValue() throws FileNotFoundException {
 		//setup
-		final String fileName = "CorrectDataWithOptionalValue.json";
+		final String file = path + "CorrectDataWithOptionalValue.json";
 		//act
-		inputValidation.validate(data + fileName);
+		inputValidation.validate(file);
 	}
 	
 	@Test
 	void ValidateInCorrectFileWithOptionalValue() throws FileNotFoundException {
 		//setup
-		final String fileName = "InCorrectDataWithOptionalValue.json";
+		final String file = path + "InCorrectDataWithOptionalValue.json";
 		//assert
 		Assertions.assertThrows(ValidationException.class, () -> {
-			inputValidation.validate(data + fileName);
+			inputValidation.validate(file);
 		});
 	}
 	
 	@Test
 	void ValidateCantFindFile() throws FileNotFoundException {
 		//setup
-		final String fileName = "CantFindThisFile.json";
+		final String file = path + "CantFindThisFile.json";
 		//assert
 		Assertions.assertThrows(FileNotFoundException.class, () -> {
-			inputValidation.validate(data + fileName);
+			inputValidation.validate(file);
 		});
 	}
 }
