@@ -1,5 +1,6 @@
 package com.group3.monitorServer.constraint.validator;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 import org.everit.json.schema.ValidationException;
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 public class ConstraintUserInputValidationTest {
 	
-	private final String path = "..\\Monitor\\src\\test\\java\\com\\group3\\monitorServer\\constraint\\validator\\testFiles\\";
+	private final String path = ".."+ File.separator + "Monitor"+ File.separator +"src"+ File.separator +"test"+ File.separator +"java"+ File.separator +"com"+ File.separator +"group3"+ File.separator +"monitorServer"+ File.separator +"constraint"+ File.separator +"validator"+ File.separator +"testFiles"+ File.separator +"";
 	ConstraintUserInputValidation inputValidation = new ConstraintUserInputValidation();
 	
 	@Test
