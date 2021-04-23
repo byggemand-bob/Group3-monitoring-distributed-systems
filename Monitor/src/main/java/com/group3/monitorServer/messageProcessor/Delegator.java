@@ -1,12 +1,11 @@
 package com.group3.monitorServer.messageProcessor;
 
-import com.group3.monitorServer.messageProcessor.TimingMonitorDataMessageID;
+import com.group3.monitorServer.controller.Controllable;
+import com.group3.monitorServer.messageProcessor.notifier.Notifier;
 import com.group3.monitorServer.messageProcessor.workers.ErrorMessageWorker;
 import com.group3.monitorServer.messageProcessor.workers.TimingMonitorDataWorker;
-import com.group3.monitorServer.controller.Controllable;
 import com.group3.monitorServer.messages.*;
 import org.openapitools.model.TimingMonitorData;
-import com.group3.monitorServer.messages.ErrorDataMessage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,12 +14,14 @@ public class Delegator implements Controllable {
 
     private final SQLMessageManager sqlMessageManager;
     private final MessageCreator messageCreator = new MessageCreator();
+    private final Notifier notifier;
     private boolean running = false;
     private boolean paused = false;
     private Thread thread = null;
 
-    public Delegator(SQLMessageManager sqlMessageManager) {
+    public Delegator(SQLMessageManager sqlMessageManager, Notifier notifier) {
         this.sqlMessageManager = sqlMessageManager;
+        this.notifier = notifier;
     }
 
     @Override
@@ -76,6 +77,7 @@ public class Delegator implements Controllable {
                             sqlMessageManager.UpdateInUse(allMessages.getInt("ID"), true);
                             sqlMessageManager.UpdateInUse(matchingMessage.id, true);
                             new Thread(new TimingMonitorDataWorker(sqlMessageManager,
+                                                                   notifier,
                                                                    firstMessage,
                                                                    allMessages.getInt("ID"),
                                                                    secondMessage,
@@ -83,6 +85,7 @@ public class Delegator implements Controllable {
                         }
                     } else if(allMessages.getInt("MessageType") == MessageTypeID.ErrorData.ordinal()){
                         new Thread(new ErrorMessageWorker(sqlMessageManager,
+                                                          notifier,
                                                           (ErrorDataMessage) messageCreator.MakeMessageFromSQL(allMessages),
                                                           allMessages.getInt("ID"))).start();
                     }

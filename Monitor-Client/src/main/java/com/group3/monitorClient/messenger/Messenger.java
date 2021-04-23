@@ -142,7 +142,7 @@ public class Messenger implements MessengerInterface {
                             errorData.setTimestamp(OffsetDateTime.now());
                             errorData.setSenderID(senderID);
                             errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.NOCONNECTION);
-                            errorData.setComment("No connection to monitor server - start: " + errorData.getTimestamp().toString() + "\n");
+                            errorData.setComment("No connection to monitor server - start: " + errorData.getTimestamp().toString());
                         }
                     } else {
                         try {
@@ -162,7 +162,7 @@ public class Messenger implements MessengerInterface {
 
                 /* If a SocketTimeout occurred and connection is re-established, complete the noConnection message and queue it */
                 if (socketTimeout && !errorOccurrence) {
-                    errorData.setComment(errorData.getComment() + "Connection re-established: " + OffsetDateTime.now().toString());
+                    errorData.setComment(errorData.getComment() + " Connection re-established: " + OffsetDateTime.now().toString());
                     MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
                     errorDataMessage.makeSQL(sqlMessageManager);
                     socketTimeout = false;
