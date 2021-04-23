@@ -1,5 +1,6 @@
 package com.group3.monitorServer.constraint.validator;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -17,7 +18,7 @@ import org.json.JSONTokener;
  */
 public class ConstraintUserInputValidation {
 
-	private final String schemaJSON = "..\\Monitor\\src\\main\\resources\\validation\\constraintSchema.json";
+	private final String schemaJSON = ".."+ File.separator +"Monitor"+ File.separator +"src"+ File.separator +"main"+ File.separator +"resources"+ File.separator +"validation"+ File.separator +"constraintSchema.json";
 	
 	/**
 	 * Validate the JSON specification file against the schema
