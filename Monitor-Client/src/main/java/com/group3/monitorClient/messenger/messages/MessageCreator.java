@@ -9,8 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MessageCreator {
-
-
     /* receives a ResultSet, representing an message and converts it back into a message structure */
     public MessageInterface MakeMessageFromSQL(ResultSet rs){
         int TypeID = -1;
@@ -55,6 +53,8 @@ public class MessageCreator {
             timingMonitorData.setTargetEndpoint(blobSplit[0]);
 
             timingMonitorData.setEventID(Long.valueOf(blobSplit[1]));
+
+            timingMonitorData.setEventCode(TimingMonitorData.EventCodeEnum.values()[Integer.parseInt(blobSplit[2])]);
 
             message = MakeMessage(timingMonitorData);
         } catch (SQLException e) {
