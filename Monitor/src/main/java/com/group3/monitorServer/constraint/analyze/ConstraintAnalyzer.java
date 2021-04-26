@@ -38,7 +38,7 @@ public class ConstraintAnalyzer {
 	 * @return True if difference between timestamps are within the boundaries of the {@link Constraint} or if a {@link Constraint} is not defined for the endpoint.
 	 * False if difference between timestamps are not within the defined minimum (optional) and maximum differences defined for the {@link Constraint} (both minimum and maximum is inclusive).
 	 */
-	public boolean analyzeTimings(OffsetDateTime timestampOne, OffsetDateTime timestampTwo, String endpoint) {
+	public ConstraintAnalysisDetails analyzeTimings(OffsetDateTime timestampOne, OffsetDateTime timestampTwo, String endpoint) {
 		return analyzeTimings(timestampOne, timestampTwo, endpoint, false , null);
 	}
 	
@@ -56,22 +56,23 @@ public class ConstraintAnalyzer {
 	 * @return True if difference between timestamps are within the boundaries of the {@link Constraint} or if a {@link Constraint} is not defined for the endpoint.
 	 * False if difference between timestamps are not within the defined minimum (optional) and maximum differences defined for the {@link Constraint} (both minimum and maximum is inclusive).
 	 */
-	public boolean analyzeTimings(OffsetDateTime timestampOne, OffsetDateTime timestampTwo, String endpoint, boolean checkForGeneralConstraint, Integer nodeID) {
+	public ConstraintAnalysisDetails analyzeTimings(OffsetDateTime timestampOne, OffsetDateTime timestampTwo, String endpoint, boolean checkForGeneralConstraint, Integer nodeID) {		
 		// Check if there is a constraint
 		ConstraintKey key = new ConstraintKey(endpoint, nodeID);
 		Constraint constraint = constraints.findConstraint(key, checkForGeneralConstraint);
 		
 		//  If constraint does not exists then return true
 		if (constraint == null) {
-			return true;
+			return new ConstraintAnalysisDetails(false, constraint, 0L);
 		}
 		
 		// Calculate the difference between the timestamps
 		long diffInMillis = calculateDifference(timestampOne, timestampTwo);
 		
 		// Check whether the difference conforms to the constraint
-		return (constraint.getMin() == null || constraint.getMin() <= diffInMillis) &&
+		final boolean withinBounds = (constraint.getMin() == null || constraint.getMin() <= diffInMillis) &&
 				constraint.getMax() >= diffInMillis;
+		return new ConstraintAnalysisDetails(!withinBounds, constraint, diffInMillis);
 	}
 	
 	/**
