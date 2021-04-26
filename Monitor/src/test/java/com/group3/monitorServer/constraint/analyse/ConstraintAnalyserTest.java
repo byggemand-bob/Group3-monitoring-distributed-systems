@@ -1,6 +1,7 @@
 package com.group3.monitorServer.constraint.analyse;
 
 import com.group3.monitorServer.constraint.Constraint;
+import com.group3.monitorServer.constraint.analyze.ConstraintAnalysisDetails;
 import com.group3.monitorServer.constraint.analyze.ConstraintAnalyzer;
 import com.group3.monitorServer.constraint.store.ConstraintStore;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,8 @@ class ConstraintAnalyserTest {
 		OffsetDateTime second = first.minusMinutes(3L);
 
 		//Act
-		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		ConstraintAnalysisDetails details = analyzer.analyzeTimings(first, second, endpoint);
+		boolean isChecked = !details.isViolated();
 		
 		//Assert
 		assertTrue(isChecked);
@@ -50,7 +52,8 @@ class ConstraintAnalyserTest {
 		store.addConstraint(constraint);
 		
 		//Act
-		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint, false, nodeID);
+		ConstraintAnalysisDetails details = analyzer.analyzeTimings(first, second, endpoint, false, nodeID);
+		boolean isChecked = !details.isViolated();
 		
 		//Assert
 		assertTrue(isChecked);
@@ -67,7 +70,8 @@ class ConstraintAnalyserTest {
 		store.addConstraint(constraint);
 		
 		//Act
-		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		ConstraintAnalysisDetails details = analyzer.analyzeTimings(first, second, endpoint);
+		boolean isChecked = !details.isViolated();
 		
 		//Assert
 		assertTrue(isChecked);
@@ -85,7 +89,8 @@ class ConstraintAnalyserTest {
 		store.addConstraint(constraint);
 		
 		//Act
-		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		ConstraintAnalysisDetails details = analyzer.analyzeTimings(first, second, endpoint);
+		boolean isChecked = !details.isViolated();
 		
 		//Assert
 		assertTrue(isChecked);
@@ -103,7 +108,8 @@ class ConstraintAnalyserTest {
 		store.addConstraint(constraint);
 		
 		//Act
-		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		ConstraintAnalysisDetails details = analyzer.analyzeTimings(first, second, endpoint);
+		boolean isChecked = !details.isViolated();
 		
 		//Assert
 		assertFalse(isChecked);
@@ -121,7 +127,8 @@ class ConstraintAnalyserTest {
 		store.addConstraint(constraint);
 		
 		//Act
-		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		ConstraintAnalysisDetails details = analyzer.analyzeTimings(first, second, endpoint);
+		boolean isChecked = !details.isViolated();
 		
 		//Assert
 		assertTrue(isChecked);
@@ -139,7 +146,8 @@ class ConstraintAnalyserTest {
 		store.addConstraint(constraint);
 		
 		//Act
-		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		ConstraintAnalysisDetails details = analyzer.analyzeTimings(first, second, endpoint);
+		boolean isChecked = !details.isViolated();
 		
 		//Assert
 		assertTrue(isChecked);
@@ -157,7 +165,8 @@ class ConstraintAnalyserTest {
 		store.addConstraint(constraint);
 		
 		//Act
-		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		ConstraintAnalysisDetails details = analyzer.analyzeTimings(first, second, endpoint);
+		boolean isChecked = !details.isViolated();
 		
 		//Assert
 		assertTrue(isChecked);
@@ -174,7 +183,8 @@ class ConstraintAnalyserTest {
 		store.addConstraint(constraint);
 		
 		//Act
-		boolean isChecked = analyzer.analyzeTimings(first, second, endpoint);
+		ConstraintAnalysisDetails details = analyzer.analyzeTimings(first, second, endpoint);
+		boolean isChecked = !details.isViolated();
 		
 		//Assert
 		assertFalse(isChecked);
