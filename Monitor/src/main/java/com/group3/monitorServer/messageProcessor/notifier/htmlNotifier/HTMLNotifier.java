@@ -1,5 +1,7 @@
 package com.group3.monitorServer.messageProcessor.notifier.htmlNotifier;
 
+import com.group3.monitorServer.constraint.Constraint;
+import com.group3.monitorServer.constraint.analyze.ConstraintAnalysisDetails;
 import com.group3.monitorServer.constraint.analyze.ConstraintAnalyzer;
 import com.group3.monitorServer.constraint.store.ConstraintStore;
 import com.group3.monitorServer.messageProcessor.notifier.Notifier;
@@ -28,17 +30,32 @@ public class HTMLNotifier implements Notifier {
 
     @Override
     public boolean timingViolation(TimingMonitorData msg1, TimingMonitorData msg2) {
-        //TODO: make an informative message
+        ConstraintAnalysisDetails constDetails = constAnalyzer.analyzeTimings(msg1.getTimestamp(),
+                                                                              msg2.getTimestamp(),
+                                                                              msg1.getTargetEndpoint());
 
-        if(constAnalyzer.analyzeTimings(msg1.getTimestamp(), msg2.getTimestamp(), msg1.getTargetEndpoint())){
-            return true;
+        if(constDetails.isViolated()){
+            Constraint constraint = constDetails.getConstraint();
+            StringBuilder Message = new StringBuilder("Timing constraint violation: ");
+
+            if(constraint.getName() != null){
+                Message.append("with name <" + constDetails.getConstraint().getName() + "> and ");
+            }
+
+            Message.append("for target-endpoint <" + constraint.getEndpoint() + ">, ");
+            Message.append("Details: time difference = <" + constDetails.getDiff() + ">, ");
+            Message.append("bounds ");
+
+            if(constraint.getMin() != null){
+                Message.append("min: <" + constraint.getMin() + ">, ");
+            }
+
+            Message.append("max: <" + constraint.getMax() + ">");
+
+            return htmlWriter.AddMessage(Message.toString());
         } else {
-            String Message = "node: \"" + msg1.getSenderID() + "\" violated timing constraints when contacting node: \"" +
-                             msg1.getTargetEndpoint() + "\". Response time was = \"";
-            
+            return true;
         }
-
-        return true;
     }
 
     @Override
