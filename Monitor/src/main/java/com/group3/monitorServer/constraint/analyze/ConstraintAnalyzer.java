@@ -35,8 +35,7 @@ public class ConstraintAnalyzer {
 	 * @param timestampTwo The second timestamp used for analysing the timing for a call.
 	 * @param endpoint The endpoint path the call to analyze was made to.
 	 * 
-	 * @return True if difference between timestamps are within the boundaries of the {@link Constraint} or if a {@link Constraint} is not defined for the endpoint.
-	 * False if difference between timestamps are not within the defined minimum (optional) and maximum differences defined for the {@link Constraint} (both minimum and maximum is inclusive).
+	 * @return An instance of {@link ConstraintAnalysisDetails} which includes all information about the result of the analysis
 	 */
 	public ConstraintAnalysisDetails analyzeTimings(OffsetDateTime timestampOne, OffsetDateTime timestampTwo, String endpoint) {
 		return analyzeTimings(timestampOne, timestampTwo, endpoint, false , null);
@@ -53,8 +52,7 @@ public class ConstraintAnalyzer {
 	 * @param checkForGeneralConstraint Determines if a {@link Constraint} could not be found for a specific node, if instead a general {@link Constraint} for the endpoint should be searched for.
 	 * @param nodeID The ID of the node the call was received on.
 	 * 
-	 * @return True if difference between timestamps are within the boundaries of the {@link Constraint} or if a {@link Constraint} is not defined for the endpoint.
-	 * False if difference between timestamps are not within the defined minimum (optional) and maximum differences defined for the {@link Constraint} (both minimum and maximum is inclusive).
+	 * @return An instance of {@link ConstraintAnalysisDetails} which includes all information about the result of the analysis
 	 */
 	public ConstraintAnalysisDetails analyzeTimings(OffsetDateTime timestampOne, OffsetDateTime timestampTwo, String endpoint, boolean checkForGeneralConstraint, Integer nodeID) {		
 		// Check if there is a constraint
