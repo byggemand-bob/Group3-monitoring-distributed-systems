@@ -1,29 +1,42 @@
 package com.group3.monitorServer.messageProcessor.notifier.htmlNotifier;
 
+import com.group3.monitorServer.constraint.analyze.ConstraintAnalyzer;
+import com.group3.monitorServer.constraint.store.ConstraintStore;
 import com.group3.monitorServer.messageProcessor.notifier.Notifier;
 import org.openapitools.model.ErrorData;
 import org.openapitools.model.TimingMonitorData;
 
 public class HTMLNotifier implements Notifier {
     private final HTMLWriter htmlWriter;
+    private final ConstraintAnalyzer constAnalyzer;
 
     /*
      * Checks the user-specification file for html location
      * otherwise creates html in default location
      * "src/main/resources/Warnings.html"
      */
-    public HTMLNotifier() {
+    public HTMLNotifier(ConstraintStore constStore) {
         htmlWriter = new HTMLWriter();
+        constAnalyzer = new ConstraintAnalyzer(constStore);
     }
 
     /* Creates a html at the specified path */
-    public HTMLNotifier(String htmlPath) {
+    public HTMLNotifier(String htmlPath, ConstraintStore constStore) {
         htmlWriter = new HTMLWriter(htmlPath);
+        constAnalyzer = new ConstraintAnalyzer(constStore);
     }
 
     @Override
     public boolean timingViolation(TimingMonitorData msg1, TimingMonitorData msg2) {
         //TODO: make an informative message
+
+        if(constAnalyzer.analyzeTimings(msg1.getTimestamp(), msg2.getTimestamp(), msg1.getTargetEndpoint())){
+            return true;
+        } else {
+            String Message = "node: \"" + msg1.getSenderID() + "\" violated timing constraints when contacting node: \"" +
+                             msg1.getTargetEndpoint() + "\". Response time was = \"";
+            
+        }
 
         return true;
     }
@@ -48,7 +61,7 @@ public class HTMLNotifier implements Notifier {
                               "\" at " + errorData.getTimestamp() + " o'clock";
 
         return htmlWriter.AddMessage(errorMessage);
-    }
+}
 
     private boolean createNoConnectionMessage(ErrorData errorData) {
         String errorMessage = "Node \"" +
