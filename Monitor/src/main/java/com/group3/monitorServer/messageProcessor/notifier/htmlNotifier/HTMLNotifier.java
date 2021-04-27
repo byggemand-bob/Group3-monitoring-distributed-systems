@@ -7,6 +7,11 @@ import com.group3.monitorServer.constraint.store.ConstraintStore;
 import com.group3.monitorServer.messageProcessor.notifier.Notifier;
 import org.openapitools.model.ErrorData;
 import org.openapitools.model.TimingMonitorData;
+import java.time.format.DateTimeFormatter;
+
+
+import java.time.OffsetDateTime;
+
 
 public class HTMLNotifier implements Notifier {
     private final HTMLWriter htmlWriter;
@@ -36,7 +41,7 @@ public class HTMLNotifier implements Notifier {
 
         if(constDetails.isViolated()){
             Constraint constraint = constDetails.getConstraint();
-            StringBuilder Message = new StringBuilder("Timing constraint violation: ");
+            StringBuilder Message = new StringBuilder("<b>Timing constraint violation:</b> ");
 
             if(constraint.getName() != null){
                 Message.append("with name <" + constDetails.getConstraint().getName() + "> and ");
@@ -73,26 +78,25 @@ public class HTMLNotifier implements Notifier {
 
 
     private boolean createUnknownErrorMessage(ErrorData errorData) {
-        String errorMessage = "An unknown ErrorType was encountered by node: \"" +
-                              errorData.getSenderID() +
-                              "\" at " + errorData.getTimestamp() + " o'clock";
+        String errorMessage = "<b>Error violation:</b> An unknown ErrorType was encountered by node: <" +
+                              errorData.getSenderID() + "> at ";
+        String dateTime = errorData.getTimestamp().format(DateTimeFormatter.RFC_1123_DATE_TIME);
+        errorMessage += dateTime.substring(0, dateTime.length()-6);
 
         return htmlWriter.AddMessage(errorMessage);
 }
 
     private boolean createNoConnectionMessage(ErrorData errorData) {
-        String errorMessage = "Node \"" +
-                              errorData.getSenderID() +
-                              "\": " +
-                              errorData.getComment();
+        String errorMessage = "<b>Error violation:</b> Node <" + errorData.getSenderID() +
+                              ">: " + errorData.getComment();
 
         return htmlWriter.AddMessage(errorMessage);
     }
 
     private boolean createHttpErrorMessage(ErrorData errorData) {
-        String errorMessage = "Node \"" +
+        String errorMessage = "<b>Error violation:</b> Node <" +
                               errorData.getSenderID() +
-                              "\": after 10 successive unsuccessful attempts to send data to monitor server, it received the following httpcode: " +
+                              ">: after 10 successive unsuccessful attempts to send data to monitor server, it received the following httpcode: " +
                               errorData.getHttpResponse();
         return htmlWriter.AddMessage(errorMessage);
     }
