@@ -1,5 +1,6 @@
 package com.group3.monitorServer.messageProcessor;
 
+import com.group3.monitorServer.constraint.store.ConstraintStore;
 import com.group3.monitorServer.messageProcessor.notifier.htmlNotifier.HTMLNotifier;
 import com.group3.monitorServer.messages.ErrorDataMessage;
 import com.group3.monitorServer.messages.MessageCreator;
@@ -22,7 +23,7 @@ public class Delegator_Tests extends AbstractSQLMessageManagerTest {
     public void ThreadControl() throws InterruptedException {
         //setup
         AbstractHTMLWriterTest.deleteHtml();
-        HTMLNotifier htmlNotifier = new HTMLNotifier(AbstractHTMLWriterTest.HTMLTestPath);
+        HTMLNotifier htmlNotifier = new HTMLNotifier(AbstractHTMLWriterTest.HTMLTestPath, new ConstraintStore());
         int loopCount;
         Delegator delegator = new Delegator(sqlMessageManager, htmlNotifier);
 
@@ -178,7 +179,7 @@ public class Delegator_Tests extends AbstractSQLMessageManagerTest {
             Method method = null;
             method = Delegator.class.getDeclaredMethod("findTimingDataMatch", TimingMonitorDataMessage.class);
             method.setAccessible(true);
-            Delegator delegator = new Delegator(sqlMessageManager, new HTMLNotifier(AbstractHTMLWriterTest.HTMLTestPath));
+            Delegator delegator = new Delegator(sqlMessageManager, new HTMLNotifier(AbstractHTMLWriterTest.HTMLTestPath, new ConstraintStore()));
             message = (TimingMonitorDataMessage) messageCreator.MakeMessage(timingMonitorData);
             matchingMessage = ((TimingMonitorDataMessageID) method.invoke(delegator, message)).timingMonitorDataMessage;
         } catch (NoSuchMethodException e) {

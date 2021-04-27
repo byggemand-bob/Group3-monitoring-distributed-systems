@@ -7,6 +7,7 @@ import com.group3.monitorServer.messageProcessor.workers.TimingMonitorDataWorker
 import com.group3.monitorServer.messages.*;
 import org.openapitools.model.TimingMonitorData;
 
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -84,6 +85,7 @@ public class Delegator implements Controllable {
                                                                    matchingMessage.id)).start();
                         }
                     } else if(allMessages.getInt("MessageType") == MessageTypeID.ErrorData.ordinal()){
+                        sqlMessageManager.UpdateInUse(allMessages.getInt("ID"), true);
                         new Thread(new ErrorMessageWorker(sqlMessageManager,
                                                           notifier,
                                                           (ErrorDataMessage) messageCreator.MakeMessageFromSQL(allMessages),
@@ -112,11 +114,7 @@ public class Delegator implements Controllable {
                 TimingMonitorDataMessageID result = getTimingMonitorDataMessageAndID(resultSetQuery);
                 if (!resultSetQuery.next()) {
                     return result;
-                } else {
-                    System.out.println("resultsetquery returns multiple matching messages");
                 }
-            } else {
-                System.out.println("resultsetquery is null");
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();

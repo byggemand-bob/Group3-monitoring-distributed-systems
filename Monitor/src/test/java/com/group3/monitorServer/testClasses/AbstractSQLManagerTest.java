@@ -61,6 +61,7 @@ public abstract class AbstractSQLManagerTest {
         errorData.setSenderID(100L);
         errorData.setTimestamp(OffsetDateTime.now());
         errorData.setComment("test");
+        errorData.setHttpResponse(400);
         return new ErrorDataMessage(errorData);
     }
 
