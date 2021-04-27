@@ -224,7 +224,7 @@ class ConstraintStoreTest {
 	
 	
 	// Utility methods
-	@SuppressWarnings({ "unchecked", "unused" })
+	@SuppressWarnings({"unchecked"})
 	private HashMap<ConstraintKey, Constraint> GetConstraintHashMap() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Map<ConstraintKey, Constraint> constraints;
 		java.lang.reflect.Field field = constraintStore.getClass().getDeclaredField("constraints");

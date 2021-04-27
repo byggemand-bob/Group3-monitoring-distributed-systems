@@ -1,0 +1,8 @@
+[
+    {
+        "max": 2,
+        "endpoint": "monitor/error",
+        "min": 3
+    }
+]
+
