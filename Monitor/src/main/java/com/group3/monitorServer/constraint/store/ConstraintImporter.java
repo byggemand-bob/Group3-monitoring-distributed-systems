@@ -47,9 +47,9 @@ public class ConstraintImporter {
 	public String getDefaultConstraintPath() {
 		String constraintsSpecificationFilePath = null;
 		
-		try {
-			constraintsSpecificationFilePath = ConfigurationManager.getInstance().getProperty(ConfigurationManager.constraintsSpecificationFilePath);
-		} catch (Exception e){}
+		constraintsSpecificationFilePath = ConfigurationManager
+				.getInstance()
+				.getProperty(ConfigurationManager.constraintsSpecificationFilePath);
 		
 		return constraintsSpecificationFilePath;
 	}
@@ -60,23 +60,23 @@ public class ConstraintImporter {
 	 * @param path The path to the {@link Constraint} specification file for import.
 	 * 
 	 * @return An array containing each {@link Constraint}.
-	 * @throws FileNotFoundException Throws an exception if the file can't be found using @param Path
+	 * @throws FileNotFoundException Throws an exception if the file can't be found using @param path.
 	 */
 	private Constraint[] readData(String path) throws FileNotFoundException {
 		Constraint[] constraints = null;	
 		String data = "";
 		Gson gson = new Gson();
-		JsonReader reader2 = new JsonReader(new FileReader(path));
-		data = JsonParser.parseReader(reader2).toString();
+		JsonReader jsonReader = new JsonReader(new FileReader(path));
+		data = JsonParser.parseReader(jsonReader).toString();
 		constraints = gson.fromJson(data, Constraint[].class);
 
 		return constraints;
 	}
 	
 	/**
-	 * Converts the {@link Constraint} data encoded in the String array into instance of the {@link Constraint} class and returns a {@link ConstraintStore} containing all the {@link Constraint}s.
+	 * Converts the {@link Constraint} data encoded in the {@link Constraint} into instance of the {@link Constraint} class and returns a {@link ConstraintStore} containing all the {@link Constraint}s.
 	 * 
-	 * @param data String array of the String encoding of the specified {@link Constraint}s
+	 * @param data is a array of {@link Constraint}
 	 * 
 	 * @return A {@link ConstraintStore} containing information about the {@link Constraint}s encoded in the data.
 	 */
@@ -85,26 +85,13 @@ public class ConstraintImporter {
 		for (int i = 0; i < constraints.length; i++) {
 			Constraint constraint = constraints[i];
 
-			if(isMaxGreaterThanMin(constraint.getMin(), constraint.getMax())) {
-				constraintStore.addConstraint(constraint);
+			if(constraint.getMin() != null && constraint.getMax() < constraint.getMin()) {
+				throw new ValidationException("The constraint max value is less than min value, which is not allowed");
 			}
+			
+			constraintStore.addConstraint(constraint);
 		}
 
 		return constraintStore;
-	}
-	
-	/**
-	 * Method to check if the {@link Constraint} min value is less then the max value.
-	 * @param min is the min value of the {@link Constraint}.
-	 * @param max is the max value of the {@link Constraint}.
-	 * @return return true if min value is less than max value, if that is not true it will return false.
-	 */
-	private boolean isMaxGreaterThanMin(Integer min, Integer max) {
-		if (min == null) {return true;} //if there is not set a min value return true
-		if (max < min) { //if max is less than min throw a ValidationException back
-			throw new ValidationException("The constraint max value is less than min value, which is not allowed");
-			} 
-		
-		return true; //max is grater than min return true
 	}
 }
