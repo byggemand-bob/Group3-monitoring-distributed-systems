@@ -21,7 +21,7 @@ public class ConstraintUserInputValidationTest {
 	}
 	
 	@Test
-	void validateIncorrectFile() throws FileNotFoundException {
+	void validateIncorrectFile() {
 		//setup
 		final String file = path + "InCorrectData.json";
 		//assert
@@ -47,7 +47,7 @@ public class ConstraintUserInputValidationTest {
 	}
 	
 	@Test
-	void ValidateInCorrectFileWithOptionalValue() throws FileNotFoundException {
+	void ValidateInCorrectFileWithOptionalValue() {
 		//setup
 		final String file = path + "InCorrectDataWithOptionalValue.json";
 		//assert
@@ -57,11 +57,20 @@ public class ConstraintUserInputValidationTest {
 	}
 	
 	@Test
-	void ValidateCantFindFile() throws FileNotFoundException {
+	void ValidateCantFindFile() {
 		//setup
 		final String file = path + "CantFindThisFile.json";
 		//assert
 		Assertions.assertThrows(FileNotFoundException.class, () -> {
+			inputValidation.validate(file);
+		});
+	}
+	
+	@Test
+	void ValidateEndpointUnderMinLength() {
+		//setup
+		final String file = path + "EndpointUnderMinLength.json";
+		Assertions.assertThrows(ValidationException.class, () -> {
 			inputValidation.validate(file);
 		});
 	}
