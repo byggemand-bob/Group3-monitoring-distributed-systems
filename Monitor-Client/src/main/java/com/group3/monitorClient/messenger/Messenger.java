@@ -142,14 +142,16 @@ public class Messenger implements MessengerInterface {
                             errorData.setTimestamp(OffsetDateTime.now());
                             errorData.setSenderID(senderID);
                             errorData.setErrorMessageType(ErrorData.ErrorMessageTypeEnum.NOCONNECTION);
-                            errorData.setComment("No connection to monitor server - start: " + errorData.getTimestamp().toString());
+                            String timeNow = OffsetDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME);
+                            errorData.setComment("No connection to monitor server - start: " + timeNow.substring(0, timeNow.length()-6));
                         }
                     } else {
                         try {
                             File dumpfile = new File("src/main/resources/dumpfile.txt");
                             PrintWriter pw = new PrintWriter(new FileOutputStream(dumpfile, true));
 
-                            pw.println(OffsetDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME));
+                            String timeNow = OffsetDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME);
+                            pw.println(timeNow.substring(0, timeNow.length()-6));
                             if(e.getCode() != 0){ pw.println("http error code: " + e.getCode()); }
                             e.printStackTrace(pw);
                             pw.println();
@@ -162,7 +164,8 @@ public class Messenger implements MessengerInterface {
 
                 /* If a SocketTimeout occurred and connection is re-established, complete the noConnection message and queue it */
                 if (socketTimeout && !errorOccurrence) {
-                    errorData.setComment(errorData.getComment() + " Connection re-established: " + OffsetDateTime.now().toString());
+                    String timeNow = OffsetDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME);
+                    errorData.setComment(errorData.getComment() + ", Connection re-established: " + timeNow.substring(0, timeNow.length()-6));
                     MessageInterface errorDataMessage = messageCreator.MakeMessage(errorData);
                     errorDataMessage.makeSQL(sqlMessageManager);
                     socketTimeout = false;
