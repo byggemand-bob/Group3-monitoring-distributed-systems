@@ -27,7 +27,7 @@ public class ConstraintAnalyzer {
 	}
 	
 	/**
-	 * Analyzes the timings between two timestamps on an endpoint to determine whether any {@link Constraints} defined for the endpoint are violated.
+	 * Analyzes the timings between two timestamps on an endpoint to determine whether any {@link Constraint} defined for the endpoint are violated.
 	 * <br><br>
 	 * The timestamps provided to this method does not need to be any kind of order, this is handled within the execution.
 	 * 
@@ -43,7 +43,7 @@ public class ConstraintAnalyzer {
 	}
 	
 	/**
-	 * Analyzes the timings between two timestamps on an endpoint to determine whether any {@link Constraints} defined for the endpoint are violated.
+	 * Analyzes the timings between two timestamps on an endpoint to determine whether any {@link Constraint} defined for the endpoint are violated.
 	 * <br><br>
 	 * The timestamps provided to this method does not need to be any kind of order, this is handled within the execution.
 	 * 
