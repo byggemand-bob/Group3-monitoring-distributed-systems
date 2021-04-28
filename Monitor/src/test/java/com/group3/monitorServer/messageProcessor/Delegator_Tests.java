@@ -36,7 +36,7 @@ public class Delegator_Tests extends AbstractSQLMessageManagerTest {
         delegator.start();
 
         loopCount = 0;
-        while(sqlMessageManager.TableSize() != 0 && loopCount < 200){
+        while(sqlMessageManager.TableSize() != 0 && loopCount < 1000){
             Thread.sleep(50);
             loopCount++;
         }
