@@ -33,9 +33,9 @@ public class Messenger implements MessengerInterface {
      * useful if multiple messengers should share the same queue.
      */
     public Messenger(String monitorIP, String sqlPath, String sqlFileName){
-        monitorClientInterface = new MonitorClientInterface();
         SQLManager sqlManager = SQLManager.getInstance();
         sqlManager.Connect(sqlPath, sqlFileName);
+        monitorClientInterface = new MonitorClientInterface();
         sqlMessageManager = new SQLMessageManager(SQLMessageManager.message_table_name);
         sqlFailedMessageManager = new SQLMessageManager(SQLMessageManager.failed_message_table_name);
     }
