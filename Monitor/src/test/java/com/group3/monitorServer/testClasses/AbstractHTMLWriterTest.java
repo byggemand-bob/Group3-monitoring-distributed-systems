@@ -8,12 +8,15 @@ import java.io.File;
 
 public abstract class AbstractHTMLWriterTest {
     public static HTMLWriter htmlWriter;
-    public static String HTMLTestPath = "src/main/resources/html_test/test.html";
+    public static String HTMLTestPath;
 
     @BeforeEach
     public void PrepareForTest(){
         deleteHtml();
         htmlWriter = createHtml();
+        String separator = File.separator;
+        HTMLTestPath = "src" + separator + "main" + separator + "resources" +
+                       separator + "html_test" + separator + "test.html";
     }
 
     public static HTMLWriter createHtml(){
