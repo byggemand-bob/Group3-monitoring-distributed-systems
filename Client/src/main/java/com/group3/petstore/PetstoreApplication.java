@@ -1,7 +1,5 @@
 package com.group3.petstore;
 
-import java.io.IOException;
-
 import org.openapitools.client.ApiException;
 import org.openapitools.client.api.PetApi;
 import org.openapitools.client.model.Pet;
@@ -9,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;

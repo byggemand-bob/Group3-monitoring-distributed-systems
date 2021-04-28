@@ -1,8 +1,7 @@
 package com.group3.monitorClient.messenger.messages;
 
-import com.group3.monitorClient.controller.MonitorClientInterface;
+import com.group3.monitorClient.MonitorClientInterface;
 import org.openapitools.client.ApiException;
-import org.openapitools.client.api.MonitorApi;
 
 public interface MessageInterface {
     String separator = ",";
@@ -14,5 +13,5 @@ public interface MessageInterface {
      * Create SQL-query to save message data in SQL database
      * needed for messageQueue to function
      */
-    void MakeSQL(SQLManager sqlManager);
+    void makeSQL(SQLMessageManager sqlMessageManager);
 }

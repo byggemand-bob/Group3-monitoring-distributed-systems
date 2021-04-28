@@ -1,14 +1,11 @@
 package com.group3.monitor.api.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
-
+import org.openapitools.client.api.MonitorApi;
+import org.openapitools.client.model.TimingMonitorData;
+import org.openapitools.client.model.TimingMonitorData.EventCodeEnum;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,13 +15,11 @@ import org.openapitools.client.ApiException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-import com.group3.monitor.api.MonitorApi;
-import com.group3.monitor.model.TimingMonitorData;
-import com.group3.monitor.model.TimingMonitorData.EventCodeEnum;
+import java.io.IOException;
+import java.time.OffsetDateTime;
 
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MonitorApiTest {
 	

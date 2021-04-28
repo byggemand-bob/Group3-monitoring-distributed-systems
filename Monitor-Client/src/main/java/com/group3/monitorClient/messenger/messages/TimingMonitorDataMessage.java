@@ -19,7 +19,7 @@ public class TimingMonitorDataMessage implements MessageInterface {
     /* Message sends itself using the given MonitorClientInterface */
     @Override
     public int send(MonitorClientInterface monitorClientInterface) throws ApiException {
-            return monitorClientInterface.addMonitorData(timingMonitorData);
+            return monitorClientInterface.sendMonitorData(timingMonitorData);
     }
 
     /* the message converts itself into an sql format, and saves itself using provided SQLManager */

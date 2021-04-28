@@ -1,13 +1,143 @@
 templateDir: src/main/resources/cstTemplates
 files:
+  client/model/TimingMonitorData.mustache:
+    templateType: SupportingFiles
+    destinationFilename: TimingMonitorData.java
+    folder: src/gen/java/main/org/openapitools/client/model
+
+  configuration/ConfigurationManager.mustache:
+    templateType: SupportingFiles
+    destinationFilename: ConfigurationManager.java
+    folder: src/gen/java/main/com/group3/monitorClient/configuration
+
+  exception/monitorConfigException.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MonitorConfigException.java
+    folder: src/gen/java/main/com/group3/monitorClient/exception
+
+  messenger/messages/MessageCreator.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MessageCreator.java
+    folder: src/gen/java/main/com/group3/monitorClient/messenger/messages
+
+  controller/requirements/AvailableCPURequirement.mustache:
+    templateType: SupportingFiles
+    destinationFilename: AvailableCPURequirement.java
+    folder: src/gen/java/main/com/group3/monitorClient/controller/requirements
+
+  messenger/messages/ErrorDataMessage.mustache:
+    templateType: SupportingFiles
+    destinationFilename: ErrorDataMessage.java
+    folder: src/gen/java/main/com/group3/monitorClient/messenger/messages
+
+  messenger/messages/MessageInterface.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MessageInterface.java
+    folder: src/gen/java/main/com/group3/monitorClient/messenger/messages
+
+  messenger/messages/MessageTypeID.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MessageTypeID.java
+    folder: src/gen/java/main/com/group3/monitorClient/messenger/messages
+
+  messenger/MessengerInterface.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MessengerInterface.java
+    folder: src/gen/java/main/com/group3/monitorClient/messenger
+
+  controller/requirements/Requirement.mustache:
+    templateType: SupportingFiles
+    destinationFilename: Requirement.java
+    folder: src/gen/java/main/com/group3/monitorClient/controller/requirements
+
+  messenger/messages/SQLManager.mustache:
+    templateType: SupportingFiles
+    destinationFilename: SQLManager.java
+    folder: src/gen/java/main/com/group3/monitorClient/messenger/messages
+
+  messenger/messages/SQLMessageManager.mustache:
+    templateType: SupportingFiles
+    destinationFilename: SQLMessageManager.java
+    folder: src/gen/java/main/com/group3/monitorClient/messenger/messages
+
+  messenger/messages/TimingMonitorDataMessage.mustache:
+    templateType: SupportingFiles
+    destinationFilename: TimingMonitorDataMessage.java
+    folder: src/gen/java/main/com/group3/monitorClient/messenger/messages
+
+  messenger/Messenger.mustache:
+    templateType: SupportingFiles
+    destinationFilename: Messenger.java
+    folder: src/gen/java/main/com/group3/monitorClient/messenger
+
+  client/api/ErrorApi.mustache:
+    templateType: SupportingFiles
+    destinationFilename: ErrorApi.java
+    folder: src/gen/java/main/org/openapitools/client/api
+
+  client/model/ErrorData.mustache:
+    templateType: SupportingFiles
+    destinationFilename: ErrorData.java
+    folder: src/gen/java/main/org/openapitools/client/model
+
+  client/api/MonitorApi.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MonitorApi.java
+    folder: src/gen/java/main/org/openapitools/client/api
+
+  controller/Controllable.mustache:
+    templateType: SupportingFiles
+    destinationFilename: Controllable.java
+    folder: src/gen/java/main/com/group3/monitorClient/controller
+
+  controller/Controller.mustache:
+    templateType: SupportingFiles
+    destinationFilename: Controller.java
+    folder: src/gen/java/main/com/group3/monitorClient/controller
+
+  scheduling/task/AbstractTask.mustache:
+    templateType: SupportingFiles
+    destinationFilename: AbstractTask.java
+    folder: src/gen/java/main/com/group3/monitorClient/scheduling/task
+
+  scheduling/task/CleanUpOldFailedMessagesTask.mustache:
+    templateType: SupportingFiles
+    destinationFilename: CleanUpOldFailedMessagesTask.java
+    folder: src/gen/java/main/com/group3/monitorClient/scheduling/task
+
+  scheduling/NotInitializedException.mustache:
+    templateType: SupportingFiles
+    destinationFilename: NotInitializedException.java
+    folder: src/gen/java/main/com/group3/monitorClient/scheduling
+
+  scheduling/TaskAlreadyExistsException.mustache:
+    templateType: SupportingFiles
+    destinationFilename: TaskAlreadyExistsException.java
+    folder: src/gen/java/main/com/group3/monitorClient/scheduling
+
+  scheduling/TaskDetails.mustache:
+    templateType: SupportingFiles
+    destinationFilename: TaskDetails.java
+    folder: src/gen/java/main/com/group3/monitorClient/scheduling
+
+  scheduling/TaskScheduler.mustache:
+    templateType: SupportingFiles
+    destinationFilename: TaskScheduler.java
+    folder: src/gen/java/main/com/group3/monitorClient/scheduling
+
+  util/MonitorUtils.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MonitorUtils.java
+    folder: src/gen/java/main/com/group3/monitorClient/util
+
   MonitorClientInterface.mustache:
     templateType: SupportingFiles
     destinationFilename: MonitorClientInterface.java
-    folder: src/gen/java/main/com/group3/monitor/client
+    folder: src/gen/java/main/com/group3/monitorClient
 
-  client/ApiCallback.mustache:
+  client/ApiException.mustache:
     templateType: SupportingFiles
-    destinationFilename: ApiCallback.java
+    destinationFilename: ApiException.java
     folder: src/gen/java/main/org/openapitools/client
 
   client/ApiClient.mustache:
@@ -15,14 +145,14 @@ files:
     destinationFilename: ApiClient.java
     folder: src/gen/java/main/org/openapitools/client
 
-  client/ApiException.mustache:
-    templateType: SupportingFiles
-    destinationFilename: ApiException.java
-    folder: src/gen/java/main/org/openapitools/client
-
   client/ApiResponse.mustache:
     templateType: SupportingFiles
     destinationFilename: ApiResponse.java
+    folder: src/gen/java/main/org/openapitools/client
+
+  client/ApiCallback.mustache:
+    templateType: SupportingFiles
+    destinationFilename: ApiCallback.java
     folder: src/gen/java/main/org/openapitools/client
 
   client/Configuration.mustache:
@@ -70,150 +200,22 @@ files:
     destinationFilename: StringUtil.java
     folder: src/gen/java/main/org/openapitools/client
 
-  api/MonitorApi.mustache:
-    templateType: SupportingFiles
-    destinationFilename: MonitorApi.java
-    folder: src/gen/java/main/com/group3/monitor/api
-
-  auth/ApiKeyAuth.mustache:
+  client/auth/ApiKeyAuth.mustache:
     templateType: SupportingFiles
     destinationFilename: ApiKeyAuth.java
     folder: src/gen/java/main/org/openapitools/client/auth
 
-  auth/Authentication.mustache:
+  client/auth/Authentication.mustache:
     templateType: SupportingFiles
     destinationFilename: Authentication.java
     folder: src/gen/java/main/org/openapitools/client/auth
 
-  auth/HttpBasicAuth.mustache:
+  client/auth/HttpBasicAuth.mustache:
     templateType: SupportingFiles
     destinationFilename: HttpBasicAuth.java
     folder: src/gen/java/main/org/openapitools/client/auth
 
-  auth/HttpBearerAuth.mustache:
+  client/auth/HttpBearerAuth.mustache:
     templateType: SupportingFiles
     destinationFilename: HttpBearerAuth.java
     folder: src/gen/java/main/org/openapitools/client/auth
-
-  model/timingMonitorData.mustache:
-    templateType: SupportingFiles
-    destinationFilename: TimingMonitorData.java
-    folder: src/gen/java/main/com/group3/monitor/model
-
-  api/controller/apiController.mustache:
-    templateType: API
-    destinationFilename: Controller.java
-  
-  api/api.mustache:
-    templateType: API
-    destinationFilename: .java
-
-  configuration/configManager.mustache:
-    templateType: SupportingFiles
-    destinationFilename: ConfigurationManager.java
-    folder: src/gen/java/main/com/group3/monitor/configuration
-  
-  exception/monitorConfigException.mustache:
-    templateType: SupportingFiles
-    destinationFilename: MonitorConfigException.java
-    folder: src/gen/java/main/com/group3/monitor/exception
-
-  controller/MonitorClientInterface.mustache:
-    templateType: SupportingFiles
-    destinationFilename: MonitorClientInterface.java
-    folder: src/gen/java/main/com/group3/monitorClient/controller
-  
-  messenger/messages/MessageCreator.mustache:
-    templateType: SupportingFiles
-    destinationFilename: MessageCreator.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger/messages
-  
-  messenger/lazyMessenger/requirements/AvailableCPURequirement.mustache:
-    templateType: SupportingFiles
-    destinationFilename: AvailableCPURequirement.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger/lazyMessenger/requirements
-  
-  messenger/messages/ErrorDataMessage.mustache:
-    templateType: SupportingFiles
-    destinationFilename: ErrorDataMessage.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger/messages
-  
-  messenger/GreedyMessenger.mustache:
-    templateType: SupportingFiles
-    destinationFilename: GreedyMessenger.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger
-  
-  messenger/lazyMessenger/LazyMessenger.mustache:
-    templateType: SupportingFiles
-    destinationFilename: LazyMessenger.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger/lazyMessenger
-  
-  messenger/messages/MessageInterface.mustache:
-    templateType: SupportingFiles
-    destinationFilename: MessageInterface.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger/messages
-  
-  messenger/messages/MessageTypeID.mustache:
-    templateType: SupportingFiles
-    destinationFilename: MessageTypeID.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger/messages
-  
-  messenger/MessengerInterface.mustache:
-    templateType: SupportingFiles
-    destinationFilename: MessengerInterface.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger
-  
-  messenger/queue/PersistentSQLQueue.mustache:
-    templateType: SupportingFiles
-    destinationFilename: PersistentSQLQueue.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger/queue
-  
-  messenger/queue/QueueInterface.mustache:
-    templateType: SupportingFiles
-    destinationFilename: QueueInterface.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger/queue
-  
-  messenger/lazyMessenger/requirements/Requirement.mustache:
-    templateType: SupportingFiles
-    destinationFilename: Requirement.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger/lazyMessenger/requirements
-  
-  messenger/queue/SecureSynchronizedQueue.mustache:
-    templateType: SupportingFiles
-    destinationFilename: SecureSynchronizedQueue.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger/queue
-  
-  messenger/messages/SQLManager.mustache:
-    templateType: SupportingFiles
-    destinationFilename: SQLManager.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger/messages
-  
-  messenger/queue/SynchronizedQueue.mustache:
-    templateType: SupportingFiles
-    destinationFilename: SynchronizedQueue.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger/queue
-  
-  messenger/messages/TimingMonitorDataMessage.mustache:
-    templateType: SupportingFiles
-    destinationFilename: TimingMonitorDataMessage.java
-    folder: src/gen/java/main/com/group3/monitorClient/messenger/messages
-  
-  client/api/ErrorApi.mustache:
-    templateType: SupportingFiles
-    destinationFilename: ErrorApi.java
-    folder: src/gen/java/main/org/openapitools/client/api
-  
-  client/model/ErrorData.mustache:
-    templateType: SupportingFiles
-    destinationFilename: ErrorData.java
-    folder: src/gen/java/main/org/openapitools/client/model
-  
-  client/api/MonitorApi.mustache:
-    templateType: SupportingFiles
-    destinationFilename: MonitorApi.java
-    folder: src/gen/java/main/org/openapitools/client/api
-  
-  client/model/TimingMonitorData.mustache:
-    templateType: SupportingFiles
-    destinationFilename: TimingMonitorData.java
-    folder: src/gen/java/main/org/openapitools/client/model

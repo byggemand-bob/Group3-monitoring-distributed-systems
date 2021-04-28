@@ -2,6 +2,8 @@ package com.group3.monitorClient;
 
 import com.group3.monitorClient.configuration.ConfigurationManager;
 import com.group3.monitorClient.exception.MonitorConfigException;
+import com.group3.monitorClient.messenger.messages.MessageCreator;
+import com.group3.monitorClient.messenger.messages.SQLMessageManager;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.api.ErrorApi;
@@ -18,8 +20,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
 public class MonitorClientInterface {
+    SQLMessageManager sqlMessageManager;
+    MessageCreator messageCreator;
     private ApiClient client;
-    private MonitorApi MonitorClient;
+    private MonitorApi monitorClient;
     private ErrorApi ErrorClient;
     private String monitorURL;
     private static AtomicLong eventIDSequence = new AtomicLong(1L);
@@ -29,7 +33,9 @@ public class MonitorClientInterface {
         monitorURL = ConfigurationManager.getInstance().getProperty(ConfigurationManager.getInstance().monitorServerAddressProp);
         client = new ApiClient();
         ValidateAndSetMonitorIP(monitorURL);
-        MonitorClient = new MonitorApi(client);
+        monitorClient = new MonitorApi(client);
+        sqlMessageManager = new SQLMessageManager(SQLMessageManager.message_table_name);
+        messageCreator = new MessageCreator();
     }
 
     private void ValidateAndSetMonitorIP(String MonitorIP){
@@ -59,8 +65,11 @@ public class MonitorClientInterface {
         if(TargetEndPoint != null){
             timingMonitorData.setTargetEndpoint(TargetEndPoint);
         }
+        messageCreator.MakeMessage(timingMonitorData).makeSQL(sqlMessageManager);
+    }
 
-        MonitorClient.addMonitorData(timingMonitorData);
+    public int sendMonitorData(TimingMonitorData timingMonitorData) throws ApiException {
+        return monitorClient.addMonitorDataWithHttpInfo(timingMonitorData).getStatusCode();
     }
 
     public long queueMonitorData(@Nullable String targetEndPoint, EventCodeEnum eventCode) throws ApiException {
@@ -78,7 +87,9 @@ public class MonitorClientInterface {
         return eventIDSequence.getAndIncrement();
     }
 
-    public void addErrorData(ErrorData errorData) throws ApiException {
-        ErrorClient.addErrorData(errorData);
+    public int sendErrorData(ErrorData errorData) throws ApiException {
+        return ErrorClient.addErrorDataWithHttpInfo(errorData).getStatusCode();
     }
+
+
 }

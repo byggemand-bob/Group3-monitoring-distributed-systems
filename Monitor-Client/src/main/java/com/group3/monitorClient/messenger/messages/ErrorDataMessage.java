@@ -16,7 +16,7 @@ public class ErrorDataMessage implements MessageInterface{
     /* Message sends itself using the given MonitorClientInterface */
     @Override
     public int send(MonitorClientInterface monitorClientInterface) throws ApiException {
-        return monitorClientInterface.addErrorData(errorData);
+        return monitorClientInterface.sendErrorData(errorData);
     }
 
     /* the message converts itself into an sql format, and saves itself using provided SQLManager */

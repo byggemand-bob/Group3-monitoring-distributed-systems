@@ -1,13 +1,5 @@
 package com.group3.petstore.Controller;
 
-import org.openapitools.client.ApiClient;
-import org.openapitools.client.ApiException;
-import org.openapitools.client.api.PetApi;
-import org.openapitools.client.model.Pet;
-
-import java.util.List;
-import java.util.regex.Pattern;
-
 public class PetStoreClientInterface {
 //    ApiClient client;
 //    PetApi api;

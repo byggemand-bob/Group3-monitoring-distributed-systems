@@ -12,7 +12,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-import com.group3.monitor.configuration.ConfigurationManager;
+import com.group3.monitorClient.configuration.ConfigurationManager;
 
 public abstract class AbstractMonitorTest {
 

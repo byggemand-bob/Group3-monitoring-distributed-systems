@@ -1,13 +1,12 @@
 package com.group3.monitor.test.client;
 
+import com.group3.monitor.test.AbstractMonitorTest;
+import com.group3.monitorClient.MonitorClientInterface;
+import com.group3.monitorClient.configuration.ConfigurationManager;
+import com.group3.monitorClient.exception.MonitorConfigException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import com.group3.monitor.client.MonitorClientInterface;
-import com.group3.monitor.configuration.ConfigurationManager;
-import com.group3.monitor.exception.MonitorConfigException;
-import com.group3.monitor.test.AbstractMonitorTest;
 
 
 
