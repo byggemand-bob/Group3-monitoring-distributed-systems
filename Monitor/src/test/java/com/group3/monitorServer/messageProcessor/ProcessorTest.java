@@ -47,7 +47,7 @@ public class ProcessorTest extends AbstractSQLMessageManagerTest {
         delegator.start();
 
         int loop = 0;
-        while(sqlMessageManager.TableSize() > 1 && loop <100){
+        while(sqlMessageManager.TableSize() > 1 && loop < 200){
             Thread.sleep(50);
             loop++;
         }
