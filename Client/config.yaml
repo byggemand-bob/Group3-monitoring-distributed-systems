@@ -134,3 +134,11 @@ files:
     templateType: SupportingFiles
     destinationFilename: MonitorClientInterface.java
     folder: src/gen/java/main/com/group3/monitorClient
+
+  model_test.mustache:
+    templateType: ModelTests
+    destinationFilename: .java
+
+  test/api_test.mustache:
+    templateType: APITests
+    destinationFilename: .java

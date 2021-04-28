@@ -219,3 +219,7 @@ files:
     templateType: SupportingFiles
     destinationFilename: HttpBearerAuth.java
     folder: src/gen/java/main/org/openapitools/client/auth
+
+  api/controller/apiController.mustache:
+    templateType: API
+    destinationFilename: Controller.java
