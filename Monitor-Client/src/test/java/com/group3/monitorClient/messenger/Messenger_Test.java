@@ -1,6 +1,7 @@
 package com.group3.monitorClient.messenger;
 
 import com.group3.monitorClient.AbstractSQLDeleter;
+import com.group3.monitorClient.configuration.ConfigurationManager;
 import com.group3.monitorClient.testClasses.Messenger_TestClass;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ public class Messenger_Test extends AbstractSQLDeleter {
     /* tests the control functions of the GreedyMessenger, Start(), Stop(), Pause() and Resume() */
     @Test
     public void testThreadControl() throws InterruptedException {
+        addPropertiesToConfig(ConfigurationManager.monitorServerAddressProp+ "=" + "1.1.1.1:8080");
         Messenger_TestClass messenger = new Messenger_TestClass("1.1.1.1:8080", getSQLPath(), getSQLFileName());
 
         for(int x = 0; x < 5; x++){
@@ -55,6 +57,7 @@ public class Messenger_Test extends AbstractSQLDeleter {
     @Test
     public void testAddDataTest(){
         //Setup
+        addPropertiesToConfig(ConfigurationManager.monitorServerAddressProp+ "=" + "1.1.1.1:8080");
         Messenger_TestClass messenger = new Messenger_TestClass("1.1.1.1:8080", getSQLPath(), getSQLFileName());
 
         //Act
@@ -69,6 +72,7 @@ public class Messenger_Test extends AbstractSQLDeleter {
     @Test
     public void testErrorMessageCreationFail () throws InterruptedException {
         //Setup
+        addPropertiesToConfig(ConfigurationManager.monitorServerAddressProp+ "=" + "1.1.1.1:8080");
         Messenger_TestClass messenger = new Messenger_TestClass("1.1.1.1:8080", getSQLPath(), getSQLFileName(), 400);
 
         messenger.AddMessage(getDefaultErrorMessage());

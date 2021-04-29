@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 
 import java.io.File;
 
-public class AbstractSQLManagerTest {
+public class AbstractSQLManagerTest extends AbstractMonitorTest {
     public static SQLManager sqlManager = SQLManager.getInstance();// = new SQLManager("src/main/resources/sqlite/db/", "test.db");
 
 

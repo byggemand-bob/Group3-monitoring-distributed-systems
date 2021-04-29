@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 
 import java.io.File;
 
-public class AbstractSQLMessageManagerTest {
+public class AbstractSQLMessageManagerTest extends AbstractMonitorTest {
     public static SQLMessageManager sqlMessageManager;// = new SQLManager("src/main/resources/sqlite/db/", "test.db");
     public static SQLMessageManager sqlFailedMessageManager;
 

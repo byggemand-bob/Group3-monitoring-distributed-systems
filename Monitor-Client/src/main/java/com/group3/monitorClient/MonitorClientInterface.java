@@ -56,7 +56,7 @@ public class MonitorClientInterface {
         }
     }
 
-    private void addMonitorData(long eventID, @Nullable String TargetEndPoint, EventCodeEnum eventCode) throws ApiException {
+    private void addMonitorData(long eventID, @Nullable String TargetEndPoint, EventCodeEnum eventCode) {
         TimingMonitorData timingMonitorData = new TimingMonitorData();
         timingMonitorData.setEventCode(eventCode);
         timingMonitorData.setEventID(eventID);
@@ -72,13 +72,17 @@ public class MonitorClientInterface {
         return monitorClient.addMonitorDataWithHttpInfo(timingMonitorData).getStatusCode();
     }
 
-    public long queueMonitorData(@Nullable String targetEndPoint, EventCodeEnum eventCode) throws ApiException {
+    public int sendErrorData(ErrorData errorData) throws ApiException {
+        return ErrorClient.addErrorDataWithHttpInfo(errorData).getStatusCode();
+    }
+
+    public long queueMonitorData(@Nullable String targetEndPoint, EventCodeEnum eventCode) {
         long eventID = getNextEventID();
         addMonitorData(eventID, targetEndPoint, eventCode);
         return eventID;
     }
 
-    public long queueMonitorData(long eventID, @Nullable String targetEndPoint, EventCodeEnum eventCode) throws ApiException {
+    public long queueMonitorData(long eventID, @Nullable String targetEndPoint, EventCodeEnum eventCode) {
         addMonitorData(eventID, targetEndPoint, eventCode);
         return eventID;
     }
@@ -86,10 +90,4 @@ public class MonitorClientInterface {
     private long getNextEventID() {
         return eventIDSequence.getAndIncrement();
     }
-
-    public int sendErrorData(ErrorData errorData) throws ApiException {
-        return ErrorClient.addErrorDataWithHttpInfo(errorData).getStatusCode();
-    }
-
-
 }

@@ -1,9 +1,6 @@
 package com.group3.monitorClient;
 
-import com.group3.monitorClient.messenger.messages.ErrorDataMessage;
-import com.group3.monitorClient.messenger.messages.MessageCreator;
-import com.group3.monitorClient.messenger.messages.MessageInterface;
-import com.group3.monitorClient.messenger.messages.TimingMonitorDataMessage;
+import com.group3.monitorClient.messenger.messages.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.openapitools.client.model.ErrorData;
@@ -12,7 +9,7 @@ import java.time.OffsetDateTime;
 
 import java.io.File;
 
-public class AbstractSQLDeleter {
+public class AbstractSQLDeleter extends AbstractMonitorTest {
     public String path = "src/main/resources/sqlite/db/";
     public String fileName = "test.db";
 
@@ -20,7 +17,6 @@ public class AbstractSQLDeleter {
     static void setupDir() {
         File path = new File("src/main/resources/sqlite/db/");
         path.mkdirs();
-
         File db = new File("src/main/resources/sqlite/db/test.db");
         if (db.delete()) {
             System.out.println("there was already a test.db at location, and it was deleted");
