@@ -3,6 +3,7 @@ package com.group3.monitorClient.scheduling.task;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import com.group3.monitorClient.messenger.Messenger;
 import com.group3.monitorClient.configuration.ConfigurationManager;
 import com.group3.monitorClient.messenger.messages.SQLMessageManager;
 
@@ -36,7 +37,7 @@ public class CleanUpOldFailedMessagesTask extends AbstractTask {
 		// Ensure that daysToKeep do not go below zero
 		final String whereClause = generateWhereClause(daysToKeep);
 		
-		SQLMessageManager failedMessageManager = new SQLMessageManager(SQLMessageManager.failed_message_table_name);
+		SQLMessageManager failedMessageManager = Messenger.getSqlFailedMessageManager();
 		int removedMessagesCount = failedMessageManager.Delete(whereClause);
 		
 		if (removedMessagesCount > -1) {

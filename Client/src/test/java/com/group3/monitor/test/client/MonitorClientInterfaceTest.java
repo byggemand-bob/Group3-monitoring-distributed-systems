@@ -46,7 +46,7 @@ public class MonitorClientInterfaceTest extends AbstractMonitorTest{
 		// Setup
 		long propertyValueID = 1L;
 		String propertyValue = "http://123.456.789.101:8080";
-		addPropertiesToConfig(propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
+		addPropertiesToConfig(false, propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
 		
 		// Act
 		
@@ -61,7 +61,7 @@ public class MonitorClientInterfaceTest extends AbstractMonitorTest{
 		// Setup
 		long propertyValueID = 1L;
 		String propertyValue = "123.456.789.101:8080";
-		addPropertiesToConfig(propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
+		addPropertiesToConfig(false, propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
 		
 		// Act
 		
@@ -76,7 +76,7 @@ public class MonitorClientInterfaceTest extends AbstractMonitorTest{
 		// Setup
 		long propertyValueID = 1L;
 		String propertyValue = "123.456.789.101:";
-		addPropertiesToConfig(propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
+		addPropertiesToConfig(false, propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
 		
 		// Act
 		
@@ -92,7 +92,7 @@ public class MonitorClientInterfaceTest extends AbstractMonitorTest{
 		// Setup
 		long propertyValueID = 1L;
 		String propertyValue = "123.456.789.101";
-		addPropertiesToConfig(propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
+		addPropertiesToConfig(false, propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
 		
 		// Act
 		
@@ -106,7 +106,7 @@ public class MonitorClientInterfaceTest extends AbstractMonitorTest{
 		// Setup
 		long propertyValueID = 1L;
 		String propertyValue = "http://123.456.789.101";
-		addPropertiesToConfig(propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
+		addPropertiesToConfig(false, propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
 		
 		// Act
 		

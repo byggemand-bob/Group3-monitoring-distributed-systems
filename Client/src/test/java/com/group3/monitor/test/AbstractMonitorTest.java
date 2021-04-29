@@ -41,7 +41,8 @@ public abstract class AbstractMonitorTest {
 				writer.write(property + "\r\n");
 			}
 			if (addRequired == true) {
-				writer.write(ConfigurationManager.IDProp + "=" + "1");
+				writer.write(ConfigurationManager.IDProp + "=" + "1\n");
+				writer.write(ConfigurationManager.monitorServerAddressProp + "=" + "localhost:8080");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
