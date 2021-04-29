@@ -15,7 +15,7 @@ public class PetstoreApplication {
 
 	public static void main(String[] args) {
 		Messenger.initialize("src/main/resources/sqlite/db", "queue.db");//TODO: User-specification paths instead
-		Messenger.getInstance().start();
+		Messenger.getInstance().start();//TODO: add to some autogeneration
 		//TODO: addController
 		SpringApplication.run(PetstoreApplication.class, args);
 

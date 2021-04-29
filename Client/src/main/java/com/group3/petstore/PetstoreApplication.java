@@ -1,7 +1,8 @@
 package com.group3.petstore;
 
+import com.group3.monitorClient.messenger.Messenger;
 import org.openapitools.client.ApiException;
-import org.openapitools.client.api.PetApi;
+import org.openapitools.client.api.PetApiClient;
 import org.openapitools.client.model.Pet;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +17,9 @@ import java.util.List;
 public class PetstoreApplication {
 
 	public static void main(String[] args) throws IOException, ApiException {
+		Messenger.initialize("src/main/resources/sqlite/db", "queue.db");//TODO: User-specification paths instead
+		Messenger.getInstance().start();//TODO: add to some autogeneration
+		//TODO: addController
 		SpringApplication.run(PetstoreApplication.class, args);
 
 		try {
@@ -39,7 +43,7 @@ public class PetstoreApplication {
 	}
 
 	private static void createCall() {
-		PetApi api = new PetApi();
+		PetApiClient api = new PetApiClient();
 		List<Pet> Pets = new ArrayList<Pet>();
 
 		try {
