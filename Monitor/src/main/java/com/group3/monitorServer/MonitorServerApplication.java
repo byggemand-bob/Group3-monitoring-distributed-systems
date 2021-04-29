@@ -13,9 +13,7 @@ public class MonitorServerApplication {
 	
 	public static void main(String[] args) throws SchedulerException {
 		SpringApplication.run(MonitorServerApplication.class, args);
-		
 		scheduler = new TaskScheduler();
 		scheduler.Initialize();
 	}
-
 }

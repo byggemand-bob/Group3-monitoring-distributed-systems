@@ -20,20 +20,20 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
 public class MonitorClientInterface {
-    SQLMessageManager sqlMessageManager;
-    MessageCreator messageCreator;
-    private ApiClient client;
-    private MonitorApi monitorClient;
-    private ErrorApi ErrorClient;
-    private String monitorURL;
-    private static AtomicLong eventIDSequence = new AtomicLong(1L);
-    private static final long senderID = ConfigurationManager.getInstance().getPropertyAsLong(ConfigurationManager.getInstance().IDProp);
+    private final SQLMessageManager sqlMessageManager;
+    private final MessageCreator messageCreator;
+    private final ApiClient client;
+    private final MonitorApi monitorClient;
+    private final ErrorApi errorApi;
+    private static final AtomicLong eventIDSequence = new AtomicLong(1L);
+    private final static long senderID = ConfigurationManager.getInstance().getPropertyAsLong(ConfigurationManager.IDProp);
+    private final static String monitorURL = ConfigurationManager.getInstance().getProperty(ConfigurationManager.monitorServerAddressProp);
 
     public MonitorClientInterface(){
-        monitorURL = ConfigurationManager.getInstance().getProperty(ConfigurationManager.getInstance().monitorServerAddressProp);
         client = new ApiClient();
         ValidateAndSetMonitorIP(monitorURL);
         monitorClient = new MonitorApi(client);
+        errorApi = new ErrorApi(client);
         sqlMessageManager = new SQLMessageManager(SQLMessageManager.message_table_name);
         messageCreator = new MessageCreator();
     }
@@ -73,13 +73,7 @@ public class MonitorClientInterface {
     }
 
     public int sendErrorData(ErrorData errorData) throws ApiException {
-        return ErrorClient.addErrorDataWithHttpInfo(errorData).getStatusCode();
-    }
-
-    public long queueMonitorData(@Nullable String targetEndPoint, EventCodeEnum eventCode) {
-        long eventID = getNextEventID();
-        addMonitorData(eventID, targetEndPoint, eventCode);
-        return eventID;
+        return errorApi.addErrorDataWithHttpInfo(errorData).getStatusCode();
     }
 
     public long queueMonitorData(long eventID, @Nullable String targetEndPoint, EventCodeEnum eventCode) {
@@ -87,7 +81,7 @@ public class MonitorClientInterface {
         return eventID;
     }
 
-    private long getNextEventID() {
+    public long getNextEventID() {
         return eventIDSequence.getAndIncrement();
     }
 }

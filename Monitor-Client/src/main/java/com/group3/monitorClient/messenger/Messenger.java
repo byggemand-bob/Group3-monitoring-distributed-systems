@@ -1,6 +1,8 @@
 package com.group3.monitorClient.messenger;
 
 import com.group3.monitorClient.MonitorClientInterface;
+import com.group3.monitorClient.configuration.ConfigurationManager;
+import com.group3.monitorClient.exception.MonitorConfigException;
 import com.group3.monitorClient.messenger.messages.*;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.model.ErrorData;
@@ -19,26 +21,37 @@ import java.time.format.DateTimeFormatter;
  * It Utilizes the MonitorApi and will indefinably probe the queue until stopped or paused.
  */
 public class Messenger implements MessengerInterface {
-    protected MonitorClientInterface monitorClientInterface;
+    private static Messenger messenger_instance = null;
+    protected static MonitorClientInterface monitorClientInterface;
     private boolean running = true;
     private boolean paused = false;
-    public final SQLMessageManager sqlMessageManager;
-    private final SQLMessageManager sqlFailedMessageManager;
-    private final MessageCreator messageCreator = new MessageCreator();
+    public static SQLMessageManager sqlMessageManager;
+    private static SQLMessageManager sqlFailedMessageManager;
+    private MessageCreator messageCreator = new MessageCreator();
     private Thread thread;
-    private long senderID = 1L;//TODO: add real sender id instead of dummy data
+    private final long senderID = ConfigurationManager.getInstance().getPropertyAsLong(ConfigurationManager.IDProp);
 
     /*
      * specifies which SynchronizedQueue to utilize,
      * useful if multiple messengers should share the same queue.
      */
-    public Messenger(String monitorIP, String sqlPath, String sqlFileName){
+    public static void initialize(String sqlPath, String sqlFileName){
         SQLManager sqlManager = SQLManager.getInstance();
         sqlManager.Connect(sqlPath, sqlFileName);
         monitorClientInterface = new MonitorClientInterface();
         sqlMessageManager = new SQLMessageManager(SQLMessageManager.message_table_name);
         sqlFailedMessageManager = new SQLMessageManager(SQLMessageManager.failed_message_table_name);
+        messenger_instance = new Messenger();
     }
+
+    public static Messenger getInstance() {
+        if (messenger_instance == null) {
+            initialize("src/main/resources/sqlite/db", "test.db");//TODO: find user specified sqlPath and db name
+        }
+        return messenger_instance;
+    }
+
+    protected Messenger() { }
 
     /* starts a thread running current class.run() */
     @Override

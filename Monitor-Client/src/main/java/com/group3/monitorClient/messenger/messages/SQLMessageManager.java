@@ -17,7 +17,6 @@ public class SQLMessageManager {
     public SQLMessageManager(String tableName) {
         this.tableName = tableName;
         this.sqlManager = SQLManager.getInstance();
-
         if (!sqlManager.CheckIfTableExists(tableName)) {
             sqlManager.CreateNewTable(tableName,
                     "ID INTEGER PRIMARY KEY AUTOINCREMENT",

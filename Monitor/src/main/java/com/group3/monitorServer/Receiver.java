@@ -7,6 +7,7 @@ import org.openapitools.api.ErrorApi;
 import org.openapitools.api.MonitorApi;
 import org.openapitools.model.ErrorData;
 import org.openapitools.model.TimingMonitorData;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,10 @@ import java.util.Optional;
 public class Receiver implements MonitorApi, ErrorApi {
     SQLMessageManager sqlMessageManager;
     MessageCreator messageCreator;
+
+    public Receiver() {
+        this("src/main/resources/sqlite/db", "queue.db"); //TODO: should check for user specified path and db name
+    }
 
     public Receiver(String sqlPath, String sqlFileName) {
         SQLManager sqlManager = SQLManager.getInstance();
