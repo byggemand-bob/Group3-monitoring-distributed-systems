@@ -28,8 +28,8 @@ public class MonitorClientInterface {
     private final MonitorApi monitorClient;
     private final ErrorApi errorApi;
     private static final AtomicLong eventIDSequence = new AtomicLong(1L);
-    private final static long senderID = ConfigurationManager.getInstance().getPropertyAsLong(ConfigurationManager.IDProp);
-    private final static String monitorURL = ConfigurationManager.getInstance().getProperty(ConfigurationManager.monitorServerAddressProp);
+    private final long senderID = ConfigurationManager.getInstance().getPropertyAsLong(ConfigurationManager.IDProp);
+    private final String monitorURL = ConfigurationManager.getInstance().getProperty(ConfigurationManager.monitorServerAddressProp);
 
     public MonitorClientInterface(){
         client = new ApiClient();
