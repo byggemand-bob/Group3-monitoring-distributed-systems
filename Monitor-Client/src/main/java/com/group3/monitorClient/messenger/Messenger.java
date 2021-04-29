@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class Messenger implements MessengerInterface {
     private static Messenger messenger_instance = null;
+
     protected static MonitorClientInterface monitorClientInterface;
     private boolean running = true;
     private boolean paused = false;
@@ -31,6 +32,7 @@ public class Messenger implements MessengerInterface {
     private Thread thread;
     private final long senderID = ConfigurationManager.getInstance().getPropertyAsLong(ConfigurationManager.IDProp);
 
+
     /*
      * specifies which SynchronizedQueue to utilize,
      * useful if multiple messengers should share the same queue.
@@ -39,8 +41,8 @@ public class Messenger implements MessengerInterface {
         SQLManager sqlManager = SQLManager.getInstance();
         sqlManager.Connect(sqlPath, sqlFileName);
         monitorClientInterface = new MonitorClientInterface();
-        sqlMessageManager = new SQLMessageManager(SQLMessageManager.message_table_name);
-        sqlFailedMessageManager = new SQLMessageManager(SQLMessageManager.failed_message_table_name);
+        sqlMessageManager = new SQLMessageManager(sqlManager, SQLMessageManager.message_table_name);
+        sqlFailedMessageManager = new SQLMessageManager(sqlManager, SQLMessageManager.failed_message_table_name);
         messenger_instance = new Messenger();
     }
 
@@ -234,6 +236,18 @@ public class Messenger implements MessengerInterface {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public static MonitorClientInterface getMonitorClientInterface() {
+        return monitorClientInterface;
+    }
+
+    public static SQLMessageManager getSqlMessageManager() {
+        return sqlMessageManager;
+    }
+
+    public static SQLMessageManager getSqlFailedMessageManager() {
+        return sqlFailedMessageManager;
     }
 
     public void CloseConnectionToSQL(){

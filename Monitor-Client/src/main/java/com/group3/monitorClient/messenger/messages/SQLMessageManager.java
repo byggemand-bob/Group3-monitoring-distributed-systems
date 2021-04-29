@@ -14,9 +14,10 @@ public class SQLMessageManager {
     private SQLManager sqlManager;
     private String tableName;
 
-    public SQLMessageManager(String tableName) {
+    public SQLMessageManager(SQLManager sqlManager, String tableName) {
         this.tableName = tableName;
-        this.sqlManager = SQLManager.getInstance();
+        this.sqlManager = sqlManager;
+
         if (!sqlManager.CheckIfTableExists(tableName)) {
             sqlManager.CreateNewTable(tableName,
                     "ID INTEGER PRIMARY KEY AUTOINCREMENT",

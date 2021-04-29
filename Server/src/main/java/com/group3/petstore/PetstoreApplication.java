@@ -1,5 +1,7 @@
 package com.group3.petstore;
 
+import com.group3.monitorClient.MonitorClientInterface;
+import com.group3.monitorClient.messenger.Messenger;
 import com.group3.monitorClient.messenger.messages.SQLManager;
 import com.group3.monitorClient.messenger.messages.SQLMessageManager;
 import org.springframework.boot.SpringApplication;
@@ -12,11 +14,10 @@ import org.springframework.context.annotation.ComponentScans;
 public class PetstoreApplication {
 
 	public static void main(String[] args) {
-		SQLManager sqlManager = SQLManager.getInstance();
-		if (sqlManager.getPath() == null || sqlManager.getFileName() == null) {
-			sqlManager.Connect("src/main/resources/sqlite/db", "queue.db");
-		}
-		//TODO: User-specification something
+		Messenger.initialize("src/main/resources/sqlite/db", "queue.db");//TODO: User-specification paths instead
+		Messenger.getInstance().start();
+		//TODO: addController
 		SpringApplication.run(PetstoreApplication.class, args);
+
 	}
 }

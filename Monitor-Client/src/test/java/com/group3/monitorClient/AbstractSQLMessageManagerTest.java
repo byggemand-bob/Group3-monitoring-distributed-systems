@@ -30,8 +30,8 @@ public class AbstractSQLMessageManagerTest extends AbstractMonitorTest {
     public void setup () {
         SQLManager sqlManager = SQLManager.getInstance();
         sqlManager.Connect("src/main/resources/sqlite/db/", "test.db");
-        sqlMessageManager = new SQLMessageManager(SQLMessageManager.message_table_name);
-        sqlFailedMessageManager = new SQLMessageManager(SQLMessageManager.failed_message_table_name);
+        sqlMessageManager = new SQLMessageManager(sqlManager,SQLMessageManager.message_table_name);
+        sqlFailedMessageManager = new SQLMessageManager(sqlManager, SQLMessageManager.failed_message_table_name);
     }
 
     /* Deletes the sql database after each test */

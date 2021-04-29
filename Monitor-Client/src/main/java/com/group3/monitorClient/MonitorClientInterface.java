@@ -2,7 +2,9 @@ package com.group3.monitorClient;
 
 import com.group3.monitorClient.configuration.ConfigurationManager;
 import com.group3.monitorClient.exception.MonitorConfigException;
+import com.group3.monitorClient.messenger.Messenger;
 import com.group3.monitorClient.messenger.messages.MessageCreator;
+import com.group3.monitorClient.messenger.messages.SQLManager;
 import com.group3.monitorClient.messenger.messages.SQLMessageManager;
 import org.openapitools.client.ApiClient;
 import org.openapitools.client.ApiException;
@@ -34,7 +36,7 @@ public class MonitorClientInterface {
         ValidateAndSetMonitorIP(monitorURL);
         monitorClient = new MonitorApi(client);
         errorApi = new ErrorApi(client);
-        sqlMessageManager = new SQLMessageManager(SQLMessageManager.message_table_name);
+        sqlMessageManager = Messenger.getSqlMessageManager();
         messageCreator = new MessageCreator();
     }
 

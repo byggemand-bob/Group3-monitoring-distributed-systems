@@ -20,7 +20,7 @@ public class ConfigurationManager {
 	public static final String daysToKeepMessages = "DaysToKeepFailedMessages";
 	private static ConfigurationManager instance = null;
 	private static String EMPTY = "";
-	private static final String[] requiredProperties = {IDProp};
+	private static final String[] requiredProperties = {IDProp, monitorServerAddressProp};
 
 	public ConfigurationManager() {
 		if (props == null) {
