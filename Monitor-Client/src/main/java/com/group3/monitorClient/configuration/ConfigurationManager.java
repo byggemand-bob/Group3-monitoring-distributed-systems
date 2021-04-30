@@ -17,7 +17,10 @@ public class ConfigurationManager {
 	private Properties props;
 	public static final String IDProp = "ID";
 	public static final String monitorServerAddressProp = "MonitorServerAddress";
-	public static final String daysToKeepMessages = "DaysToKeepFailedMessages";
+	public static final String daysToKeepMessagesProp = "DaysToKeepFailedMessages";
+	public static final String sqlPathProp = "SQLPath";
+	public static final String dbFileNameProp = "DataBaseFileName";
+	public static final String availableCPURequirementProp = "MonitorDataSendingCPUThreshold";
 	private static ConfigurationManager instance = null;
 	private static String EMPTY = "";
 	private static final String[] requiredProperties = {IDProp, monitorServerAddressProp};
@@ -57,12 +60,28 @@ public class ConfigurationManager {
 		String propValue = getProperty(propertyName);
 		return Long.parseLong(propValue);
 	}
-	
+
+	public double getPropertyAsDouble(String propertyName, double defaultValue) {
+		String propValue = getProperty(propertyName);
+		if (propValue == null) {
+			return defaultValue;
+		}
+		return Double.parseDouble(propValue);
+	}
+
+	public int getPropertyAsInteger(String propertyName, int defaultValue) {
+		String propValue = getProperty(propertyName);
+		if (propValue == null) {
+			return defaultValue;
+		}
+		return Integer.parseInt(propValue);
+	}
+
 	public int getPropertyAsInteger(String propertyName) {
 		String propValue = getProperty(propertyName);
 		return Integer.parseInt(propValue);
 	}
-	
+
 	private void validateRequiredProperties() {
 		List<String> msg = new ArrayList<>();
 

@@ -32,7 +32,7 @@ public class CleanUpOldFailedMessagesTask extends AbstractTask {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		System.out.println("Started cleanup of old failed messages...");
 		
-		int daysToKeep = ConfigurationManager.getInstance().getPropertyAsInteger(ConfigurationManager.daysToKeepMessages);
+		int daysToKeep = ConfigurationManager.getInstance().getPropertyAsInteger(ConfigurationManager.daysToKeepMessagesProp);
 		
 		// Ensure that daysToKeep do not go below zero
 		final String whereClause = generateWhereClause(daysToKeep);

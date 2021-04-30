@@ -40,15 +40,16 @@ public class Messenger implements MessengerInterface {
     public static void initialize(String sqlPath, String sqlFileName){
         SQLManager sqlManager = SQLManager.getInstance();
         sqlManager.Connect(sqlPath, sqlFileName);
-        monitorClientInterface = new MonitorClientInterface();
         sqlMessageManager = new SQLMessageManager(sqlManager, SQLMessageManager.message_table_name);
         sqlFailedMessageManager = new SQLMessageManager(sqlManager, SQLMessageManager.failed_message_table_name);
         messenger_instance = new Messenger();
+        monitorClientInterface = new MonitorClientInterface();
     }
 
     public static Messenger getInstance() {
         if (messenger_instance == null) {
-            initialize("src/main/resources/sqlite/db", "test.db");//TODO: find user specified sqlPath and db name
+            initialize(ConfigurationManager.getInstance().getProperty(ConfigurationManager.sqlPathProp, "src" + File.separator + "main" + File.separator + "resources" + File.separator + "sqlite" + File.separator + "db"),
+                       ConfigurationManager.getInstance().getProperty(ConfigurationManager.dbFileNameProp, "queue.db"));
         }
         return messenger_instance;
     }
