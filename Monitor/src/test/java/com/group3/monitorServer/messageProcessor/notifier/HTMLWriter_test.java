@@ -1,16 +1,38 @@
 package com.group3.monitorServer.messageProcessor.notifier;
 
 import com.group3.monitorServer.messageProcessor.notifier.htmlNotifier.HTMLWriter;
+
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
 
 public class HTMLWriter_test {
+	
+	private final static String htmlPath = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "html_test";
+	
+	@AfterAll
+	public static void cleanUp() {
+		File dir = new File(htmlPath);
+		recursiveClean(dir);
+	}
+	
+	public static void recursiveClean(File file) {
+		if (file.isDirectory()) {
+			for (File f : file.listFiles()) {
+				recursiveClean(f);
+			}
+		}
+		file.delete();
+	}
+	
+	
     @Test
     public void Constructor_NoExistingHtml() throws IOException {
         //setup
-        File file = new File("src/main/resources/html_test/constructorTest.html");
+        final String htmlFilePath = htmlPath + File.separator + "constructorTest.html";
+    	File file = new File(htmlFilePath);
         file.delete();
 
         String htmlExpected = "<!DOCTYPE html>\n" +
@@ -23,7 +45,7 @@ public class HTMLWriter_test {
                 "</html>\n";
 
         //Act
-        HTMLWriter htmlWriter = new HTMLWriter("src/main/resources/html_test/constructorTest.html");
+        HTMLWriter htmlWriter = new HTMLWriter(htmlFilePath);
 
         StringBuilder htmlActual = new StringBuilder();
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
@@ -36,12 +58,17 @@ public class HTMLWriter_test {
         //Assert
         Assertions.assertTrue(file.exists());
         Assertions.assertEquals(htmlExpected, htmlActual.toString());
+        
+        //Cleanup
+        bufferedReader.close();
+        htmlWriter.close();
     }
 
     @Test
     public void Constructor_AlreadyExistingHtml() throws IOException {
         //setup
-        File file = new File("src/main/resources/html_test/constructorTest.html");
+    	final String htmlFilePath = htmlPath + File.separator + "constructorTest.html";
+        File file = new File(htmlFilePath);
         file.delete();
         file.createNewFile();
 
@@ -61,7 +88,7 @@ public class HTMLWriter_test {
         fileWriter.close();
 
         //Act
-        HTMLWriter htmlWriter = new HTMLWriter("src/main/resources/html_test/constructorTest.html");
+        HTMLWriter htmlWriter = new HTMLWriter(htmlFilePath);
 
         StringBuilder htmlActual = new StringBuilder();
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
@@ -74,12 +101,17 @@ public class HTMLWriter_test {
         //Assert
         Assertions.assertTrue(file.exists());
         Assertions.assertEquals(htmlExpected, htmlActual.toString());
+        
+        //Cleanup
+        bufferedReader.close();
+        htmlWriter.close();
     }
 
     @Test
     public void AddMessage() throws IOException {
         //Setup
-        File file = new File("src/main/resources/html_test/test.html");
+    	final String htmlFilePath = htmlPath + File.separator + "test.html";
+        File file = new File(htmlFilePath);
         file.delete();
         file.createNewFile();
 
@@ -101,7 +133,7 @@ public class HTMLWriter_test {
         fileWriter.close();
 
         //Act
-        HTMLWriter htmlWriter = new HTMLWriter("src/main/resources/html_test/test.html");
+        HTMLWriter htmlWriter = new HTMLWriter(htmlFilePath);
         htmlWriter.AddMessage("Error4");
 
         StringBuilder htmlAfter = new StringBuilder();
@@ -127,5 +159,9 @@ public class HTMLWriter_test {
                              "</html>\n"; //note the real html would not have a "\n" at the end on this line, the way htmlAfter is constructed adds this.
 
         Assertions.assertEquals(expectedHtml, htmlAfter.toString());
+        
+        //Cleanup
+        bufferedReader.close();
+        htmlWriter.close();
     }
 }

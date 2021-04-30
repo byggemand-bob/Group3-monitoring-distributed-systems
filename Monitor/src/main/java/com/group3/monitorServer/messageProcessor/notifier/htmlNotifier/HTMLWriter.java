@@ -36,6 +36,7 @@ public class HTMLWriter {
     /* checks the html file location, if the html doesn't exists it creates an empty html */
     private File PrepareHTMLFile(String htmlPath) throws IOException {
         File file = new File(htmlPath);
+        createDirectoryIfNotExist(htmlPath);
 
         //If the file didn't exist, create a new one, with an empty html
         if(file.createNewFile()){
@@ -55,6 +56,16 @@ public class HTMLWriter {
         }
 
         return file;
+    }
+    
+    /* Creates the necessary directory for the html file, if it does not already exist*/
+    private void createDirectoryIfNotExist(String htmlFilePath) {
+    	final int fileNameIndex = htmlFilePath.lastIndexOf(File.separator);
+    	final String path = htmlFilePath.substring(0, fileNameIndex);
+    	File dir = new File(path);
+    	if (!dir.exists()) {
+    		dir.mkdir();
+    	}
     }
 
     /* Returns the user specified path if one exists, otherwise returns default path */
@@ -114,5 +125,9 @@ public class HTMLWriter {
         raf.writeBytes("\t\t</ul>\n");
         raf.writeBytes("\t</body>\n");
         raf.writeBytes("</html>");
+    }
+    
+    public void close() throws IOException {
+    	raf.close();
     }
 }
