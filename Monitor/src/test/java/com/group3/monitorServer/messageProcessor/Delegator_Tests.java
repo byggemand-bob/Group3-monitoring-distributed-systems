@@ -1,9 +1,11 @@
 package com.group3.monitorServer.messageProcessor;
 
+import com.group3.monitorServer.constraint.store.ConstraintStore;
+import com.group3.monitorServer.messageProcessor.notifier.htmlNotifier.HTMLNotifier;
 import com.group3.monitorServer.messages.ErrorDataMessage;
 import com.group3.monitorServer.messages.MessageCreator;
-import com.group3.monitorServer.messages.SQLMessageManager;
 import com.group3.monitorServer.messages.TimingMonitorDataMessage;
+import com.group3.monitorServer.testClasses.AbstractHTMLWriterTest;
 import com.group3.monitorServer.testClasses.AbstractSQLMessageManagerTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,8 +22,10 @@ public class Delegator_Tests extends AbstractSQLMessageManagerTest {
     @Test
     public void ThreadControl() throws InterruptedException {
         //setup
+        AbstractHTMLWriterTest.deleteHtml();
+        HTMLNotifier htmlNotifier = new HTMLNotifier(AbstractHTMLWriterTest.HTMLTestPath, new ConstraintStore());
         int loopCount;
-        Delegator delegator = new Delegator(sqlMessageManager);
+        Delegator delegator = new Delegator(sqlMessageManager, htmlNotifier);
 
         AddMessages();
 
@@ -32,7 +36,7 @@ public class Delegator_Tests extends AbstractSQLMessageManagerTest {
         delegator.start();
 
         loopCount = 0;
-        while(sqlMessageManager.TableSize() != 0 && loopCount < 50){
+        while(sqlMessageManager.TableSize() != 0 && loopCount < 1000){
             Thread.sleep(50);
             loopCount++;
         }
@@ -50,7 +54,7 @@ public class Delegator_Tests extends AbstractSQLMessageManagerTest {
 
         delegator.resume();
         loopCount = 0;
-        while(sqlMessageManager.TableSize() != 0 && loopCount < 50){
+        while(sqlMessageManager.TableSize() != 0 && loopCount < 1000){
             Thread.sleep(50);
             loopCount++;
         }
@@ -63,6 +67,7 @@ public class Delegator_Tests extends AbstractSQLMessageManagerTest {
 
         /* verifies that the delegator thread was terminated after calling stop() */
         Assertions.assertFalse(delegator.isAlive());
+        AbstractHTMLWriterTest.deleteHtml();
     }
 
     private void AddMessages(){
@@ -116,7 +121,7 @@ public class Delegator_Tests extends AbstractSQLMessageManagerTest {
     }
 
     @Test
-    public void testFindTimingDataMatchPass () throws SQLException { //TODO: refactor to match returns of the new analyzed messages
+    public void testFindTimingDataMatchPass () { //TODO: refactor to match returns of the new analyzed messages
         //Setup
         MessageCreator messageCreator = new MessageCreator();
         OffsetDateTime offsetDateTime = OffsetDateTime.now();
@@ -174,7 +179,7 @@ public class Delegator_Tests extends AbstractSQLMessageManagerTest {
             Method method = null;
             method = Delegator.class.getDeclaredMethod("findTimingDataMatch", TimingMonitorDataMessage.class);
             method.setAccessible(true);
-            Delegator delegator = new Delegator(sqlMessageManager);
+            Delegator delegator = new Delegator(sqlMessageManager, new HTMLNotifier(AbstractHTMLWriterTest.HTMLTestPath, new ConstraintStore()));
             message = (TimingMonitorDataMessage) messageCreator.MakeMessage(timingMonitorData);
             matchingMessage = ((TimingMonitorDataMessageID) method.invoke(delegator, message)).timingMonitorDataMessage;
         } catch (NoSuchMethodException e) {
@@ -190,5 +195,7 @@ public class Delegator_Tests extends AbstractSQLMessageManagerTest {
         Assertions.assertEquals(message.getTimingMonitorData().getSenderID(),matchingMessage.getTimingMonitorData().getSenderID());
         Assertions.assertNotEquals(message.getTimingMonitorData().getEventCode(),matchingMessage.getTimingMonitorData().getEventCode());
         Assertions.assertEquals(TimingMonitorData.EventCodeEnum.SENDREQUEST,matchingMessage.getTimingMonitorData().getEventCode());
+
+        AbstractHTMLWriterTest.deleteHtml();
     }
 }

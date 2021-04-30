@@ -13,7 +13,6 @@ import com.group3.monitorClient.configuration.ConfigurationManager;
 import com.group3.monitorServer.constraint.Constraint;
 import com.group3.monitorServer.constraint.validator.ConstraintUserInputValidation;
 
-
 /**
  * Responsible for importing the {@link Constraint}s specified in a file into the Monitor Server to make them available to use in the system when analyzing the data.
  * 

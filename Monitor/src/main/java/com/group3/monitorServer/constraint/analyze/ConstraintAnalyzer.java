@@ -1,11 +1,11 @@
 package com.group3.monitorServer.constraint.analyze;
 
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
-
 import com.group3.monitorServer.constraint.Constraint;
 import com.group3.monitorServer.constraint.ConstraintKey;
 import com.group3.monitorServer.constraint.store.ConstraintStore;
+
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 
 /**
  * Is the class responsible for analyzing the data that are received by the Monitor Server.
@@ -35,10 +35,9 @@ public class ConstraintAnalyzer {
 	 * @param timestampTwo The second timestamp used for analysing the timing for a call.
 	 * @param endpoint The endpoint path the call to analyze was made to.
 	 * 
-	 * @return True if difference between timestamps are within the boundaries of the {@link Constraint} or if a {@link Constraint} is not defined for the endpoint.
-	 * False if difference between timestamps are not within the defined minimum (optional) and maximum differences defined for the {@link Constraint} (both minimum and maximum is inclusive).
+	 * @return An instance of {@link ConstraintAnalysisDetails} which includes all information about the result of the analysis
 	 */
-	public boolean analyzeTimings(OffsetDateTime timestampOne, OffsetDateTime timestampTwo, String endpoint) {
+	public ConstraintAnalysisDetails analyzeTimings(OffsetDateTime timestampOne, OffsetDateTime timestampTwo, String endpoint) {
 		return analyzeTimings(timestampOne, timestampTwo, endpoint, false , null);
 	}
 	
@@ -53,25 +52,25 @@ public class ConstraintAnalyzer {
 	 * @param checkForGeneralConstraint Determines if a {@link Constraint} could not be found for a specific node, if instead a general {@link Constraint} for the endpoint should be searched for.
 	 * @param nodeID The ID of the node the call was received on.
 	 * 
-	 * @return True if difference between timestamps are within the boundaries of the {@link Constraint} or if a {@link Constraint} is not defined for the endpoint.
-	 * False if difference between timestamps are not within the defined minimum (optional) and maximum differences defined for the {@link Constraint} (both minimum and maximum is inclusive).
+	 * @return An instance of {@link ConstraintAnalysisDetails} which includes all information about the result of the analysis
 	 */
-	public boolean analyzeTimings(OffsetDateTime timestampOne, OffsetDateTime timestampTwo, String endpoint, boolean checkForGeneralConstraint, Integer nodeID) {
+	public ConstraintAnalysisDetails analyzeTimings(OffsetDateTime timestampOne, OffsetDateTime timestampTwo, String endpoint, boolean checkForGeneralConstraint, Integer nodeID) {		
 		// Check if there is a constraint
 		ConstraintKey key = new ConstraintKey(endpoint, nodeID);
 		Constraint constraint = constraints.findConstraint(key, checkForGeneralConstraint);
 		
 		//  If constraint does not exists then return true
 		if (constraint == null) {
-			return true;
+			return new ConstraintAnalysisDetails(false, constraint, 0L);
 		}
 		
 		// Calculate the difference between the timestamps
 		long diffInMillis = calculateDifference(timestampOne, timestampTwo);
 		
 		// Check whether the difference conforms to the constraint
-		return (constraint.getMin() == null || constraint.getMin() <= diffInMillis) &&
+		final boolean withinBounds = (constraint.getMin() == null || constraint.getMin() <= diffInMillis) &&
 				constraint.getMax() >= diffInMillis;
+		return new ConstraintAnalysisDetails(!withinBounds, constraint, diffInMillis);
 	}
 	
 	/**

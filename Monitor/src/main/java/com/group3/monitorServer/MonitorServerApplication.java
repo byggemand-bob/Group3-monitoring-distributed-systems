@@ -1,10 +1,9 @@
 package com.group3.monitorServer;
 
+import com.group3.monitorClient.scheduling.TaskScheduler;
 import org.quartz.SchedulerException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.group3.monitorClient.scheduling.TaskScheduler;
 
 @SpringBootApplication
 public class MonitorServerApplication {

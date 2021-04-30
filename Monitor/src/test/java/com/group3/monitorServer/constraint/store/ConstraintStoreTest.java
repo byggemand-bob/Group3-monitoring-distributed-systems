@@ -1,17 +1,16 @@
 package com.group3.monitorServer.constraint.store;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.HashMap;
-import java.util.Map;
-
+import com.group3.monitorServer.constraint.Constraint;
+import com.group3.monitorServer.constraint.ConstraintKey;
+import com.group3.monitorServer.constraint.exception.ConstraintAlreadyExistsException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.group3.monitorServer.constraint.Constraint;
-import com.group3.monitorServer.constraint.ConstraintKey;
-import com.group3.monitorServer.constraint.exception.ConstraintAlreadyExistsException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class ConstraintStoreTest {
 
