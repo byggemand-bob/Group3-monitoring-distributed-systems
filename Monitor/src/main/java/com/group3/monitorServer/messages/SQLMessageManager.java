@@ -67,7 +67,7 @@ public class SQLMessageManager {
     }
 
     /*Update the InUse state*/
-    public void UpdateInUse (int msgId, boolean set) {
+    public void UpdateInUse (long msgId, boolean set) {
         GenericPreparedStmt("UPDATE " + tableName + " SET InUse = " + set + " WHERE ID  = " + msgId);
     }
 

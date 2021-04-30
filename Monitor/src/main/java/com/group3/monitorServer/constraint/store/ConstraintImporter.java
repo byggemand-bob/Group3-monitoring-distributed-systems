@@ -1,8 +1,17 @@
 package com.group3.monitorServer.constraint.store;
 
-import org.apache.commons.lang3.NotImplementedException;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
+import javax.validation.ValidationException;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+import com.group3.monitorClient.configuration.ConfigurationManager;
 import com.group3.monitorServer.constraint.Constraint;
+import com.group3.monitorServer.constraint.validator.ConstraintUserInputValidation;
 
 /**
  * Responsible for importing the {@link Constraint}s specified in a file into the Monitor Server to make them available to use in the system when analyzing the data.
@@ -19,9 +28,14 @@ public class ConstraintImporter {
 	 * @param path The path the the file specifying the {@link Constraint}s for the Monitor Server.
 	 * 
 	 * @return A {@link ConstraintStore} containing all the {@link Constraint}s specified in the file.
+	 * @throws IOException is thrown if there was a I/O operations that failed
 	 */
-	public ConstraintStore importConstraints(String path) {
-		throw new NotImplementedException();
+	public ConstraintStore importConstraints(String path) throws IOException {
+		ConstraintUserInputValidation inputValidation = new ConstraintUserInputValidation();
+		inputValidation.validate(path);
+		Constraint[] constraints  = readData(path);
+		ConstraintStore constraintStore = convertData(constraints);;
+		return constraintStore;
 	}
 	
 	/**
@@ -30,7 +44,13 @@ public class ConstraintImporter {
 	 * @return The path to the {@link Constraint} specification as defined in the configuration.properties file.
 	 */
 	public String getDefaultConstraintPath() {
-		throw new NotImplementedException();
+		String constraintsSpecificationFilePath = null;
+		
+		constraintsSpecificationFilePath = ConfigurationManager
+				.getInstance()
+				.getProperty(ConfigurationManager.constraintsSpecificationFilePath);
+		
+		return constraintsSpecificationFilePath;
 	}
 	
 	/**
@@ -38,32 +58,39 @@ public class ConstraintImporter {
 	 * 
 	 * @param path The path to the {@link Constraint} specification file for import.
 	 * 
-	 * @return An array containing each {@link Constraint} encoded as a String.
+	 * @return An array containing each {@link Constraint}.
+	 * @throws FileNotFoundException Throws an exception if the file can't be found using @param path.
 	 */
-	private String[] readData(String path) {
-		throw new NotImplementedException();
+	private Constraint[] readData(String path) throws FileNotFoundException {
+		Constraint[] constraints = null;	
+		String data = "";
+		Gson gson = new Gson();
+		JsonReader jsonReader = new JsonReader(new FileReader(path));
+		data = JsonParser.parseReader(jsonReader).toString();
+		constraints = gson.fromJson(data, Constraint[].class);
+
+		return constraints;
 	}
 	
 	/**
-	 * Converts the {@link Constraint} data encoded in the String array into instance of the {@link Constraint} class and returns a {@link ConstraintStore} containing all the {@link Constraint}s.
+	 * Converts the {@link Constraint} data encoded in the {@link Constraint} into instance of the {@link Constraint} class and returns a {@link ConstraintStore} containing all the {@link Constraint}s.
 	 * 
-	 * @param data String array of the String encoding of the specified {@link Constraint}s
+	 * @param data is a array of {@link Constraint}
 	 * 
 	 * @return A {@link ConstraintStore} containing information about the {@link Constraint}s encoded in the data.
 	 */
-	private ConstraintStore convertData(String[] data) {
-		throw new NotImplementedException();
-	}
-	
-	/**
-	 * Converts a single encoding of a {@link Constraint} into its class representation.
-	 * 
-	 * @param data The {@link Constraint} encoded as a String.
-	 * 
-	 * @return A {@link Constraint} instance based on the provided data.
-	 */
-	private Constraint convertData(String data) {
-		//TODO Make sure min value cant be greater then max value.
-		throw new NotImplementedException();
+	private ConstraintStore convertData(Constraint[] constraints) {	
+		ConstraintStore constraintStore = new ConstraintStore();
+		for (int i = 0; i < constraints.length; i++) {
+			Constraint constraint = constraints[i];
+
+			if(constraint.getMin() != null && constraint.getMax() < constraint.getMin()) {
+				throw new ValidationException("The constraint max value is less than min value, which is not allowed");
+			}
+			
+			constraintStore.addConstraint(constraint);
+		}
+
+		return constraintStore;
 	}
 }

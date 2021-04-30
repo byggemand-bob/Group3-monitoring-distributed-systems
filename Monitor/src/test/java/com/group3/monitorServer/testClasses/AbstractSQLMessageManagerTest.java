@@ -6,11 +6,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openapitools.model.ErrorData;
 import org.openapitools.model.TimingMonitorData;
-
-import java.io.File;
 import java.time.OffsetDateTime;
 
-public class AbstractSQLMessageManagerTest {
+import java.io.File;
+
+public abstract class AbstractSQLMessageManagerTest {
     public static SQLMessageManager sqlMessageManager;// = new SQLManager("src/main/resources/sqlite/db/", "test.db");
 
     @BeforeAll
@@ -63,7 +63,7 @@ public class AbstractSQLMessageManagerTest {
         errorData.setSenderID(100L);
         errorData.setTimestamp(OffsetDateTime.now());
         errorData.setComment("test");
-        errorData.setHttpResponse(200);
+        errorData.setHttpResponse(400);
         return new ErrorDataMessage(errorData);
     }
 

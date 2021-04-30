@@ -10,7 +10,7 @@ import org.openapitools.model.TimingMonitorData;
 import java.io.File;
 import java.time.OffsetDateTime;
 
-public class AbstractSQLManagerTest {
+public abstract class AbstractSQLManagerTest {
     public static SQLManager sqlManager = SQLManager.getInstance();;// = new SQLManager("src/main/resources/sqlite/db/", "test.db");
 
     @BeforeAll
@@ -61,6 +61,7 @@ public class AbstractSQLManagerTest {
         errorData.setSenderID(100L);
         errorData.setTimestamp(OffsetDateTime.now());
         errorData.setComment("test");
+        errorData.setHttpResponse(400);
         return new ErrorDataMessage(errorData);
     }
 
