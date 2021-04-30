@@ -130,6 +130,11 @@ files:
     destinationFilename: MonitorClientInterface.java
     folder: src/gen/java/main/com/group3/monitorClient
 
+  controller/Controller.mustache:
+    templateType: SupportingFiles
+    destinationFilename: Controller.java
+    folder: src/gen/java/main/com/group3/monitorClient/controller
+
   api.mustache:
     templateType: API
     destinationFilename: .java
