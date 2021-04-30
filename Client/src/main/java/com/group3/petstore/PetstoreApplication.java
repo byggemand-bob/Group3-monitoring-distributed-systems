@@ -1,5 +1,8 @@
 package com.group3.petstore;
 
+import com.group3.monitorClient.configuration.ConfigurationManager;
+import com.group3.monitorClient.controller.Controller;
+import com.group3.monitorClient.controller.requirements.AvailableCPURequirement;
 import com.group3.monitorClient.messenger.Messenger;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.api.PetApiClient;
@@ -17,9 +20,10 @@ import java.util.List;
 public class PetstoreApplication {
 
 	public static void main(String[] args) throws IOException, ApiException {
-		Messenger.initialize("src/main/resources/sqlite/db", "queue.db");//TODO: User-specification paths instead
 		Messenger.getInstance().start();//TODO: add to some autogeneration
-		//TODO: addController
+		Controller controller = new Controller();
+		controller.addRequirement(new AvailableCPURequirement(ConfigurationManager.getInstance().getPropertyAsDouble(ConfigurationManager.availableCPURequirementProp, 0.2)));
+		controller.addThread(Messenger.getInstance());
 		SpringApplication.run(PetstoreApplication.class, args);
 
 		try {

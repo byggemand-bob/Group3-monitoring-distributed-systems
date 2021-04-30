@@ -1,9 +1,9 @@
 package com.group3.monitorClient.scheduling.task;
 
+import com.group3.monitorClient.messenger.Messenger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import com.group3.monitorClient.messenger.Messenger;
 import com.group3.monitorClient.configuration.ConfigurationManager;
 import com.group3.monitorClient.messenger.messages.SQLMessageManager;
 
@@ -32,7 +32,7 @@ public class CleanUpOldFailedMessagesTask extends AbstractTask {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		System.out.println("Started cleanup of old failed messages...");
 		
-		int daysToKeep = ConfigurationManager.getInstance().getPropertyAsInteger(ConfigurationManager.daysToKeepMessages);
+		int daysToKeep = ConfigurationManager.getInstance().getPropertyAsInteger(ConfigurationManager.daysToKeepMessagesProp);
 		
 		// Ensure that daysToKeep do not go below zero
 		final String whereClause = generateWhereClause(daysToKeep);
