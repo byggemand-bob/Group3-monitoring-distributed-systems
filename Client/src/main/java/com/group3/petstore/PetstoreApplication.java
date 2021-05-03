@@ -24,6 +24,7 @@ public class PetstoreApplication {
 		Controller controller = new Controller();
 		controller.addRequirement(new AvailableCPURequirement(ConfigurationManager.getInstance().getPropertyAsDouble(ConfigurationManager.availableCPURequirementProp, 0.2)));
 		controller.addThread(Messenger.getInstance());
+		controller.start();
 		SpringApplication.run(PetstoreApplication.class, args);
 
 		try {
