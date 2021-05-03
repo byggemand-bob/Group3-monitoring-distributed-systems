@@ -16,11 +16,12 @@ import org.springframework.context.annotation.ComponentScans;
 public class PetstoreApplication {
 
 	public static void main(String[] args) {
-		Messenger.initialize("src/main/resources/sqlite/db", "queue.db");//TODO: User-specification paths instead
+		Messenger.initialize("src/main/resources/sqlite/db/", "queue.db");//TODO: User-specification paths instead
 		Messenger.getInstance().start();//TODO: add to some autogeneration
 		Controller controller = new Controller();
 		controller.addRequirement(new AvailableCPURequirement(0)); //TODO: Should be added to the configuration.properties and configurationManger such that i can handle doubles.
 		controller.addThread(Messenger.getInstance());
+		controller.start();
 		SpringApplication.run(PetstoreApplication.class, args);
 
 	}

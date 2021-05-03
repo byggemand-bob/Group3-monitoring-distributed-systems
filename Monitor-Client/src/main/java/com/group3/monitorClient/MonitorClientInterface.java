@@ -31,7 +31,7 @@ public class MonitorClientInterface {
     private final long senderID = ConfigurationManager.getInstance().getPropertyAsLong(ConfigurationManager.IDProp);
     private final String monitorURL = ConfigurationManager.getInstance().getProperty(ConfigurationManager.monitorServerAddressProp);
     private final int daysToKeepMessages = ConfigurationManager.getInstance().getPropertyAsInteger(ConfigurationManager.daysToKeepMessagesProp, 30);
-    private final String sqlPath = ConfigurationManager.getInstance().getProperty(ConfigurationManager.sqlPathProp, "src/main/resources/sqlite/db");
+    private final String sqlPath = ConfigurationManager.getInstance().getProperty(ConfigurationManager.sqlPathProp, "src/main/resources/sqlite/db/");
     private final String dbFileName = ConfigurationManager.getInstance().getProperty(ConfigurationManager.dbFileNameProp, "queue.db");
     private final double availableCPURequirementProp = ConfigurationManager.getInstance().getPropertyAsDouble(ConfigurationManager.availableCPURequirementProp, 0.2);
 
