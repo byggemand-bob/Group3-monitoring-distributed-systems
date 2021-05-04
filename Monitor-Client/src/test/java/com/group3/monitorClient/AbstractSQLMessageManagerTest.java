@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openapitools.client.model.ErrorData;
 import org.openapitools.client.model.TimingMonitorData;
-import java.time.OffsetDateTime;
+import org.threeten.bp.OffsetDateTime;
 
 import java.io.File;
 

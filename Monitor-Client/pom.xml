@@ -212,7 +212,6 @@
 							<inputSpec>${project.basedir}/src/main/resources/monitor_api.yaml</inputSpec>
 							<generatorName>java</generatorName> <!-- spring for server/java for client -->
 							<configOptions>
-								<dateLibrary>java8</dateLibrary>
 								<sourceFolder>src/gen/java/main</sourceFolder>
 							</configOptions>
 						</configuration>
