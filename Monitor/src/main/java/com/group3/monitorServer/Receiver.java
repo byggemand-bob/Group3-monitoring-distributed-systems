@@ -1,5 +1,12 @@
 package com.group3.monitorServer;
 
+import com.group3.monitorClient.configuration.ConfigurationManager;
+import com.group3.monitorServer.constraint.store.ConstraintImporter;
+import com.group3.monitorServer.constraint.store.ConstraintStore;
+import com.group3.monitorServer.controller.Controller;
+import com.group3.monitorServer.controller.requirements.AvailableCPURequirement;
+import com.group3.monitorServer.messageProcessor.Delegator;
+import com.group3.monitorServer.messageProcessor.notifier.htmlNotifier.HTMLNotifier;
 import com.group3.monitorServer.messages.MessageCreator;
 import com.group3.monitorServer.messages.SQLManager;
 import com.group3.monitorServer.messages.SQLMessageManager;
@@ -16,6 +23,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import javax.validation.Valid;
 
 import java.io.File;
+import java.io.IOException;
+
 import java.util.Optional;
 
 @RestController
@@ -23,16 +32,22 @@ public class Receiver implements MonitorApi, ErrorApi {
     SQLMessageManager sqlMessageManager;
     MessageCreator messageCreator;
 
-    public Receiver() {
-        this("src" + File.separator + "main" + File.separator + "resources" + File.separator + "sqlite" + File.separator + "db" + File.separator, "queue.db");
+
+    public Receiver() throws IOException {
+        this(ConfigurationManager.getInstance().getProperty(ConfigurationManager.sqlPathProp, "src"+File.separator+"main"+File.separator+"resources"+File.separator+"sqlite"+File.separator+"db"+File.separator), ConfigurationManager.getInstance().getProperty(ConfigurationManager.dbFileNameProp, "Messages.db"));
     }
 
-    public Receiver(String sqlPath, String sqlFileName) {
+    public Receiver(String sqlPath, String sqlFileName) throws IOException {
         SQLManager sqlManager = SQLManager.getInstance();
         sqlManager.Connect(sqlPath, sqlFileName);
         sqlMessageManager = new SQLMessageManager(sqlManager, "UnprocessedMessages");
         messageCreator = new MessageCreator();
-        //TODO: Create and start MessageProcessor
+        ConstraintImporter constraintImporter = new ConstraintImporter();
+        ConstraintStore constraintStore = constraintImporter.importConstraints(constraintImporter.getDefaultConstraintPath());
+        Controller controller = new Controller();
+        controller.addRequirement(new AvailableCPURequirement(0));
+        controller.addThread(new Delegator(sqlMessageManager, new HTMLNotifier(constraintStore)));
+        controller.start();
     }
 
     @Override
