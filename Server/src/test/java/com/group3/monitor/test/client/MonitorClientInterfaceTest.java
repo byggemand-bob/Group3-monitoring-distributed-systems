@@ -20,10 +20,10 @@ public class MonitorClientInterfaceTest extends AbstractMonitorTest {
 	
 	@BeforeAll
 	public static void setupTests () {
-		File path = new File("src/main/resources/sqlite/db/");
+		File path = new File("src" + File.separator + "main" + File.separator + "resources" + File.separator + "sqlite" + File.separator + "db" + File.separator);
 		path.mkdirs();
 		SQLManager sqlManager = SQLManager.getInstance();
-		sqlManager.Connect("src/main/resources/sqlite/db","test.db");
+		sqlManager.Connect("src" + File.separator + "main" + File.separator + "resources" + File.separator + "sqlite" + File.separator + "db","test.db");
 		propertyNameID = ConfigurationManager.getInstance().IDProp;
 		propertyName = ConfigurationManager.getInstance().monitorServerAddressProp;
 		AbstractMonitorTest.setupTests();
