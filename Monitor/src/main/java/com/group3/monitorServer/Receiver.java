@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.Valid;
+
+import java.io.File;
 import java.util.Optional;
 
 @RestController
@@ -22,7 +24,7 @@ public class Receiver implements MonitorApi, ErrorApi {
     MessageCreator messageCreator;
 
     public Receiver() {
-        this("src/main/resources/sqlite/db/", "queue.db"); //TODO: should check for user specified path and db name
+        this("src" + File.separator + "main" + File.separator + "resources" + File.separator + "sqlite" + File.separator + "db" + File.separator, "queue.db");
     }
 
     public Receiver(String sqlPath, String sqlFileName) {
