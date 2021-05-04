@@ -139,7 +139,7 @@ files:
     templateType: API
     destinationFilename: .java
 
-  Controller/apiClient.mustache:
+  controller/apiClient.mustache:
     templateType: API
     destinationFilename: Client.java
 
