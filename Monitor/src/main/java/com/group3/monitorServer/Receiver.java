@@ -22,7 +22,7 @@ public class Receiver implements MonitorApi, ErrorApi {
     MessageCreator messageCreator;
 
     public Receiver() {
-        this("src/main/resources/sqlite/db", "queue.db"); //TODO: should check for user specified path and db name
+        this("src/main/resources/sqlite/db/", "queue.db"); //TODO: should check for user specified path and db name
     }
 
     public Receiver(String sqlPath, String sqlFileName) {
