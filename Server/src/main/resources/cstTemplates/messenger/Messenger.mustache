@@ -6,7 +6,7 @@ import com.group3.monitorClient.exception.MonitorConfigException;
 import com.group3.monitorClient.messenger.messages.*;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.model.ErrorData;
-import java.time.OffsetDateTime;
+import org.threeten.bp.OffsetDateTime;
 
 
 import java.io.File;
@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
+import org.threeten.bp.format.DateTimeFormatter;
 
 /*
  * The GreedyMessenger class runs a continues thread sending TimingMonitorData from a SynchronizedQueue.

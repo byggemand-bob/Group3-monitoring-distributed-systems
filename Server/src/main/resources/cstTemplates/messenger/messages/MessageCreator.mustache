@@ -5,8 +5,8 @@ import org.openapitools.client.model.TimingMonitorData;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
+import org.threeten.bp.OffsetDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 public class MessageCreator {
     /* receives a ResultSet, representing an message and converts it back into a message structure */

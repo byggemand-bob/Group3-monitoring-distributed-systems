@@ -55,6 +55,15 @@ import java.util.Map;
 public class {{classname}}Client extends {{classname}}{
     private MonitorClientInterface monitorClientInterface = Messenger.getMonitorClientInterface();
     {{#operation}}
+
+    public {{classname}}Client() {
+        super();
+    }
+
+    public {{classname}}Client(ApiClient apiClient) {
+        super(apiClient);
+    }
+
     {{^vendorExtensions.x-group-parameters}}
     /**
      * {{summary}}
