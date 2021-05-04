@@ -125,7 +125,7 @@ files:
     destinationFilename: MonitorUtils.java
     folder: src/gen/java/main/com/group3/monitorClient/util
 
-  MonitorClientInterface.mustache:
+  monitorClientInterface.mustache:
     templateType: SupportingFiles
     destinationFilename: MonitorClientInterface.java
     folder: src/gen/java/main/com/group3/monitorClient
