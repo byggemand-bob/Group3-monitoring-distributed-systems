@@ -16,7 +16,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
-import java.time.OffsetDateTime;
+import org.threeten.bp.OffsetDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -59,7 +59,7 @@ public class MonitorApiTest {
 		timing1.setEventID(eventId);
 		timing1.setSenderID(senderId);
 		timing1.setTargetEndpoint(targetEndpoint);
-		timing1.setTimestamp(now);
+		timing1.setTimestamp(OffsetDateTime.now());
 		
 		// Object with information about received request in MockServer
 		RecordedRequest request;
