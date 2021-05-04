@@ -54,7 +54,6 @@ public class MonitorApiTest {
 		final String targetEndpoint = "/monitor";
 		
 		TimingMonitorData timing1 = new TimingMonitorData();
-		OffsetDateTime now = OffsetDateTime.now();
 		timing1.setEventCode(EventCodeEnum.SENDREQUEST);
 		timing1.setEventID(eventId);
 		timing1.setSenderID(senderId);
@@ -91,9 +90,6 @@ public class MonitorApiTest {
 		timing1.setTargetEndpoint(targetEndpoint);
 		timing1.setTimestamp(now);
 		
-		// Object with information about received request in MockServer
-		RecordedRequest request;
-		
 		// Enqueue response in mock backend
 		// Here body, headers, params, and other can be added to the response
 		// These are sent back in FIFO sequence
@@ -119,9 +115,6 @@ public class MonitorApiTest {
 		timing1.setSenderID(senderId);
 		timing1.setTargetEndpoint(targetEndpoint);
 		timing1.setTimestamp(now);
-		
-		// Object with information about received request in MockServer
-		RecordedRequest request;
 		
 		// Enqueue response in mock backend
 		// Here body, headers, params, and other can be added to the response
