@@ -15,7 +15,6 @@ import org.springframework.context.annotation.ComponentScan;
 public class PetstoreApplication {
 
 	public static void main(String[] args) {
-		Messenger.getInstance().start();
 		Controller controller = new Controller();
 		controller.addRequirement(new AvailableCPURequirement(ConfigurationManager.getInstance().getPropertyAsDouble(ConfigurationManager.availableCPURequirementProp, 0.2)));
 		controller.addThread(Messenger.getInstance());
