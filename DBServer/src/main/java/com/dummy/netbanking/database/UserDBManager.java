@@ -70,7 +70,7 @@ public class UserDBManager extends DBManager {
 		try {
 			digest = MessageDigest.getInstance(algorithm);
 		} catch (NoSuchAlgorithmException e) {
-			//TODO: Handle error
+			// Intentially left blank...
 		}
 		
 		byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
