@@ -64,46 +64,6 @@ public class {{classname}}Client extends {{classname}}{
         super(apiClient);
     }
 
-    {{^vendorExtensions.x-group-parameters}}
-    /**
-     * {{summary}}
-     * {{notes}}{{#allParams}}
-     * @param {{paramName}} {{description}}{{#required}} (required){{/required}}{{^required}} (optional{{^isContainer}}{{#defaultValue}}, default to {{.}}{{/defaultValue}}{{/isContainer}}){{/required}}{{/allParams}}{{#returnType}}
-     * @return {{returnType}}{{/returnType}}
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
-     {{#responses.0}}
-     * @http.response.details
-     <table summary="Response Details" border="1">
-        <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
-        {{#responses}}
-        <tr><td> {{code}} </td><td> {{message}} </td><td> {{#headers}} * {{baseName}} - {{description}} <br> {{/headers}}{{^headers.0}} - {{/headers.0}} </td></tr>
-        {{/responses}}
-     </table>
-     {{/responses.0}}
-     {{#isDeprecated}}
-     * @deprecated
-     {{/isDeprecated}}
-        {{#externalDocs}}
-     * {{description}}
-     * @see <a href="{{url}}">{{summary}} Documentation</a>
-        {{/externalDocs}}
-     */
-    {{#isDeprecated}}
-    @Deprecated
-    {{/isDeprecated}}
-    @Override
-    public {{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}{{operationId}}({{#allParams}}{{{dataType}}} {{paramName}}{{^-last}}, {{/-last}}{{/allParams}}) throws ApiException {
-        long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.SENDREQUEST);
-
-        {{#returnType}}{{{returnType}}} {{/returnType}}result = super.{{operationId}}({{#allParams}}{{{dataType}}} {{paramName}}{{^-last}}, {{/-last}}{{/allParams}});
-
-        monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.RECEIVERESPONSE);
-
-        return result;
-    }
-    {{/vendorExtensions.x-group-parameters}}
-
     {{^vendorExtensions.x-group-parameters}}/**
      * {{summary}}
      * {{notes}}{{#allParams}}
