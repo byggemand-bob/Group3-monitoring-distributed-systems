@@ -19,6 +19,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/User"
+        required: true
       responses:
         '201':
           description: Success
@@ -76,6 +77,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Account"
+        required: true
       responses:
         '201':
           description: Success
