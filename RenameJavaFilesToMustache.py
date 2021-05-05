@@ -4,45 +4,45 @@ import shutil
 from typing import List
 
 #Used to store the soruce and dest file path
-source = './Monitor-Client/src/main/java'
-dest = ['./Client/src/main/resources/cstTemplates/', './Server/src/main/resources/cstTemplates/']
-autogen = './Monitor-Client/target/generated-sources/openapi/src/gen/java/main'
-autogen_folders = ['\\org\\openapitools\\client\\api', '\\org\\openapitools\\client\\model']
-exclude_path = './Monitor-Client/src/main/java\\com\\group3\\monitorClient'
+source = os.path.join(os.getcwd(), 'Monitor-Client', 'src' , 'main', 'java')
+dest = [ os.path.join(os.getcwd(), 'Client', 'src', 'main' , 'resources', 'cstTemplates', ''),  os.path.join('.', 'Server', 'src', 'main' , 'resources', 'cstTemplates', '')]
+autogen = os.path.join(os.getcwd(), 'Monitor-Client', 'target' , 'generated-sources', 'openapi', 'src', 'gen' , 'java', 'main')
+autogen_folders = [os.path.join('org', 'openapitools', 'client' , 'api'), os.path.join('org', 'openapitools', 'client' , 'model')]
+exclude_path = os.path.join(os.getcwd(), 'Monitor-Client', 'src', 'main', 'java', 'com', 'group3', 'monitorClient')
 
-def check_include_list(path: str, include_list: List) -> bool:
+def check_include_list(path: str, include_list: List) -> str:
   if include_list == None:
     print('Include by default for path: ' + path)
-    return True
+    return None
 
   allow = False
   for dir in include_list:
     if path.find(dir) != -1:
       print('Path <' + path + '> allowed because it contains dir <' + dir + '>')
       allow = True
+      return dir
       break
   
-  return allow
+  return None
 
 #Function that does:
   # Rename .java files to mustache files
   # Copy and move them into the desired target location
-def CopyRenameMove(path: str, file_name: str, include_dir_list: List = None) -> None:
+def CopyRenameMove(path: str, file_name: str, sourceL: str, dir_structure_rem_idx: int) -> None:
   #Rules out the files that does not end with .java
   if file_name.endswith('.java'):
     
-    if not check_include_list(path, include_dir_list): return
     if path == exclude_path: 
       print('Excluded <' + file_name + '>...')
       return
 
-    subpath = path[len(source) + 1:]
+    subpath = path[len(sourceL) + 1:]
 
     #Spilt the path into a list containing mutitple strings used to generate the folder structure
-    folder_structure = subpath.split('\\')
+    folder_structure = subpath.split(os.path.sep)
 
     #Igonre the the first 3 string in the array
-    del folder_structure[0:3]
+    del folder_structure[0:dir_structure_rem_idx]
 
     #Remove the files that starts with Test
     source_file = os.path.join(path, file_name)
@@ -56,7 +56,7 @@ def CopyRenameMove(path: str, file_name: str, include_dir_list: List = None) -> 
     #Create the dest path for both project (server, client) for each file.
     for dst in dest:
       dst_path = dst
-      dst_path += '\\'.join(folder_structure) + '\\' if len(folder_structure) > 0 else ''
+      dst_path += os.path.sep.join(folder_structure) + os.path.sep if len(folder_structure) > 0 else ''
       
       #Adding file name to each of the dest path for both projects.
       dst_path = dst_path + dest_file_name
@@ -76,12 +76,15 @@ def CopyRenameMove(path: str, file_name: str, include_dir_list: List = None) -> 
 print('Starting converting Java classes to mustache templates...')
 for root, dirs, files in os.walk(source, topdown=True):
   for name in files:
-    CopyRenameMove(root, name)
+    CopyRenameMove(root, name, source, 3)
 
 # Remember to get the necessary api and models from the autogen folders
 for autogen_dir in autogen_folders:
   for root, dirs, files in os.walk(autogen, topdown=True):
     for name in files:
-        CopyRenameMove(root, name, autogen_folders)
+        #check_val: str = check_include_list(root, autogen_folders)
+        #if not check_val:
+          #continue
+        CopyRenameMove(root, name, autogen, 2)
 
 print('Finished converting Java classes to mustache templates...')

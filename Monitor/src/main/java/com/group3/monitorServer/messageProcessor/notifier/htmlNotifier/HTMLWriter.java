@@ -76,13 +76,14 @@ public class HTMLWriter {
             return htmlPath;
         } else {
             //if nothing was specified in the user specification file, return default location
-            return "src/main/resources/Warnings.html";
+            return "src"+File.separator+"main"+File.separator+"resources"+File.separator+"Warnings.html";
         }
     }
 
     /* Returns the user specified html path */
     private String CheckSpecificationFile() {
         //TODO: create implementation for user specified html location
+
         return null;
     }
 

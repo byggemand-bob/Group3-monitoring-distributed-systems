@@ -3,12 +3,13 @@ package {{package}};
 
 
 {{#jdk8}}
+import com.group3.monitorClient.messenger.Messenger;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
 {{#imports}}import {{import}};
 {{/imports}}
-import com.group3.monitor.client.MonitorClientInterface;
-import com.group3.monitor.model.TimingMonitorData.EventCodeEnum;
+import com.group3.monitorClient.MonitorClientInterface;
+import org.openapitools.client.model.TimingMonitorData.EventCodeEnum;
 import javax.validation.constraints.NotNull;
 import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
@@ -76,7 +77,7 @@ import java.util.concurrent.Callable;
 {{#operations}}
 public class {{classname}}Controller implements {{classname}} {
 
-	private MonitorClientInterface monitorClientInterface;
+	private MonitorClientInterface monitorClientInterface = Messenger.getMonitorClientInterface();;
 {{#isDelegate}}
 
     private final {{classname}}Delegate delegate;
@@ -144,7 +145,8 @@ public class {{classname}}Controller implements {{classname}} {
     {{^isDelegate}}
         {{^async}}
         {{!>methodBody}}
-        final long eventID = monitorClientInterface.queueMonitorData("{{{path}}}", EventCodeEnum.RECEIVEREQUEST);
+        final long eventID = monitorClientInterface.getNextEventID();
+        monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.RECEIVEREQUEST);
         
         // Implement controller logic here!
         {{#responseWrapper}}{{.}}<{{/responseWrapper}}ResponseEntity<{{>returnTypes}}>{{#responseWrapper}}>{{/responseWrapper}} returnValue = {{classname}}.super.{{operationId}}({{#allParams}}{{paramName}}{{^-last}},{{/-last}}{{/allParams}});

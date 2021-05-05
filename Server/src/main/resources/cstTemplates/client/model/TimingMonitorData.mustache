@@ -29,7 +29,7 @@ import org.threeten.bp.OffsetDateTime;
  * Contain the required data, that is needed to check timing constraints
  */
 @ApiModel(description = "Contain the required data, that is needed to check timing constraints")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-04-07T13:27:05.270433200+02:00[Europe/Copenhagen]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-05T08:40:23.274167300+02:00[Europe/Paris]")
 public class TimingMonitorData {
   public static final String SERIALIZED_NAME_TIMESTAMP = "Timestamp";
   @SerializedName(SERIALIZED_NAME_TIMESTAMP)
@@ -46,6 +46,61 @@ public class TimingMonitorData {
   public static final String SERIALIZED_NAME_EVENT_I_D = "EventID";
   @SerializedName(SERIALIZED_NAME_EVENT_I_D)
   private Long eventID;
+
+  /**
+   * Describes the event that triggered the generation of a timing event
+   */
+  @JsonAdapter(EventCodeEnum.Adapter.class)
+  public enum EventCodeEnum {
+    SENDREQUEST("SendRequest"),
+    
+    RECEIVERESPONSE("ReceiveResponse"),
+    
+    RECEIVEREQUEST("ReceiveRequest"),
+    
+    SENDRESPONSE("SendResponse");
+
+    private String value;
+
+    EventCodeEnum(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    public static EventCodeEnum fromValue(String value) {
+      for (EventCodeEnum b : EventCodeEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    public static class Adapter extends TypeAdapter<EventCodeEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final EventCodeEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public EventCodeEnum read(final JsonReader jsonReader) throws IOException {
+        String value =  jsonReader.nextString();
+        return EventCodeEnum.fromValue(value);
+      }
+    }
+  }
+
+  public static final String SERIALIZED_NAME_EVENT_CODE = "EventCode";
+  @SerializedName(SERIALIZED_NAME_EVENT_CODE)
+  private EventCodeEnum eventCode;
 
 
   public TimingMonitorData timestamp(OffsetDateTime timestamp) {
@@ -137,6 +192,28 @@ public class TimingMonitorData {
   }
 
 
+  public TimingMonitorData eventCode(EventCodeEnum eventCode) {
+    
+    this.eventCode = eventCode;
+    return this;
+  }
+
+   /**
+   * Describes the event that triggered the generation of a timing event
+   * @return eventCode
+  **/
+  @ApiModelProperty(example = "SendRequest", required = true, value = "Describes the event that triggered the generation of a timing event")
+
+  public EventCodeEnum getEventCode() {
+    return eventCode;
+  }
+
+
+  public void setEventCode(EventCodeEnum eventCode) {
+    this.eventCode = eventCode;
+  }
+
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -149,12 +226,13 @@ public class TimingMonitorData {
     return Objects.equals(this.timestamp, timingMonitorData.timestamp) &&
         Objects.equals(this.senderID, timingMonitorData.senderID) &&
         Objects.equals(this.targetEndpoint, timingMonitorData.targetEndpoint) &&
-        Objects.equals(this.eventID, timingMonitorData.eventID);
+        Objects.equals(this.eventID, timingMonitorData.eventID) &&
+        Objects.equals(this.eventCode, timingMonitorData.eventCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestamp, senderID, targetEndpoint, eventID);
+    return Objects.hash(timestamp, senderID, targetEndpoint, eventID, eventCode);
   }
 
   @Override
@@ -165,6 +243,7 @@ public class TimingMonitorData {
     sb.append("    senderID: ").append(toIndentedString(senderID)).append("\n");
     sb.append("    targetEndpoint: ").append(toIndentedString(targetEndpoint)).append("\n");
     sb.append("    eventID: ").append(toIndentedString(eventID)).append("\n");
+    sb.append("    eventCode: ").append(toIndentedString(eventCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -1,7 +1,7 @@
 package com.group3.monitor.test.configuration;
 
-import com.group3.monitor.configuration.ConfigurationManager;
-import com.group3.monitor.exception.MonitorConfigException;
+import com.group3.monitorClient.configuration.ConfigurationManager;
+import com.group3.monitorClient.exception.MonitorConfigException;
 import com.group3.monitor.test.AbstractMonitorTest;
 
 import org.junit.jupiter.api.Assertions;

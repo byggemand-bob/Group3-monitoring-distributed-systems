@@ -10,11 +10,11 @@ public class MonitorClientInterface_TestClass extends MonitorClientInterface {
     int responseCode = 200;
 
     public MonitorClientInterface_TestClass(String MonitorIP) {
-        super(MonitorIP);
+        super();
     }
 
     public MonitorClientInterface_TestClass(String MonitorIP, int ResponseCode) {
-        super(MonitorIP);
+        super();
         responseCode = ResponseCode;
     }
 
@@ -23,12 +23,12 @@ public class MonitorClientInterface_TestClass extends MonitorClientInterface {
     }
 
     @Override
-    public int addMonitorData (TimingMonitorData timingMonitorData) throws ApiException {
+    public int sendMonitorData (TimingMonitorData timingMonitorData) throws ApiException {
         return responseCode;
     }
 
     @Override
-    public  int addErrorData (ErrorData errorData) throws ApiException {
+    public int sendErrorData (ErrorData errorData) throws ApiException {
         return responseCode;
     }
 }

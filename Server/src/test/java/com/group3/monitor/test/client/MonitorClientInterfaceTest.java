@@ -1,13 +1,17 @@
 package com.group3.monitor.test.client;
 
+import com.group3.monitorClient.messenger.messages.SQLManager;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.group3.monitor.client.MonitorClientInterface;
-import com.group3.monitor.configuration.ConfigurationManager;
-import com.group3.monitor.exception.MonitorConfigException;
+import com.group3.monitorClient.MonitorClientInterface;
+import com.group3.monitorClient.configuration.ConfigurationManager;
+import com.group3.monitorClient.exception.MonitorConfigException;
 import com.group3.monitor.test.AbstractMonitorTest;
+
+import java.io.File;
 
 
 public class MonitorClientInterfaceTest extends AbstractMonitorTest {
@@ -16,10 +20,26 @@ public class MonitorClientInterfaceTest extends AbstractMonitorTest {
 	
 	@BeforeAll
 	public static void setupTests () {
+		File path = new File("src" + File.separator + "main" + File.separator + "resources" + File.separator + "sqlite" + File.separator + "db" + File.separator);
+		path.mkdirs();
+		SQLManager sqlManager = SQLManager.getInstance();
+		sqlManager.Connect("src" + File.separator + "main" + File.separator + "resources" + File.separator + "sqlite" + File.separator + "db","test.db");
 		propertyNameID = ConfigurationManager.getInstance().IDProp;
 		propertyName = ConfigurationManager.getInstance().monitorServerAddressProp;
 		AbstractMonitorTest.setupTests();
+	}
 
+	@AfterAll
+	public static void tearDown () {
+		SQLManager sqlManager = SQLManager.getInstance();
+
+		File db = new File(sqlManager.getPath() + sqlManager.getFileName());
+
+		sqlManager.CloseConnection();
+
+		if (!db.delete()) {
+			System.out.println(MonitorClientInterfaceTest.class.toString() + ": Could not access database file. It was therefore not deleted!");
+		}
 	}
 	
 	@Test
@@ -27,14 +47,14 @@ public class MonitorClientInterfaceTest extends AbstractMonitorTest {
 		// Setup
 		long propertyValueID = 1L;
 		String propertyValue = "http://123.456.789.101:8080";
-		addPropertiesToConfig(propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
+		addPropertiesToConfig(false, propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
 		
 		// Act
 		
 		
 		// Assert
 		Assertions.assertDoesNotThrow(() -> {
-			new MonitorClientInterface();
+			new MonitorClientInterface(); //todo:fix here
 		});
 	}
 	@Test
@@ -48,7 +68,7 @@ public class MonitorClientInterfaceTest extends AbstractMonitorTest {
 		
 		
 		// Assert
-		Assertions.assertDoesNotThrow(() -> {
+		Assertions.assertDoesNotThrow(() -> {//todo:fix here
 			new MonitorClientInterface();
 		});
 	}
@@ -57,7 +77,7 @@ public class MonitorClientInterfaceTest extends AbstractMonitorTest {
 		// Setup
 		long propertyValueID = 1L;
 		String propertyValue = "123.456.789.101:";
-		addPropertiesToConfig(propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
+		addPropertiesToConfig(false, propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
 		
 		// Act
 		
@@ -73,7 +93,7 @@ public class MonitorClientInterfaceTest extends AbstractMonitorTest {
 		// Setup
 		long propertyValueID = 1L;
 		String propertyValue = "123.456.789.101";
-		addPropertiesToConfig(propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
+		addPropertiesToConfig(false,propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
 		
 		// Act
 		
@@ -87,7 +107,7 @@ public class MonitorClientInterfaceTest extends AbstractMonitorTest {
 		// Setup
 		long propertyValueID = 1L;
 		String propertyValue = "http://123.456.789.101";
-		addPropertiesToConfig(propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
+		addPropertiesToConfig(false,propertyNameID + "=" + propertyValueID, propertyName + "=" + propertyValue);
 		
 		// Act
 		

@@ -1,5 +1,10 @@
 package com.group3.monitor.test;
 
+import com.group3.monitorClient.configuration.ConfigurationManager;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -7,12 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-
-import com.group3.monitor.configuration.ConfigurationManager;
 
 public abstract class AbstractMonitorTest {
 
@@ -42,7 +41,8 @@ public abstract class AbstractMonitorTest {
 				writer.write(property + "\r\n");
 			}
 			if (addRequired == true) {
-				writer.write(ConfigurationManager.IDProp + "=" + "1");
+				writer.write(ConfigurationManager.IDProp + "=" + "1\n");
+				writer.write(ConfigurationManager.monitorServerAddressProp + "=" + "localhost:8080");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

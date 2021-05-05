@@ -7,13 +7,15 @@ import com.group3.monitorClient.messenger.Messenger;
  */
 public class Messenger_TestClass extends Messenger {
     public Messenger_TestClass(String monitorIP, String sqlPath, String sqlFileName) {
-        super(monitorIP, sqlPath, sqlFileName);
+        super();
+        initialize(sqlPath, sqlFileName);
         monitorClientInterface = new MonitorClientInterface_TestClass(monitorIP);
     }
 
     /* Specifies the http status code returned when messages are being sent */
     public Messenger_TestClass(String monitorIP, String sqlPath, String sqlFileName, int ReturnStatusCode) {
-        super(monitorIP, sqlPath, sqlFileName);
+        super();
+        initialize(sqlPath, sqlFileName);
         monitorClientInterface = new MonitorClientInterface_TestClass(monitorIP, ReturnStatusCode);
     }
 

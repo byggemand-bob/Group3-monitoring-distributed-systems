@@ -10,16 +10,16 @@ import org.threeten.bp.OffsetDateTime;
 
 import java.io.File;
 
-public class AbstractSQLManagerTest {
+public class AbstractSQLManagerTest extends AbstractMonitorTest {
     public static SQLManager sqlManager = SQLManager.getInstance();// = new SQLManager("src/main/resources/sqlite/db/", "test.db");
 
 
     @BeforeAll
     static void setupDir() {
-        File path = new File("src/main/resources/sqlite/db/");
+        File path = new File("src" + File.separator + "main" + File.separator + "resources" + File.separator + "sqlite" + File.separator + "db" + File.separator);
         path.mkdirs();
 
-        File db = new File("src/main/resources/sqlite/db/test.db");
+        File db = new File("src" + File.separator + "main" + File.separator + "resources" + File.separator + "sqlite" + File.separator + "db" + File.separator + "test.db");
         if (db.delete()) {
             System.out.println("there was already a test.db at location, and it was deleted");
         }
@@ -28,7 +28,7 @@ public class AbstractSQLManagerTest {
     /* Creates a new sql database before each test */
     @BeforeEach
     public void setup () {
-        sqlManager.Connect("src/main/resources/sqlite/db/", "test.db");
+        sqlManager.Connect("src" + File.separator + "main" + File.separator + "resources" + File.separator + "sqlite" + File.separator + "db"  + File.separator, "test.db");
     }
 
     /* Deletes the sql database after each test */

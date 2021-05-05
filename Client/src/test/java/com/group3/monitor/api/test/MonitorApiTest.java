@@ -1,14 +1,11 @@
 package com.group3.monitor.api.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
-
+import org.openapitools.client.api.MonitorApi;
+import org.openapitools.client.model.TimingMonitorData;
+import org.openapitools.client.model.TimingMonitorData.EventCodeEnum;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,13 +15,11 @@ import org.openapitools.client.ApiException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-import com.group3.monitor.api.MonitorApi;
-import com.group3.monitor.model.TimingMonitorData;
-import com.group3.monitor.model.TimingMonitorData.EventCodeEnum;
+import java.io.IOException;
+import org.threeten.bp.OffsetDateTime;
 
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MonitorApiTest {
 	
@@ -59,12 +54,11 @@ public class MonitorApiTest {
 		final String targetEndpoint = "/monitor";
 		
 		TimingMonitorData timing1 = new TimingMonitorData();
-		OffsetDateTime now = OffsetDateTime.now();
 		timing1.setEventCode(EventCodeEnum.SENDREQUEST);
 		timing1.setEventID(eventId);
 		timing1.setSenderID(senderId);
 		timing1.setTargetEndpoint(targetEndpoint);
-		timing1.setTimestamp(now);
+		timing1.setTimestamp(OffsetDateTime.now());
 		
 		// Object with information about received request in MockServer
 		RecordedRequest request;
@@ -96,9 +90,6 @@ public class MonitorApiTest {
 		timing1.setTargetEndpoint(targetEndpoint);
 		timing1.setTimestamp(now);
 		
-		// Object with information about received request in MockServer
-		RecordedRequest request;
-		
 		// Enqueue response in mock backend
 		// Here body, headers, params, and other can be added to the response
 		// These are sent back in FIFO sequence
@@ -124,9 +115,6 @@ public class MonitorApiTest {
 		timing1.setSenderID(senderId);
 		timing1.setTargetEndpoint(targetEndpoint);
 		timing1.setTimestamp(now);
-		
-		// Object with information about received request in MockServer
-		RecordedRequest request;
 		
 		// Enqueue response in mock backend
 		// Here body, headers, params, and other can be added to the response

@@ -1,50 +1,69 @@
 package com.group3.monitorClient.messenger;
 
 import com.group3.monitorClient.MonitorClientInterface;
+import com.group3.monitorClient.configuration.ConfigurationManager;
+import com.group3.monitorClient.exception.MonitorConfigException;
 import com.group3.monitorClient.messenger.messages.*;
 import org.openapitools.client.ApiException;
 import org.openapitools.client.model.ErrorData;
 import org.threeten.bp.OffsetDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
+
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.threeten.bp.format.DateTimeFormatter;
 
 /*
  * The GreedyMessenger class runs a continues thread sending TimingMonitorData from a SynchronizedQueue.
  * It Utilizes the MonitorApi and will indefinably probe the queue until stopped or paused.
  */
 public class Messenger implements MessengerInterface {
-    protected MonitorClientInterface monitorClientInterface;
+    private static Messenger messenger_instance = null;
+
+    protected static MonitorClientInterface monitorClientInterface;
     private boolean running = true;
     private boolean paused = false;
-    public final SQLMessageManager sqlMessageManager;
-    private final SQLMessageManager sqlFailedMessageManager;
-    private final MessageCreator messageCreator = new MessageCreator();
+    public static SQLMessageManager sqlMessageManager;
+    private static SQLMessageManager sqlFailedMessageManager;
+    private MessageCreator messageCreator = new MessageCreator();
     private Thread thread;
-    private long senderID = 1L;//TODO: add real sender id instead of dummy data
+    private final long senderID = ConfigurationManager.getInstance().getPropertyAsLong(ConfigurationManager.IDProp);
+
 
     /*
      * specifies which SynchronizedQueue to utilize,
      * useful if multiple messengers should share the same queue.
      */
-    public Messenger(String monitorIP, String sqlPath, String sqlFileName){
-        monitorClientInterface = new MonitorClientInterface(monitorIP);
+    public static void initialize(String sqlPath, String sqlFileName){
         SQLManager sqlManager = SQLManager.getInstance();
         sqlManager.Connect(sqlPath, sqlFileName);
-        sqlMessageManager = new SQLMessageManager(SQLMessageManager.message_table_name);
-        sqlFailedMessageManager = new SQLMessageManager(SQLMessageManager.failed_message_table_name);
+        sqlMessageManager = new SQLMessageManager(sqlManager, SQLMessageManager.message_table_name);
+        sqlFailedMessageManager = new SQLMessageManager(sqlManager, SQLMessageManager.failed_message_table_name);
+        messenger_instance = new Messenger();
+        monitorClientInterface = new MonitorClientInterface();
     }
+
+    public static Messenger getInstance() {
+        if (messenger_instance == null) {
+            initialize(ConfigurationManager.getInstance().getProperty(ConfigurationManager.sqlPathProp, "src" + File.separator + "main" + File.separator + "resources" + File.separator + "sqlite" + File.separator + "db" + File.separator),
+                       ConfigurationManager.getInstance().getProperty(ConfigurationManager.dbFileNameProp, "queue.db"));
+        }
+        return messenger_instance;
+    }
+
+    protected Messenger() { }
 
     /* starts a thread running current class.run() */
     @Override
     public void start(){
         running = true;
-        thread = new Thread(this);
-        thread.start();
+        if (thread == null) {
+            thread = new Thread(this);
+            thread.start();
+        }
     }
 
     /* This terminates the thread, whoever it completes the current loop*/
@@ -104,14 +123,20 @@ public class Messenger implements MessengerInterface {
     //TODO: Multi thread this?
     private void SendMessage(){
     	// Start by checking if any messages are available for sending
-    	boolean availableMessages = sqlMessageManager.TableSize() > 0;
+    	boolean availableMessages = sqlMessageManager.TableSize("InUse = 0") > 0;
     	if (!availableMessages) {
     		ThreadWait(5000);
     		return;
     	}
     	
-        ResultSet firstMessageRS = sqlMessageManager.SelectFirstMessage();
+        ResultSet firstMessageRS = sqlMessageManager.SelectFirstMessage("InUse = 0");
         MessageInterface message = messageCreator.MakeMessageFromSQL(firstMessageRS);
+
+        try {
+            sqlMessageManager.UpdateInUse(firstMessageRS.getInt("ID"), true);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
         if (message != null) {
             int loop = 0, statusCode = -1;
@@ -223,6 +248,18 @@ public class Messenger implements MessengerInterface {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public static MonitorClientInterface getMonitorClientInterface() {
+        return monitorClientInterface;
+    }
+
+    public static SQLMessageManager getSqlMessageManager() {
+        return sqlMessageManager;
+    }
+
+    public static SQLMessageManager getSqlFailedMessageManager() {
+        return sqlFailedMessageManager;
     }
 
     public void CloseConnectionToSQL(){
