@@ -28,7 +28,8 @@ public abstract class DBManager {
 			final String path = dbPath + dbName;
 			createDirectoryIfNotExist(dbPath);
 			
-			connect(path);			
+			connect(path);
+			System.out.println("Connection to DB established...");
 		}
 		if (!tableCreated) {
 			createTableIfNotExist();
