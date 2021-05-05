@@ -16,7 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "org.openapitools.api")
+@ComponentScan(basePackages = {"org.openapitools.api", "com.dummy.netbanking.controller"})
 public class ServerApplication {
 
 	public static void main(String[] args) throws SQLException {
@@ -26,7 +26,7 @@ public class ServerApplication {
 		controller.start();
 		SpringApplication.run(ServerApplication.class, args);
 		
-		test();
+		//test();
 	}
 	
 	private static void test() throws SQLException {
