@@ -31,9 +31,9 @@ public class SQLManager {
     }
 
     /* returns the number of elements in a specified table */
-    public synchronized int TableSize(String TableName){
+    public synchronized int TableSize(String TableName, String... whereArgs){
         int size = -1;
-        ResultSet rs = GenericStmt("SELECT COUNT(*) FROM " + TableName);
+        ResultSet rs = GenericStmt(AppendWhereArgs("SELECT COUNT(*) FROM " + TableName, whereArgs));
 
         try {
             if(rs.next()){
@@ -61,7 +61,7 @@ public class SQLManager {
 
     /* returns the first element of tableName */
     public synchronized ResultSet SelectFirst(String tableName, String... whereArgs){
-        return GenericStmt(AppendWhereArgs("SELECT * FROM "+tableName+" LIMIT 1", whereArgs));
+        return GenericStmt(AppendWhereArgs("SELECT * FROM "+tableName+ " ", whereArgs) + " LIMIT 1");
     }
 
     public synchronized ResultSet Select (String tableName, String... whereArgs) {

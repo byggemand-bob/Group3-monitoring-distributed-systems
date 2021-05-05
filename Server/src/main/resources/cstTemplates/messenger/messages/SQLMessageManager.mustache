@@ -34,8 +34,8 @@ public class SQLMessageManager {
     }
 
     /* returns the number of elements in a specified table */
-    public long TableSize(){
-        return sqlManager.TableSize(tableName);
+    public long TableSize(String... whereArgs){
+        return sqlManager.TableSize(tableName, whereArgs);
     }
 
     /* Inserts and Message element into the given table */
