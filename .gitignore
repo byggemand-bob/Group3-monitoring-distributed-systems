@@ -33,6 +33,6 @@ build/
 .vscode/
 
 ### Java Properties ###
-**/configuration.properties
+#**/configuration.properties
 *.db
 *.html
