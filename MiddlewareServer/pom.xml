@@ -207,6 +207,7 @@
                 <version>5.0.1</version>
                 <executions>
                     <execution>
+                    	<id>genereateServerConfig</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
@@ -219,9 +220,23 @@
                             <configurationFile>${project.basedir}/server_config.yaml</configurationFile>
                         </configuration>
                     </execution>
+                    
+                    <execution>
+                    	<id>genereateClientConfig</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/DBServer.yaml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <configOptions>
+                                <sourceFolder>src/gen/java/main</sourceFolder>
+                            </configOptions>
+                            <configurationFile>${project.basedir}/client_config.yaml</configurationFile>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 </project>
