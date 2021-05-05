@@ -48,7 +48,7 @@ public class Messenger implements MessengerInterface {
 
     public static Messenger getInstance() {
         if (messenger_instance == null) {
-            initialize(ConfigurationManager.getInstance().getProperty(ConfigurationManager.sqlPathProp, "src" + File.separator + "main" + File.separator + "resources" + File.separator + "sqlite" + File.separator + "db"),
+            initialize(ConfigurationManager.getInstance().getProperty(ConfigurationManager.sqlPathProp, "src" + File.separator + "main" + File.separator + "resources" + File.separator + "sqlite" + File.separator + "db" + File.separator),
                        ConfigurationManager.getInstance().getProperty(ConfigurationManager.dbFileNameProp, "queue.db"));
         }
         return messenger_instance;
@@ -60,8 +60,10 @@ public class Messenger implements MessengerInterface {
     @Override
     public void start(){
         running = true;
-        thread = new Thread(this);
-        thread.start();
+        if (thread == null) {
+            thread = new Thread(this);
+            thread.start();
+        }
     }
 
     /* This terminates the thread, whoever it completes the current loop*/
@@ -121,14 +123,20 @@ public class Messenger implements MessengerInterface {
     //TODO: Multi thread this?
     private void SendMessage(){
     	// Start by checking if any messages are available for sending
-    	boolean availableMessages = sqlMessageManager.TableSize() > 0;
+    	boolean availableMessages = sqlMessageManager.TableSize("InUse = 0") > 0;
     	if (!availableMessages) {
     		ThreadWait(5000);
     		return;
     	}
     	
-        ResultSet firstMessageRS = sqlMessageManager.SelectFirstMessage();
+        ResultSet firstMessageRS = sqlMessageManager.SelectFirstMessage("InUse = 0");
         MessageInterface message = messageCreator.MakeMessageFromSQL(firstMessageRS);
+
+        try {
+            sqlMessageManager.UpdateInUse(firstMessageRS.getInt("ID"), true);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
         if (message != null) {
             int loop = 0, statusCode = -1;
