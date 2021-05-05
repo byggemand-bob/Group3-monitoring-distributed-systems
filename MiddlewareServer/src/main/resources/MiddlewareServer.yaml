@@ -1,0 +1,204 @@
+openapi: 3.0.0
+info:
+  title: Swagger Bank system
+  description: >-
+    The swagger specfifcation file for a dummy bank system.
+  version: 1.0.0
+tags:
+  - name: Bank
+    description: Everything about the dummy bank system
+paths:
+  /User:
+    post:
+      tags:
+        - User
+      summary: Create new user
+      operationId: createNewUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '201':
+          description: Success
+        '500':
+          description: Error
+    
+    delete:
+      tags:
+        - User
+      summary: Delete user
+      operationId: deleteUser
+      parameters:
+        - name: user
+          in: query
+          description: Delete user from the value of a query parameter
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+          
+    get:
+      tags:
+        - User
+      summary: get a user
+      operationId: getUser
+      parameters:
+        - name: user
+          in: query
+          description: Get a user from the value of the query parameter
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          description: Bad request
+          
+  /Account:
+    post:
+      tags:
+        - Account
+      summary: Create new account
+      operationId: createAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Account"
+      responses:
+        '201':
+          description: Success
+        '500':
+          description: Error
+          
+    delete:
+      tags:
+        - Account
+      summary: Delete account
+      operationId: deleteAccount
+      parameters:
+        - name: account
+          in: query
+          description: Delete a account from the value of a query parameter
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+          
+    get:
+      tags:
+        - Account
+      summary: Get all account assigned to a user
+      operationId: getUsersAllAccount
+      parameters:
+        - name: user
+          in: query
+          description: Get all the account that has been assigned for the user
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Account"
+        '400':
+          description: Bad request
+        
+  /Account/balance:
+    get:
+      tags:
+        - Account
+      summary: Get the balance of a acccount
+      operationId: getAccountBalance
+      parameters:
+        - name: account
+          in: query
+          description: Get the balance of a account
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: number
+                format: double
+        '400':
+          description: Bad request
+    
+    put:
+      tags:
+        - Account
+      summary: Update the balance of a acccount
+      operationId: updateAccountBalance
+      parameters:
+        - name: account
+          in: query
+          description: Update the balance of a account
+          required: true
+          schema:
+            type: string
+        
+        - name: balance
+          in: query
+          description: Change the balance
+          required: true
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+          format: password
+      required:
+        - name
+        - password
+          
+    Account:
+      type: object
+      properties:
+        name:
+          type: string
+        balance:
+          type: number
+          format: double
+          default: 0
+        owner:
+          type: string
+      required:
+        - name
+        - owner
