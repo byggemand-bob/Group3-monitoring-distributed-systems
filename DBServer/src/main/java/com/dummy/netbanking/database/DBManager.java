@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public abstract class DBManager {
 
@@ -17,7 +18,9 @@ public abstract class DBManager {
 	
 	private void connect(String path) {
 		try {
-			connection = DriverManager.getConnection(driver + path);
+			Properties connectionProperties = new Properties();
+			connectionProperties.setProperty("foreign_keys", "true");
+			connection = DriverManager.getConnection(driver + path, connectionProperties);
 		} catch (SQLException e) {
 			System.err.println("Failed to create a connection to DB: <" + path + ">, with driver <" + driver + "> because of error <" + e.getMessage() + ">");
 		}
@@ -54,24 +57,15 @@ public abstract class DBManager {
 		return statement;
 	}
 	
-	protected synchronized int executeUpdatePreparedStatement(PreparedStatement statement) {
-		int updatedRows = -1;
-		try {
-			updatedRows = statement.executeUpdate();
-		} catch (SQLException e) {
-			System.err.println("Failed to execute update for prepared statement <" + statement + "> with error message <" + e.getMessage() + ">");
-		}
+	protected synchronized int executeUpdatePreparedStatement(PreparedStatement statement) throws SQLException {
+		int updatedRows = statement.executeUpdate();
 		
 		return updatedRows;
 	}
 	
-	protected synchronized ResultSet executePreparedStatement(PreparedStatement statement) {
-		ResultSet queryResult = null;
-		try {
-			queryResult = statement.executeQuery();
-		} catch (SQLException e) {
-			System.err.println("Failed to execute prepared statement <" + statement + "> with error message <" + e.getMessage() + ">");
-		}
+	protected synchronized ResultSet executePreparedStatement(PreparedStatement statement) throws SQLException {
+		ResultSet queryResult = statement.executeQuery();
+		
 		return queryResult;
 	}
 }
