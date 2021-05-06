@@ -95,7 +95,8 @@ public class Delegator implements Controllable {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
+            // Wait a bit in order to give the poor RAM and CPU a break!
+           ThreadWait(10000);
         }
     }
 
