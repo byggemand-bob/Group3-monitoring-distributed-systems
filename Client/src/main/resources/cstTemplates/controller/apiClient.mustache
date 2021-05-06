@@ -54,7 +54,6 @@ import java.util.Map;
 {{#operations}}
 public class {{classname}}Client extends {{classname}}{
     private MonitorClientInterface monitorClientInterface = Messenger.getMonitorClientInterface();
-    {{#operation}}
 
     public {{classname}}Client() {
         super();
@@ -63,6 +62,7 @@ public class {{classname}}Client extends {{classname}}{
     public {{classname}}Client(ApiClient apiClient) {
         super(apiClient);
     }
+    {{#operation}}
 
     {{^vendorExtensions.x-group-parameters}}/**
      * {{summary}}
@@ -94,8 +94,8 @@ public class {{classname}}Client extends {{classname}}{
     public{{/vendorExtensions.x-group-parameters}}{{#vendorExtensions.x-group-parameters}}private{{/vendorExtensions.x-group-parameters}} ApiResponse<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Void{{/returnType}}> {{operationId}}WithHttpInfo({{#allParams}}{{#useBeanValidation}}{{>beanValidationQueryParams}}{{/useBeanValidation}}{{{dataType}}} {{paramName}}{{^-last}}, {{/-last}}{{/allParams}}) throws ApiException {
         long eventID = monitorClientInterface.getNextEventID();
         monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.SENDREQUEST);
-
-        {{#returnType}}ApiResponse<{{{returnType}}}> {{/returnType}}result = super.{{operationId}}WithHttpInfo({{#allParams}}{{{dataType}}} {{paramName}}{{^-last}}, {{/-last}}{{/allParams}});
+        
+        {{^returnType}}ApiResponse<Void> {{/returnType}}{{#returnType}}ApiResponse<{{{returnType}}}> {{/returnType}}result = super.{{operationId}}WithHttpInfo({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}});
 
         monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.RECEIVERESPONSE);
 
@@ -134,7 +134,7 @@ public class {{classname}}Client extends {{classname}}{
         long eventID = monitorClientInterface.getNextEventID();
         monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.SENDREQUEST);
 
-        okhttp3.Call result = super.{{operationId}}Async({{#allParams}}{{{dataType}}} {{paramName}}, {{/allParams}}_callback);
+        okhttp3.Call result = super.{{operationId}}Async({{#allParams}}{{paramName}}, {{/allParams}}_callback);
 
         monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.RECEIVERESPONSE);
 
