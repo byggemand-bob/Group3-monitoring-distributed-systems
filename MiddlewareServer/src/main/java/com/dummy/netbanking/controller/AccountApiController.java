@@ -1,5 +1,6 @@
 package com.dummy.netbanking.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +41,7 @@ public class AccountApiController implements AccountApi {
     	monitorClientInterface = new MonitorClientInterface();
         this.request = request;
         ApiClient apiClient = new ApiClient();
-        apiClient.setBasePath("localhost:8082");
+        apiClient.setBasePath("http://80.161.170.140:8082");
         accountApiClient = new AccountApiClient(apiClient);
     }
 
@@ -123,7 +124,7 @@ public class AccountApiController implements AccountApi {
         
         try {
 			apiResponse = accountApiClient.getAccountBalanceWithHttpInfo(account);
-			returnValue = new ResponseEntity<Double>(HttpStatus.resolve(apiResponse.getStatusCode()));
+			returnValue = new ResponseEntity<Double>(apiResponse.getData(), HttpStatus.resolve(apiResponse.getStatusCode()));
 		} catch (ApiException e) {
 			returnValue = new ResponseEntity<Double>(HttpStatus.BAD_REQUEST);
 			e.printStackTrace();
@@ -151,7 +152,9 @@ public class AccountApiController implements AccountApi {
         
         try {
 			apiResponse = accountApiClient.getUsersAllAccountWithHttpInfo(user);
-			returnValue = new ResponseEntity<List<Account>>(HttpStatus.resolve(apiResponse.getStatusCode()));
+			List<Account> accounts = new ArrayList<Account>();
+			apiResponse.getData().stream().forEach((i) -> convertAccountTypeToList(i, accounts));
+			returnValue = new ResponseEntity<List<Account>>(accounts, HttpStatus.resolve(apiResponse.getStatusCode()));
 		} catch (ApiException e) {
 			returnValue = new ResponseEntity<List<Account>>(HttpStatus.BAD_REQUEST);
 			e.printStackTrace();
@@ -162,7 +165,7 @@ public class AccountApiController implements AccountApi {
     }
 
     /**
-     * PUT /Account/balance : Update the balance of a acccount
+     * PUT /Account/balance : Update the balance of a account
      *
      * @param account Update the balance of a account (required)
      * @param balance Change the balance (required)
@@ -179,7 +182,7 @@ public class AccountApiController implements AccountApi {
         ResponseEntity<Void> returnValue;
         
 		try {
-			double newBalance = accountApiClient.getAccountBalance(account) - balance;
+			double newBalance = accountApiClient.getAccountBalance(account) + balance;
 			apiResponse = accountApiClient.updateAccountBalanceWithHttpInfo(account, newBalance);
 			returnValue = new ResponseEntity<Void>(HttpStatus.resolve(apiResponse.getStatusCode()));
 		} catch (ApiException e) {
@@ -203,5 +206,13 @@ public class AccountApiController implements AccountApi {
     	clientAccount.setOwner(account.getOwner());
     	
     	return clientAccount;
+    }
+    private void convertAccountTypeToList(org.openapitools.client.model.Account account, List<Account> accounts) {
+    	Account clientAccount = new Account();
+    	clientAccount.setBalance(account.getBalance());
+    	clientAccount.setName(account.getName());
+    	clientAccount.setOwner(account.getOwner());
+    	
+    	accounts.add(clientAccount);
     }
 }

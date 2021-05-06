@@ -43,7 +43,7 @@ public class UserApiController implements UserApi {
     	monitorClientInterface = new MonitorClientInterface();
         this.request = request;
         ApiClient apiClient = new ApiClient();
-        apiClient.setBasePath("localhost:8082");
+        apiClient.setBasePath("http://80.161.170.140:8082");
         userApiClient = new UserApiClient(apiClient);
         accountApiClient = new AccountApiClient(apiClient);
     }
@@ -130,9 +130,10 @@ public class UserApiController implements UserApi {
         ApiResponse<org.openapitools.client.model.User> apiResponse;
         ResponseEntity<User> returnValue;
         
+        
         try {
 			apiResponse = userApiClient.getUserWithHttpInfo(user);
-			returnValue = new ResponseEntity<User>(HttpStatus.resolve(apiResponse.getStatusCode()));
+			returnValue = new ResponseEntity<User>(convertUserType(apiResponse.getData()),HttpStatus.resolve(apiResponse.getStatusCode()));
 		} catch (ApiException e) {
 			returnValue = new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 			e.printStackTrace();
@@ -149,6 +150,14 @@ public class UserApiController implements UserApi {
      */
     private org.openapitools.client.model.User convertUserType(User user) {
     	org.openapitools.client.model.User clientUser = new org.openapitools.client.model.User();
+    	clientUser.setName(user.getName());
+    	clientUser.setPassword(user.getPassword());
+    	
+    	return clientUser;
+    }
+    
+    private User convertUserType(org.openapitools.client.model.User user) {
+    	User clientUser = new User();
     	clientUser.setName(user.getName());
     	clientUser.setPassword(user.getPassword());
     	
