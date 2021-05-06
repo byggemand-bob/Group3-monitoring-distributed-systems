@@ -27,12 +27,16 @@ public class AccountDBManager extends DBManager {
 	protected void createTableIfNotExist() {
 		final String sql = "CREATE TABLE IF NOT EXISTS Account(" + 
 							col_name + " TEXT PRIMARY KEY, " + 
-							col_balance + " REAL NOT NULL DEFAULT 0, " +
+							col_balance + " REAL DEFAULT 0, " +
 							col_owner + " TEXT NOT NULL, " +
-							"FOREIGN KEY(" + col_owner + ") REFERENCES User(" + UserDBManager.col_primary + ")" +
+							"FOREIGN KEY (" + col_owner + ") REFERENCES User (" + UserDBManager.col_primary + ")" +
 							")";
 		PreparedStatement statement = createPreparedStatement(sql);
-		executeUpdatePreparedStatement(statement);
+		try {
+			executeUpdatePreparedStatement(statement);
+		} catch (SQLException e) {
+			System.err.println("Failed to create table <Account> with error message <" + e.getMessage() + ">");
+		}
 	}
 	
 	public void insertAccount(Account account) throws SQLException {

@@ -28,7 +28,12 @@ public class UserDBManager extends DBManager {
 				col_password + " TEXT NOT NULL" +
 				")";
 		PreparedStatement statement = createPreparedStatement(sql);
-		executeUpdatePreparedStatement(statement);
+		try {
+			executeUpdatePreparedStatement(statement);
+		} catch (SQLException e) {
+			System.err.println("Failed to create table <User> with error message <" + e.getMessage() + ">");
+			e.printStackTrace();
+		}
 	}
 	
 	public void insertUser(User user) throws SQLException {
