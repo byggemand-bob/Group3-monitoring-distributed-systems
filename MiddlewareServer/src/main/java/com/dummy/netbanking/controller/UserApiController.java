@@ -1,15 +1,21 @@
 package com.dummy.netbanking.controller;
 
-
-
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.openapitools.api.UserApi;
+import org.openapitools.client.ApiClient;
+import org.openapitools.client.ApiException;
+import org.openapitools.client.ApiResponse;
+import org.openapitools.client.api.AccountApiClient;
+import org.openapitools.client.api.UserApiClient;
+import org.openapitools.client.model.Account;
 import org.openapitools.client.model.TimingMonitorData.EventCodeEnum;
 import org.openapitools.model.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,13 +34,18 @@ import io.swagger.annotations.ApiParam;
 public class UserApiController implements UserApi {
 
 	private MonitorClientInterface monitorClientInterface = Messenger.getMonitorClientInterface();;
-
+	private UserApiClient userApiClient;
+	private AccountApiClient accountApiClient; 
     private final NativeWebRequest request;
 
     @org.springframework.beans.factory.annotation.Autowired
     public UserApiController(NativeWebRequest request) {
     	monitorClientInterface = new MonitorClientInterface();
         this.request = request;
+        ApiClient apiClient = new ApiClient();
+        apiClient.setBasePath("localhost:8082");
+        userApiClient = new UserApiClient(apiClient);
+        accountApiClient = new AccountApiClient(apiClient);
     }
 
     @Override
@@ -54,14 +65,16 @@ public class UserApiController implements UserApi {
         final long eventID = monitorClientInterface.getNextEventID();
         monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.RECEIVEREQUEST);
         
-        /* TODO Implement controller logic here!
-         * 
-         * Input: a instance of User: user
-         * Make a CREATE SQL statement with the values from user
-         * 
-         */
+        ApiResponse<Void> apiResponse;
+        ResponseEntity<Void> returnValue;
         
-        ResponseEntity<Void> returnValue = UserApi.super.createNewUser(user);
+        try {
+			apiResponse = userApiClient.createNewUserWithHttpInfo(convertUserType(user));
+			returnValue = new ResponseEntity<Void>(HttpStatus.resolve(apiResponse.getStatusCode()));
+		} catch (ApiException e) {
+			returnValue = new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
+		}
 		
 		monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.SENDRESPONSE);
 		return returnValue;
@@ -80,16 +93,23 @@ public class UserApiController implements UserApi {
         final long eventID = monitorClientInterface.getNextEventID();
         monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.RECEIVEREQUEST);
         
-        /* TODO Implement controller logic here!
-         * 
-         * Input: String: the name of a user
-         * Make a DELETE SQL statement where name in DB is the name as the input
-         * Throw error if a user can't be found?
-         * 
-         */
+        ApiResponse<Void> apiResponse;
+        ResponseEntity<Void> returnValue;
         
-        ResponseEntity<Void> returnValue = UserApi.super.deleteUser(user);
-		
+        try {
+        	List<Account> accounts = accountApiClient.getUsersAllAccount(user);
+        	
+        	for (int i = 0; i < accounts.size(); i++) {
+        		accountApiClient.deleteAccount(accounts.get(i).getName());
+        	}
+        	
+			apiResponse = userApiClient.deleteUserWithHttpInfo(user);
+			returnValue = new ResponseEntity<Void>(HttpStatus.resolve(apiResponse.getStatusCode()));
+		} catch (ApiException e) {
+			returnValue = new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+			e.printStackTrace();
+		}
+       
 		monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.SENDRESPONSE);
 		return returnValue;
     }
@@ -107,18 +127,31 @@ public class UserApiController implements UserApi {
         final long eventID = monitorClientInterface.getNextEventID();
         monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.RECEIVEREQUEST);
         
-        /* TODO Implement controller logic here!
-         * 
-         * Input: String: the name of a user
-         * Make a SELECT SQL statement where name in DB is the same as input
-         * Throw error if a user can't be found?
-         * return the user 
-         */
+        ApiResponse<org.openapitools.client.model.User> apiResponse;
+        ResponseEntity<User> returnValue;
         
-        ResponseEntity<User> returnValue = UserApi.super.getUser(user);
+        try {
+			apiResponse = userApiClient.getUserWithHttpInfo(user);
+			returnValue = new ResponseEntity<User>(HttpStatus.resolve(apiResponse.getStatusCode()));
+		} catch (ApiException e) {
+			returnValue = new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+			e.printStackTrace();
+		}
 		
 		monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.SENDRESPONSE);
 		return returnValue;
     }
-
+    
+    /**
+     * Convert from {@link User} to {@link org.openapitools.client.model.User}
+     * @param user the user that you want to convert
+     * @return the converted user
+     */
+    private org.openapitools.client.model.User convertUserType(User user) {
+    	org.openapitools.client.model.User clientUser = new org.openapitools.client.model.User();
+    	clientUser.setName(user.getName());
+    	clientUser.setPassword(user.getPassword());
+    	
+    	return clientUser;
+    }
 }

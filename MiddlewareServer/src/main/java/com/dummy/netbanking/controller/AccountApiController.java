@@ -1,7 +1,5 @@
 package com.dummy.netbanking.controller;
 
-
-
 import java.util.List;
 import java.util.Optional;
 
@@ -9,8 +7,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.openapitools.api.AccountApi;
+import org.openapitools.client.ApiClient;
+import org.openapitools.client.ApiException;
+import org.openapitools.client.ApiResponse;
+import org.openapitools.client.api.AccountApiClient;
 import org.openapitools.client.model.TimingMonitorData.EventCodeEnum;
 import org.openapitools.model.Account;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,13 +32,16 @@ import io.swagger.annotations.ApiParam;
 public class AccountApiController implements AccountApi {
 
 	private MonitorClientInterface monitorClientInterface = Messenger.getMonitorClientInterface();;
-
+	private AccountApiClient accountApiClient;
     private final NativeWebRequest request;
 
     @org.springframework.beans.factory.annotation.Autowired
     public AccountApiController(NativeWebRequest request) {
     	monitorClientInterface = new MonitorClientInterface();
         this.request = request;
+        ApiClient apiClient = new ApiClient();
+        apiClient.setBasePath("localhost:8082");
+        accountApiClient = new AccountApiClient(apiClient);
     }
 
     @Override
@@ -55,14 +61,17 @@ public class AccountApiController implements AccountApi {
         final long eventID = monitorClientInterface.getNextEventID();
         monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.RECEIVEREQUEST);
         
-        /* TODO Implement controller logic here!
-         * 
-         * Input a instance of Account: account
-         * Make a CREATE SQL statement with the values from the input
-         * 
-         */
+        ApiResponse<Void> apiResponse;
+        ResponseEntity<Void> returnValue;
         
-        ResponseEntity<Void> returnValue = AccountApi.super.createAccount(account);
+		try {
+			apiResponse = accountApiClient.createAccountWithHttpInfo(convertAccountType(account));
+			returnValue = new ResponseEntity<Void>(HttpStatus.resolve(apiResponse.getStatusCode()));
+		} 
+		catch (ApiException e) {
+			returnValue = new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
+		}
 		
 		monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.SENDRESPONSE);
 		return returnValue;
@@ -81,16 +90,16 @@ public class AccountApiController implements AccountApi {
         final long eventID = monitorClientInterface.getNextEventID();
         monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.RECEIVEREQUEST);
 
+        ApiResponse<Void> apiResponse;
+        ResponseEntity<Void> returnValue;
         
-        /* TODO Implement controller logic here!
-         * 
-         * Input: String: the accounts name
-         * Make a DELETE SQL statement where name in DB is the name as the input
-         * Throw error if the account can't be found?
-         * 
-         */
-        
-        ResponseEntity<Void> returnValue = AccountApi.super.deleteAccount(account);
+        try {
+			apiResponse = accountApiClient.deleteAccountWithHttpInfo(account);
+			returnValue = new ResponseEntity<Void>(HttpStatus.resolve(apiResponse.getStatusCode()));
+		} catch (ApiException e) {
+			returnValue = new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+			e.printStackTrace();
+		}
 		
 		monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.SENDRESPONSE);
 		return returnValue;
@@ -109,17 +118,16 @@ public class AccountApiController implements AccountApi {
         final long eventID = monitorClientInterface.getNextEventID();
         monitorClientInterface.queueMonitorData(eventID, "/Account/balance", EventCodeEnum.RECEIVEREQUEST);
         
-        /* TODO Implement controller logic here!
-         * 
-         * Input: String: the accounts name
-         * Make a SELECT SQL statement where Account is the same as input
-         * Throw error if the account can't be found?
-         * Get the balance of the found account
-         * Return balance
-         * 
-         */
+        ApiResponse<Double> apiResponse;
+        ResponseEntity<Double> returnValue;
         
-        ResponseEntity<Double> returnValue = AccountApi.super.getAccountBalance(account);
+        try {
+			apiResponse = accountApiClient.getAccountBalanceWithHttpInfo(account);
+			returnValue = new ResponseEntity<Double>(HttpStatus.resolve(apiResponse.getStatusCode()));
+		} catch (ApiException e) {
+			returnValue = new ResponseEntity<Double>(HttpStatus.BAD_REQUEST);
+			e.printStackTrace();
+		}
 		
 		monitorClientInterface.queueMonitorData(eventID, "/Account/balance", EventCodeEnum.SENDRESPONSE);
 		return returnValue;
@@ -138,16 +146,16 @@ public class AccountApiController implements AccountApi {
         final long eventID = monitorClientInterface.getNextEventID();
         monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.RECEIVEREQUEST);
         
-        /* TODO Implement controller logic here!
-         * 
-         * Input String: the name of a user
-         * Make a SELECT SQL statement where user is the same as account owner
-         * throw a error is none is found?
-         * return the account(s)
-         * 
-         */
+        ApiResponse<List<org.openapitools.client.model.Account>> apiResponse;
+        ResponseEntity<List<Account>> returnValue;
         
-        ResponseEntity<List<Account>> returnValue = AccountApi.super.getUsersAllAccount(user);
+        try {
+			apiResponse = accountApiClient.getUsersAllAccountWithHttpInfo(user);
+			returnValue = new ResponseEntity<List<Account>>(HttpStatus.resolve(apiResponse.getStatusCode()));
+		} catch (ApiException e) {
+			returnValue = new ResponseEntity<List<Account>>(HttpStatus.BAD_REQUEST);
+			e.printStackTrace();
+		}
 		
 		monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.SENDRESPONSE);
 		return returnValue;
@@ -167,20 +175,33 @@ public class AccountApiController implements AccountApi {
         final long eventID = monitorClientInterface.getNextEventID();
         monitorClientInterface.queueMonitorData(eventID, "/Account/balance", EventCodeEnum.RECEIVEREQUEST);
         
-        /* TODO Implement controller logic here!
-         * 
-         * Input: String: account name, Double: balance
-         * Make a SELECT SQL statement to find the account that matches the account name
-         * Throw error is none is found?
-         * If a account is found calculate the new balance
-         * Make a UPDATE SQL statement for the account with the new balance (can go in negative)
-         * 
-         */
+        ApiResponse<Void> apiResponse;
+        ResponseEntity<Void> returnValue;
         
-        ResponseEntity<Void> returnValue = AccountApi.super.updateAccountBalance(account,balance);
+		try {
+			double newBalance = accountApiClient.getAccountBalance(account) - balance;
+			apiResponse = accountApiClient.updateAccountBalanceWithHttpInfo(account, newBalance);
+			returnValue = new ResponseEntity<Void>(HttpStatus.resolve(apiResponse.getStatusCode()));
+		} catch (ApiException e) {
+			returnValue = new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+			e.printStackTrace();
+		}
 		
 		monitorClientInterface.queueMonitorData(eventID, "/Account/balance", EventCodeEnum.SENDRESPONSE);
 		return returnValue;
     }
-
+    
+    /**
+     * Convert from {@link Account} to {@link org.openapitools.client.model.Account}
+     * @param account the account that you want to convert
+     * @return the converted account
+     */
+    private org.openapitools.client.model.Account convertAccountType(Account account) {
+    	org.openapitools.client.model.Account clientAccount = new org.openapitools.client.model.Account();
+    	clientAccount.setBalance(account.getBalance());
+    	clientAccount.setName(account.getName());
+    	clientAccount.setOwner(account.getOwner());
+    	
+    	return clientAccount;
+    }
 }
