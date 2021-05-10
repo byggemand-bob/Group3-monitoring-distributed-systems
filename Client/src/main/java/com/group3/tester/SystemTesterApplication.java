@@ -1,11 +1,6 @@
 package com.group3.tester;
 
-import com.group3.monitorClient.configuration.ConfigurationManager;
-import com.group3.monitorClient.controller.Controller;
-import com.group3.monitorClient.controller.requirements.AvailableCPURequirement;
-import com.group3.monitorClient.messenger.Messenger;
 import org.openapitools.client.ApiException;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
@@ -14,7 +9,30 @@ import java.io.IOException;
 public class SystemTesterApplication {
 
 	public static void main(String[] args) throws IOException, ApiException {
-		SpringApplication.run(SystemTesterApplication.class, args);
+		
+		if (args.length < 3) {
+			System.out.println("################## Usage ##################");
+			System.out.println("Arguments");
+			System.out.println("\t[0]<port_number>: The port number that the testing request are sent to");
+			System.out.println("\t[1]<repetitions>: The number of repetitions of 25 requests that are sent as testing data");
+			System.out.println("\t[2]<Repeats>: The number of times the test is repeated");
+			System.out.println("###########################################");
+			System.exit(1);
+		}
+		
+		System.out.println("Starting system test on port <" + args[0] + "> and with <" + args[1] + "> repetisions of 25 requests");
+		SystemTester tester = new SystemTester(args[0]);
+		final int repeats = Integer.parseInt(args[2]);
+		for (int i = 0; i < repeats; i++) {
+			
+		tester.initializeTestData(Long.parseLong(args[1]));
+		tester.clock(true);
+		tester.run();
+		tester.clock(false);
+		}
+		
+		System.out.println("Ended system test on port <" + args[0] + "> and with <" + args[1] + "> repetitions of 25 requests and repeated <" + args[2] + "> times!");
+		tester.printResult(System.out);
 	}
 }
 
@@ -22,3 +40,4 @@ public class SystemTesterApplication {
 //controller.addRequirement(new AvailableCPURequirement(ConfigurationManager.getInstance().getPropertyAsDouble(ConfigurationManager.availableCPURequirementProp, 0.2)));
 //controller.addThread(Messenger.getInstance());
 //controller.start();
+//SpringApplication.run(SystemTesterApplication.class, args);
