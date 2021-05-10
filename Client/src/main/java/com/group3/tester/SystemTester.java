@@ -209,10 +209,14 @@ public class SystemTester {
 	public void clear() {
 		testData.clear();
 	}
+	
+	public void printResult(PrintStream out, int index) {
+		out.println("\tResult of Run <" + (index+1) + ">: clocked time <" + results.get(index) + "ms>");		
+	}
 
-	public void printResult(PrintStream out) {
+	public void printResults(PrintStream out) {
 		for (int i = 0; i < results.size(); i++) {
-			out.println("\tResult of Run <" + (i+1) + ">: clocked time <" + results.get(i) + "ms>");
+			printResult(out, i);
 		}
 	}
 }

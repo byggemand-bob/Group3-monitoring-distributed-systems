@@ -21,7 +21,9 @@ public class SystemTesterApplication {
 		}
 		
 		System.out.println("Starting system test on port <" + args[0] + "> and with <" + (Integer.parseInt(args[1]) * 25) + "> requests and repeated <" + args[2] + "> times!");
+		System.out.println("Results:");
 		SystemTester tester = new SystemTester(args[0]);
+		final long t0 = System.currentTimeMillis();
 		final int repeats = Integer.parseInt(args[2]);
 		for (int i = 0; i < repeats; i++) {	
 			tester.initializeTestData(Long.parseLong(args[1]));
@@ -29,10 +31,10 @@ public class SystemTesterApplication {
 			tester.run();
 			tester.clock(false);
 			tester.clear();
+			tester.printResult(System.out, i);
 		}
-		
-		System.out.println("Ended system test on port <" + args[0] + "> and with <" + (Integer.parseInt(args[1]) * 25) + "> requests and repeated <" + args[2] + "> times!");
-		tester.printResult(System.out);
+		final long t1 = System.currentTimeMillis();
+		System.out.println("Ended system test after <" + (t1 - t0) + "ms> on port <" + args[0] + "> and with <" + (Integer.parseInt(args[1]) * 25) + "> requests and repeated <" + args[2] + "> times!");
 	}
 }
 
