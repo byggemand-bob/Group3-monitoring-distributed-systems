@@ -9,8 +9,8 @@
 		<version>2.4.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.Group3</groupId>
-	<artifactId>client</artifactId>
+	<groupId>com.group3</groupId>
+	<artifactId>tester</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>pet-store</name>
 	<description>Demo project for Spring Boot</description>
@@ -207,7 +207,7 @@
 						</goals>
 						<configuration>
 							<configurationFile>${project.basedir}/config.yaml</configurationFile>
-							<inputSpec>${project.basedir}/src/main/resources/petstore-api.yaml</inputSpec>
+							<inputSpec>${project.basedir}/src/main/resources/MiddlewareServer.yaml</inputSpec>
 							<generatorName>java</generatorName> <!-- spring for server/java for client -->
 							<configOptions>
 								<sourceFolder>src/gen/java/main</sourceFolder>
