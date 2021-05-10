@@ -1,0 +1,4 @@
+// To build the image from already established image (-t db-server = name of new image, db = tag of new image).
+docker build -t db-server:db .
+// To start a container based on the new image (-p expose ports in container)
+docker run -p 8082:8082 db-server:db
