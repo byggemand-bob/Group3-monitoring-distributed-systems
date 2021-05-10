@@ -43,7 +43,7 @@ public class UserApiController implements UserApi {
     	monitorClientInterface = new MonitorClientInterface();
         this.request = request;
         ApiClient apiClient = new ApiClient();
-        apiClient.setBasePath("http://80.161.170.140:8082");
+        apiClient.setBasePath("http://localhost:8082");
         userApiClient = new UserApiClient(apiClient);
         accountApiClient = new AccountApiClient(apiClient);
     }

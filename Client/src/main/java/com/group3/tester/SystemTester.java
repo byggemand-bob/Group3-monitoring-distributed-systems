@@ -20,9 +20,13 @@ public class SystemTester {
 	private UserApiClient user;
 	private static final String path = "http://localhost:%s";
 	private long clock = 0;
-	private List<Long> results;
+
+	private int userSuffix;
+	private int accountSuffix;
+
 	
-	List<SystemTestData> testData;
+	private List<Long> results;
+	private List<SystemTestData> testData;
 	
 	public SystemTester(String port) {
 		ApiClient client = new ApiClient();
@@ -33,11 +37,13 @@ public class SystemTester {
 		
 		testData = new ArrayList<SystemTestData>();
 		results = new ArrayList<Long>();
+		
+		userSuffix = 0;
+		accountSuffix = 0;
 	}
 	
 	public void initializeTestData(final long repetitions) throws ApiException {
-		int userSuffix = 0;
-		int accountSuffix = 0;
+
 		final String userPrefix = "User";
 		final String accountPrefix = "Account";
 		final String password = "p4ssword";
@@ -206,7 +212,7 @@ public class SystemTester {
 
 	public void printResult(PrintStream out) {
 		for (int i = 0; i < results.size(); i++) {
-			out.println("\tResult of Run <" + i+1 + ">: clocked time <" + results.get(i) + "ms>");
+			out.println("\tResult of Run <" + (i+1) + ">: clocked time <" + results.get(i) + "ms>");
 		}
 	}
 }

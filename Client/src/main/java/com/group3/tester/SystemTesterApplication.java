@@ -20,18 +20,18 @@ public class SystemTesterApplication {
 			System.exit(1);
 		}
 		
-		System.out.println("Starting system test on port <" + args[0] + "> and with <" + args[1] + "> repetisions of 25 requests");
+		System.out.println("Starting system test on port <" + args[0] + "> and with <" + (Integer.parseInt(args[1]) * 25) + "> requests and repeated <" + args[2] + "> times!");
 		SystemTester tester = new SystemTester(args[0]);
 		final int repeats = Integer.parseInt(args[2]);
-		for (int i = 0; i < repeats; i++) {
-			
-		tester.initializeTestData(Long.parseLong(args[1]));
-		tester.clock(true);
-		tester.run();
-		tester.clock(false);
+		for (int i = 0; i < repeats; i++) {	
+			tester.initializeTestData(Long.parseLong(args[1]));
+			tester.clock(true);
+			tester.run();
+			tester.clock(false);
+			tester.clear();
 		}
 		
-		System.out.println("Ended system test on port <" + args[0] + "> and with <" + args[1] + "> repetitions of 25 requests and repeated <" + args[2] + "> times!");
+		System.out.println("Ended system test on port <" + args[0] + "> and with <" + (Integer.parseInt(args[1]) * 25) + "> requests and repeated <" + args[2] + "> times!");
 		tester.printResult(System.out);
 	}
 }
