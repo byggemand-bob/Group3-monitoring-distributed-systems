@@ -8,7 +8,7 @@ import java.io.IOException;
 @SpringBootApplication
 public class SystemTesterApplication {
 
-	public static void main(String[] args) throws IOException, ApiException {
+	public static void main(String[] args) throws IOException, ApiException, InterruptedException {
 		
 		if (args.length < 3) {
 			System.out.println("################## Usage ##################");
@@ -32,6 +32,7 @@ public class SystemTesterApplication {
 			tester.clock(false);
 			tester.clear();
 			tester.printResult(System.out, i);
+			Thread.sleep(2000);
 		}
 		final long t1 = System.currentTimeMillis();
 		System.out.println("Ended system test after <" + (t1 - t0) + "ms> on port <" + args[0] + "> and with <" + (Integer.parseInt(args[1]) * 25) + "> requests and repeated <" + args[2] + "> times!");

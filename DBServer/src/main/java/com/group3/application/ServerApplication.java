@@ -29,10 +29,9 @@ public class ServerApplication {
 			controller.start();			
 		}
 		SpringApplication.run(ServerApplication.class, args);
-		
-		//test();
 	}
 	
+	/* Method used to test the internal calls of the DBServer */
 	private static void test() throws SQLException {
 		UserDBManager userMan = new UserDBManager();
 		AccountDBManager accMan = new AccountDBManager();
