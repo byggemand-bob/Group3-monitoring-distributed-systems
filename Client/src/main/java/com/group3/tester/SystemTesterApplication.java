@@ -37,9 +37,3 @@ public class SystemTesterApplication {
 		System.out.println("Ended system test after <" + (t1 - t0) + "ms> on port <" + args[0] + "> and with <" + (Integer.parseInt(args[1]) * 25) + "> requests and repeated <" + args[2] + "> times!");
 	}
 }
-
-//Controller controller = new Controller();
-//controller.addRequirement(new AvailableCPURequirement(ConfigurationManager.getInstance().getPropertyAsDouble(ConfigurationManager.availableCPURequirementProp, 0.2)));
-//controller.addThread(Messenger.getInstance());
-//controller.start();
-//SpringApplication.run(SystemTesterApplication.class, args);
