@@ -67,8 +67,9 @@ public class Controller implements Runnable{
 
     /* starts a thread running current class.run() */
     public void start(){
-        running = true;
-        new Thread(this).start();
+        Thread t = new Thread(this);
+        t.setPriority(Thread.MIN_PRIORITY);
+        t.start();
     }
 
     public void stop(){
