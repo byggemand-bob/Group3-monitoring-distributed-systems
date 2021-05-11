@@ -14,6 +14,7 @@ import java.util.List;
 import org.openapitools.model.Account;
 
 import com.dummy.netbanking.database.AccountDBManager;
+import com.group3.application.ServerApplication;
 import com.group3.monitorClient.MonitorClientInterface;
 
 import org.openapitools.api.DBAccountApi;
@@ -66,8 +67,11 @@ public class DBAccountApiController implements DBAccountApi {
      */
     @Override
     public ResponseEntity<Void> createAccount(@ApiParam(value = "" ,required=true )  @Valid @RequestBody Account account) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/DBAccount", EventCodeEnum.RECEIVEREQUEST);
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+    		monitorClientInterface.queueMonitorData(eventID, "/DBAccount", EventCodeEnum.RECEIVEREQUEST);    		
+    	}
         
         // Implement controller logic here!
         ResponseEntity<Void> returnValue;
@@ -79,7 +83,9 @@ public class DBAccountApiController implements DBAccountApi {
 			returnValue = new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		monitorClientInterface.queueMonitorData(eventID, "/DBAccount", EventCodeEnum.SENDRESPONSE);
+        if (ServerApplication.withMonitor) {
+        	monitorClientInterface.queueMonitorData(eventID, "/DBAccount", EventCodeEnum.SENDRESPONSE);        	
+        }
 		return returnValue;
     }
 
@@ -93,9 +99,12 @@ public class DBAccountApiController implements DBAccountApi {
      */
     @Override
     public ResponseEntity<Void> deleteAccount(@NotNull @ApiParam(value = "Delete a account from the value of a query parameter", required = true) @Valid @RequestParam(value = "account", required = true) String account) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/DBAccount", EventCodeEnum.RECEIVEREQUEST);
-        
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+    		monitorClientInterface.queueMonitorData(eventID, "/DBAccount", EventCodeEnum.RECEIVEREQUEST);    		
+    	}
+    	
         // Implement controller logic here!
         ResponseEntity<Void> returnValue;
         boolean success = false;
@@ -111,7 +120,9 @@ public class DBAccountApiController implements DBAccountApi {
         	returnValue = new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         }
 		
-		monitorClientInterface.queueMonitorData(eventID, "/DBAccount", EventCodeEnum.SENDRESPONSE);
+        if (ServerApplication.withMonitor) {
+        	monitorClientInterface.queueMonitorData(eventID, "/DBAccount", EventCodeEnum.SENDRESPONSE);        	
+        }
 		return returnValue;
     }
 
@@ -125,9 +136,12 @@ public class DBAccountApiController implements DBAccountApi {
      */
     @Override
     public ResponseEntity<Double> getAccountBalance(@NotNull @ApiParam(value = "Get the balance of a account", required = true) @Valid @RequestParam(value = "account", required = true) String account) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/DBAccount/balance", EventCodeEnum.RECEIVEREQUEST);
-        
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+    		monitorClientInterface.queueMonitorData(eventID, "/DBAccount/balance", EventCodeEnum.RECEIVEREQUEST);    		
+    	}
+    	
         // Implement controller logic here!
         ResponseEntity<Double> returnValue;
         try {
@@ -142,7 +156,9 @@ public class DBAccountApiController implements DBAccountApi {
 			returnValue = new ResponseEntity<Double>(HttpStatus.BAD_REQUEST);
 		}
 		
-		monitorClientInterface.queueMonitorData(eventID, "/DBAccount/balance", EventCodeEnum.SENDRESPONSE);
+        if (ServerApplication.withMonitor) {
+        	monitorClientInterface.queueMonitorData(eventID, "/DBAccount/balance", EventCodeEnum.SENDRESPONSE);        	
+        }
 		return returnValue;
     }
 
@@ -156,9 +172,12 @@ public class DBAccountApiController implements DBAccountApi {
      */
     @Override
     public ResponseEntity<List<Account>> getUsersAllAccount(@NotNull @ApiParam(value = "Get all the account that has been assigned for the user", required = true) @Valid @RequestParam(value = "user", required = true) String user) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/DBAccount", EventCodeEnum.RECEIVEREQUEST);
-        
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+    		monitorClientInterface.queueMonitorData(eventID, "/DBAccount", EventCodeEnum.RECEIVEREQUEST);    		
+    	}
+    	
         // Implement controller logic here!
         ResponseEntity<List<Account>> returnValue;
         try {
@@ -170,7 +189,9 @@ public class DBAccountApiController implements DBAccountApi {
 		}
         
 		
-		monitorClientInterface.queueMonitorData(eventID, "/DBAccount", EventCodeEnum.SENDRESPONSE);
+        if (ServerApplication.withMonitor) {
+        	monitorClientInterface.queueMonitorData(eventID, "/DBAccount", EventCodeEnum.SENDRESPONSE);        	
+        }
 		return returnValue;
     }
 
@@ -185,9 +206,12 @@ public class DBAccountApiController implements DBAccountApi {
      */
     @Override
     public ResponseEntity<Void> updateAccountBalance(@NotNull @ApiParam(value = "Update the balance of a account", required = true) @Valid @RequestParam(value = "account", required = true) String account,@NotNull @ApiParam(value = "Change the balance", required = true) @Valid @RequestParam(value = "balance", required = true) Double balance) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/DBAccount/balance", EventCodeEnum.RECEIVEREQUEST);
-        
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+    		monitorClientInterface.queueMonitorData(eventID, "/DBAccount/balance", EventCodeEnum.RECEIVEREQUEST);    		
+    	}
+    	
         // Implement controller logic here!
         ResponseEntity<Void> returnValue;
         boolean success = false;
@@ -203,7 +227,9 @@ public class DBAccountApiController implements DBAccountApi {
         	returnValue = new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         }
 		
-		monitorClientInterface.queueMonitorData(eventID, "/DBAccount/balance", EventCodeEnum.SENDRESPONSE);
+        if (ServerApplication.withMonitor) {
+        	monitorClientInterface.queueMonitorData(eventID, "/DBAccount/balance", EventCodeEnum.SENDRESPONSE);        	
+        }
 		return returnValue;
     }
 

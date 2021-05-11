@@ -3,6 +3,7 @@
 package {{package}};
 import com.group3.monitorClient.MonitorClientInterface;
 import com.group3.monitorClient.messenger.Messenger;
+import com.group3.application.ServerApplication;
 import org.openapitools.client.model.TimingMonitorData.EventCodeEnum;
 import {{invokerPackage}}.ApiCallback;
 import {{invokerPackage}}.ApiClient;
@@ -92,12 +93,17 @@ public class {{classname}}Client extends {{classname}}{
     {{/isDeprecated}}
     @Override
     public{{/vendorExtensions.x-group-parameters}}{{#vendorExtensions.x-group-parameters}}private{{/vendorExtensions.x-group-parameters}} ApiResponse<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Void{{/returnType}}> {{operationId}}WithHttpInfo({{#allParams}}{{#useBeanValidation}}{{>beanValidationQueryParams}}{{/useBeanValidation}}{{{dataType}}} {{paramName}}{{^-last}}, {{/-last}}{{/allParams}}) throws ApiException {
-        long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.SENDREQUEST);
+        long eventID;
+        if (ServerApplication.withMonitor) {
+	        eventID = monitorClientInterface.getNextEventID();
+	        monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.SENDREQUEST);        
+        }
         
         {{^returnType}}ApiResponse<Void> {{/returnType}}{{#returnType}}ApiResponse<{{{returnType}}}> {{/returnType}}result = super.{{operationId}}WithHttpInfo({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}});
 
-        monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.RECEIVERESPONSE);
+        if (ServerApplication.withMonitor) {
+	        monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.RECEIVERESPONSE);
+        }
 
         return result;
     }
@@ -131,12 +137,17 @@ public class {{classname}}Client extends {{classname}}{
     {{/isDeprecated}}
     @Override
     public{{/vendorExtensions.x-group-parameters}}{{#vendorExtensions.x-group-parameters}}private{{/vendorExtensions.x-group-parameters}} okhttp3.Call {{operationId}}Async({{#allParams}}{{{dataType}}} {{paramName}}, {{/allParams}}final ApiCallback<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Void{{/returnType}}> _callback) throws ApiException {
-        long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.SENDREQUEST);
+		long eventID;
+        if (ServerApplication.withMonitor) {
+	        eventID = monitorClientInterface.getNextEventID();
+	        monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.SENDREQUEST);        
+        }
 
         okhttp3.Call result = super.{{operationId}}Async({{#allParams}}{{paramName}}, {{/allParams}}_callback);
 
-        monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.RECEIVERESPONSE);
+		if (ServerApplication.withMonitor) {
+	        monitorClientInterface.queueMonitorData(eventID, "{{{path}}}", EventCodeEnum.RECEIVERESPONSE);
+        }
 
         return result;
     }

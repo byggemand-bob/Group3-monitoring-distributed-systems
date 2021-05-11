@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.NativeWebRequest;
 
+import com.group3.application.ServerApplication;
 import com.group3.monitorClient.MonitorClientInterface;
 import com.group3.monitorClient.messenger.Messenger;
 
@@ -40,10 +41,12 @@ public class UserApiController implements UserApi {
 
     @org.springframework.beans.factory.annotation.Autowired
     public UserApiController(NativeWebRequest request) {
-    	monitorClientInterface = new MonitorClientInterface();
+    	if (ServerApplication.withMonitor) {
+    		monitorClientInterface = new MonitorClientInterface();    		
+    	}
         this.request = request;
         ApiClient apiClient = new ApiClient();
-        apiClient.setBasePath("http://localhost:8082");
+        apiClient.setBasePath(ServerApplication.destinationIPandPort);
         userApiClient = new UserApiClient(apiClient);
         accountApiClient = new AccountApiClient(apiClient);
     }
@@ -62,8 +65,11 @@ public class UserApiController implements UserApi {
      */
     @Override
     public ResponseEntity<Void> createNewUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody User user) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.RECEIVEREQUEST);
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+    		monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.RECEIVEREQUEST);    		
+    	}
         
         ApiResponse<Void> apiResponse;
         ResponseEntity<Void> returnValue;
@@ -76,7 +82,9 @@ public class UserApiController implements UserApi {
 			e.printStackTrace();
 		}
 		
-		monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.SENDRESPONSE);
+        if (ServerApplication.withMonitor) {
+        	monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.SENDRESPONSE);        	
+        }
 		return returnValue;
     }
 
@@ -90,8 +98,11 @@ public class UserApiController implements UserApi {
      */
     @Override
     public ResponseEntity<Void> deleteUser(@NotNull @ApiParam(value = "Delete user from the value of a query parameter", required = true) @Valid @RequestParam(value = "user", required = true) String user) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.RECEIVEREQUEST);
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+    		monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.RECEIVEREQUEST);    		
+    	}
         
         ApiResponse<Void> apiResponse;
         ResponseEntity<Void> returnValue;
@@ -110,7 +121,9 @@ public class UserApiController implements UserApi {
 			e.printStackTrace();
 		}
        
-		monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.SENDRESPONSE);
+        if (ServerApplication.withMonitor) {
+        	monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.SENDRESPONSE);        	
+        }
 		return returnValue;
     }
 
@@ -124,9 +137,12 @@ public class UserApiController implements UserApi {
      */
     @Override
     public ResponseEntity<User> getUser(@NotNull @ApiParam(value = "Get a user from the value of the query parameter", required = true) @Valid @RequestParam(value = "user", required = true) String user) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.RECEIVEREQUEST);
-        
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+    		monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.RECEIVEREQUEST);    		
+    	}
+    	
         ApiResponse<org.openapitools.client.model.User> apiResponse;
         ResponseEntity<User> returnValue;
         
@@ -139,8 +155,10 @@ public class UserApiController implements UserApi {
 			e.printStackTrace();
 		}
 		
-		monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.SENDRESPONSE);
-		return returnValue;
+        if (ServerApplication.withMonitor) {
+        	monitorClientInterface.queueMonitorData(eventID, "/User", EventCodeEnum.SENDRESPONSE);        	
+        }
+        return returnValue;
     }
     
     /**

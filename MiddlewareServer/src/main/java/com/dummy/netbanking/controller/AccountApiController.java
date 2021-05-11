@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.NativeWebRequest;
 
+import com.group3.application.ServerApplication;
 import com.group3.monitorClient.MonitorClientInterface;
 import com.group3.monitorClient.messenger.Messenger;
 
@@ -38,10 +39,13 @@ public class AccountApiController implements AccountApi {
 
     @org.springframework.beans.factory.annotation.Autowired
     public AccountApiController(NativeWebRequest request) {
-    	monitorClientInterface = new MonitorClientInterface();
+    	if (ServerApplication.withMonitor) {
+    		monitorClientInterface = new MonitorClientInterface();    		
+    	}
+    	
         this.request = request;
         ApiClient apiClient = new ApiClient();
-        apiClient.setBasePath("http://localhost:8082");
+        apiClient.setBasePath(ServerApplication.destinationIPandPort);
         accountApiClient = new AccountApiClient(apiClient);
     }
 
@@ -59,8 +63,11 @@ public class AccountApiController implements AccountApi {
      */
     @Override
     public ResponseEntity<Void> createAccount(@ApiParam(value = "" ,required=true )  @Valid @RequestBody Account account) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.RECEIVEREQUEST);
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+	        monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.RECEIVEREQUEST);
+    	}
         
         ApiResponse<Void> apiResponse;
         ResponseEntity<Void> returnValue;
@@ -74,7 +81,9 @@ public class AccountApiController implements AccountApi {
 			e.printStackTrace();
 		}
 		
-		monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.SENDRESPONSE);
+		if (ServerApplication.withMonitor) {
+			monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.SENDRESPONSE);			
+		}
 		return returnValue;
     }
 
@@ -88,8 +97,11 @@ public class AccountApiController implements AccountApi {
      */
     @Override
     public ResponseEntity<Void> deleteAccount(@NotNull @ApiParam(value = "Delete a account from the value of a query parameter", required = true) @Valid @RequestParam(value = "account", required = true) String account) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.RECEIVEREQUEST);
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+	        monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.RECEIVEREQUEST);
+    	}
 
         ApiResponse<Void> apiResponse;
         ResponseEntity<Void> returnValue;
@@ -102,7 +114,9 @@ public class AccountApiController implements AccountApi {
 			e.printStackTrace();
 		}
 		
-		monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.SENDRESPONSE);
+		if (ServerApplication.withMonitor) {
+			monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.SENDRESPONSE);			
+		}
 		return returnValue;
     }
 
@@ -116,8 +130,11 @@ public class AccountApiController implements AccountApi {
      */
     @Override
     public ResponseEntity<Double> getAccountBalance(@NotNull @ApiParam(value = "Get the balance of a account", required = true) @Valid @RequestParam(value = "account", required = true) String account) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/Account/balance", EventCodeEnum.RECEIVEREQUEST);
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+	        monitorClientInterface.queueMonitorData(eventID, "/Account/balance", EventCodeEnum.RECEIVEREQUEST);
+    	}
         
         ApiResponse<Double> apiResponse;
         ResponseEntity<Double> returnValue;
@@ -130,7 +147,9 @@ public class AccountApiController implements AccountApi {
 			e.printStackTrace();
 		}
 		
-		monitorClientInterface.queueMonitorData(eventID, "/Account/balance", EventCodeEnum.SENDRESPONSE);
+        if (ServerApplication.withMonitor) {
+			monitorClientInterface.queueMonitorData(eventID, "/Account/balance", EventCodeEnum.SENDRESPONSE);			
+		}
 		return returnValue;
     }
 
@@ -144,8 +163,11 @@ public class AccountApiController implements AccountApi {
      */
     @Override
     public ResponseEntity<List<Account>> getUsersAllAccount(@NotNull @ApiParam(value = "Get all the account that has been assigned for the user", required = true) @Valid @RequestParam(value = "user", required = true) String user) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.RECEIVEREQUEST);
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+	        monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.RECEIVEREQUEST);
+    	}
         
         ApiResponse<List<org.openapitools.client.model.Account>> apiResponse;
         ResponseEntity<List<Account>> returnValue;
@@ -160,7 +182,9 @@ public class AccountApiController implements AccountApi {
 			e.printStackTrace();
 		}
 		
-		monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.SENDRESPONSE);
+		if (ServerApplication.withMonitor) {
+			monitorClientInterface.queueMonitorData(eventID, "/Account", EventCodeEnum.SENDRESPONSE);			
+		}
 		return returnValue;
     }
 
@@ -175,9 +199,12 @@ public class AccountApiController implements AccountApi {
      */
     @Override
     public ResponseEntity<Void> updateAccountBalance(@NotNull @ApiParam(value = "Update the balance of a account", required = true) @Valid @RequestParam(value = "account", required = true) String account,@NotNull @ApiParam(value = "Change the balance", required = true) @Valid @RequestParam(value = "balance", required = true) Double balance) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/Account/balance", EventCodeEnum.RECEIVEREQUEST);
-        
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+	        monitorClientInterface.queueMonitorData(eventID, "/Account/balance", EventCodeEnum.RECEIVEREQUEST);
+    	}
+
         ApiResponse<Void> apiResponse;
         ResponseEntity<Void> returnValue;
         
@@ -190,7 +217,9 @@ public class AccountApiController implements AccountApi {
 			e.printStackTrace();
 		}
 		
-		monitorClientInterface.queueMonitorData(eventID, "/Account/balance", EventCodeEnum.SENDRESPONSE);
+		if (ServerApplication.withMonitor) {
+			monitorClientInterface.queueMonitorData(eventID, "/Account/balance", EventCodeEnum.SENDRESPONSE);			
+		}
 		return returnValue;
     }
     

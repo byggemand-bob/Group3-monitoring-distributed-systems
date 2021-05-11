@@ -12,6 +12,7 @@ import java.util.List;
 import org.openapitools.model.User;
 
 import com.dummy.netbanking.database.UserDBManager;
+import com.group3.application.ServerApplication;
 import com.group3.monitorClient.MonitorClientInterface;
 
 import org.openapitools.api.DBUserApi;
@@ -64,8 +65,11 @@ public class DBUserApiController implements DBUserApi {
      */
     @Override
     public ResponseEntity<Void> createNewUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody User user) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/DBUser", EventCodeEnum.RECEIVEREQUEST);
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+    		monitorClientInterface.queueMonitorData(eventID, "/DBUser", EventCodeEnum.RECEIVEREQUEST);    		
+    	}
         
         // Implement controller logic here!
         ResponseEntity<Void> returnValue;
@@ -77,7 +81,9 @@ public class DBUserApiController implements DBUserApi {
 			returnValue = new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		monitorClientInterface.queueMonitorData(eventID, "/DBUser", EventCodeEnum.SENDRESPONSE);
+        if (ServerApplication.withMonitor) {
+        	monitorClientInterface.queueMonitorData(eventID, "/DBUser", EventCodeEnum.SENDRESPONSE);        	
+        }
 		return returnValue;
     }
 
@@ -91,9 +97,12 @@ public class DBUserApiController implements DBUserApi {
      */
     @Override
     public ResponseEntity<Void> deleteUser(@NotNull @ApiParam(value = "Delete user from the value of a query parameter", required = true) @Valid @RequestParam(value = "user", required = true) String user) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/DBUser", EventCodeEnum.RECEIVEREQUEST);
-        
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+    		monitorClientInterface.queueMonitorData(eventID, "/DBUser", EventCodeEnum.RECEIVEREQUEST);    		
+    	}
+    	
         // Implement controller logic here!
         ResponseEntity<Void> returnValue;
         boolean success = false;
@@ -109,7 +118,9 @@ public class DBUserApiController implements DBUserApi {
         	returnValue = new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         }
 		
-		monitorClientInterface.queueMonitorData(eventID, "/DBUser", EventCodeEnum.SENDRESPONSE);
+        if (ServerApplication.withMonitor) {
+        	monitorClientInterface.queueMonitorData(eventID, "/DBUser", EventCodeEnum.SENDRESPONSE);        	
+        }
 		return returnValue;
     }
 
@@ -123,9 +134,12 @@ public class DBUserApiController implements DBUserApi {
      */
     @Override
     public ResponseEntity<User> getUser(@NotNull @ApiParam(value = "Get a user from the value of the query parameter", required = true) @Valid @RequestParam(value = "user", required = true) String user) {
-        final long eventID = monitorClientInterface.getNextEventID();
-        monitorClientInterface.queueMonitorData(eventID, "/DBUser", EventCodeEnum.RECEIVEREQUEST);
-        
+    	final long eventID;
+    	if (ServerApplication.withMonitor) {
+    		eventID = monitorClientInterface.getNextEventID();
+    		monitorClientInterface.queueMonitorData(eventID, "/DBUser", EventCodeEnum.RECEIVEREQUEST);    		
+    	}
+    	
         // Implement controller logic here!
         ResponseEntity<User> returnValue;
         try {
@@ -136,7 +150,9 @@ public class DBUserApiController implements DBUserApi {
 			returnValue = new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 		}
 		
-		monitorClientInterface.queueMonitorData(eventID, "/DBUser", EventCodeEnum.SENDRESPONSE);
+        if (ServerApplication.withMonitor) {
+        	monitorClientInterface.queueMonitorData(eventID, "/DBUser", EventCodeEnum.SENDRESPONSE);        	
+        }
 		return returnValue;
     }
 
