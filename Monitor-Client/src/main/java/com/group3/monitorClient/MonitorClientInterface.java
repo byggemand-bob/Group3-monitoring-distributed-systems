@@ -1,5 +1,6 @@
 package com.group3.monitorClient;
 
+import com.group3.monitorClient.concurrent.LowPrioThreadFactory;
 import com.group3.monitorClient.configuration.ConfigurationManager;
 import com.group3.monitorClient.exception.MonitorConfigException;
 import com.group3.monitorClient.messenger.Messenger;
@@ -18,6 +19,9 @@ import org.threeten.bp.OffsetDateTime;
 
 import javax.annotation.Nullable;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
@@ -35,6 +39,8 @@ public class MonitorClientInterface {
     private final String dbFileName = ConfigurationManager.getInstance().getProperty(ConfigurationManager.dbFileNameProp, "queue.db");
     private final double availableCPURequirementProp = ConfigurationManager.getInstance().getPropertyAsDouble(ConfigurationManager.availableCPURequirementProp, 0.2);
 
+    private static ThreadPoolExecutor threadPool;
+    
     public MonitorClientInterface(){
         client = new ApiClient();
         ValidateAndSetMonitorIP(monitorURL);
@@ -42,6 +48,11 @@ public class MonitorClientInterface {
         errorApi = new ErrorApi(client);
         sqlMessageManager = Messenger.getSqlMessageManager();
         messageCreator = new MessageCreator();
+        
+        if (threadPool == null) {
+        	threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(2, new LowPrioThreadFactory());
+        	threadPool.setKeepAliveTime(0L, TimeUnit.MILLISECONDS);
+        }
     }
 
     private void ValidateAndSetMonitorIP(String MonitorIP){
@@ -83,7 +94,8 @@ public class MonitorClientInterface {
     }
 
     public long queueMonitorData(long eventID, @Nullable String targetEndPoint, EventCodeEnum eventCode) {
-        addMonitorData(eventID, targetEndPoint, eventCode);
+        threadPool.submit(() -> addMonitorData(eventID, targetEndPoint, eventCode));
+        
         return eventID;
     }
 
