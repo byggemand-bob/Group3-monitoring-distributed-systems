@@ -150,3 +150,8 @@ files:
   test/api_test.mustache:
     templateType: APITests
     destinationFilename: .java
+  
+  concurrent/LowPrioThreadFactory.mustache:
+    templateType: SupportingFiles
+    destinationFilename: LowPrioThreadFactory.java
+    folder: src/gen/java/main/com/group3/monitorClient/concurrent
