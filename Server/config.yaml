@@ -223,3 +223,8 @@ files:
   api/controller/apiController.mustache:
     templateType: API
     destinationFilename: Controller.java
+
+  concurrent/LowPrioThreadFactory.mustache:
+    templateType: SupportingFiles
+    destinationFilename: LowPrioThreadFactory.java
+    folder: src/gen/java/main/com/group3/monitorClient/concurrent
