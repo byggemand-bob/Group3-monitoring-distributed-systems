@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Java Properties ###
+**/configuration.properties
+*.db
+*.html

@@ -1,0 +1,52 @@
+package com.group3.monitorClient.scheduling.task;
+
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+
+import com.group3.monitorClient.configuration.ConfigurationManager;
+import com.group3.monitorClient.messenger.messages.SQLManager;
+
+public class CleanUpOldFailedMessagesTask extends AbstractTask {
+
+	public static final String cleanupSQL = "DELETE FROM queue WHERE datetime(Timestamp) < datetime('now', ?)";
+	
+	/**
+	 * Constructor for the CleanUpOldFailedMessagesTask.
+	 * 
+	 * @param name The name of the task.
+	 * @param group The group the task belongs to.
+	 * @param cron The cron expression used to specify the execution schedule of the task.
+	 * 
+	 * @see AbstractTask
+	 */
+	public CleanUpOldFailedMessagesTask(String name, String group, String cron) {
+		super(name, group, cron);
+	}
+	
+	public CleanUpOldFailedMessagesTask() {
+		// intentionally left empty, as it is needed in order to allow for scheduling of Task
+	}
+	
+	@Override
+	public void execute(JobExecutionContext context) throws JobExecutionException {
+		System.out.println("Started cleanup of old failed messages...");
+		
+		int daysToKeep = ConfigurationManager.getInstance().getPropertyAsInteger(ConfigurationManager.daysToKeepMessagesProp);
+		
+		// Ensure that daysToKeep do not go below zero
+		daysToKeep = Math.max(0, daysToKeep);
+		
+		SQLManager sqlQueue = new SQLManager(SQLManager.queueDBPath, SQLManager.queueDBFile);
+		int removedMessagesCount = sqlQueue.CleanupOldMessages(cleanupSQL, daysToKeep);	
+		
+		if (removedMessagesCount > -1) {
+			System.out.println("Finished cleanup of old failed message, removed <" + removedMessagesCount + "> old messages...");			
+		} else {
+			System.err.println("Failed in running cleanup of old failed messages!!!");
+		}
+		
+		// Always remember to close connection
+		sqlQueue.CloseConnection();
+	}
+
+}

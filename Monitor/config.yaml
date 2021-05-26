@@ -1,0 +1,51 @@
+templateDir: src/main/resources/cstTemplates
+files:
+  scheduling/task/AbstractTask.mustache:
+    templateType: SupportingFiles
+    destinationFilename: AbstractTask.java
+    folder: src/gen/java/main/com/group3/monitorClient/scheduling/task
+  
+  scheduling/task/CleanUpOldFailedMessagesTask.mustache:
+    templateType: SupportingFiles
+    destinationFilename: CleanUpOldFailedMessagesTask.java
+    folder: src/gen/java/main/com/group3/monitorClient/scheduling/task
+  
+  util/MonitorUtils.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MonitorUtils.java
+    folder: src/gen/java/main/com/group3/monitorClient/util
+  
+  scheduling/NotInitializedException.mustache:
+    templateType: SupportingFiles
+    destinationFilename: NotInitializedException.java
+    folder: src/gen/java/main/com/group3/monitorClient/scheduling
+  
+  scheduling/TaskAlreadyExistsException.mustache:
+    templateType: SupportingFiles
+    destinationFilename: TaskAlreadyExistsException.java
+    folder: src/gen/java/main/com/group3/monitorClient/scheduling
+  
+  scheduling/TaskDetails.mustache:
+    templateType: SupportingFiles
+    destinationFilename: TaskDetails.java
+    folder: src/gen/java/main/com/group3/monitorClient/scheduling
+  
+  scheduling/TaskScheduler.mustache:
+    templateType: SupportingFiles
+    destinationFilename: TaskScheduler.java
+    folder: src/gen/java/main/com/group3/monitorClient/scheduling
+  
+  configuration/ConfigurationManager.mustache:
+    templateType: SupportingFiles
+    destinationFilename: ConfigurationManager.java
+    folder: src/gen/java/main/com/group3/monitorClient/configuration
+  
+  exception/monitorConfigException.mustache:
+    templateType: SupportingFiles
+    destinationFilename: MonitorConfigException.java
+    folder: src/gen/java/main/com/group3/monitorClient/exception
+  
+  messenger/messages/SQLManager.mustache:
+    templateType: SupportingFiles
+    destinationFilename: SQLManager.java
+    folder: src/gen/java/main/com/group3/monitorClient/messenger/messages

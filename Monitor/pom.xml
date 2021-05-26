@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.Group3</groupId>
-    <artifactId>monitor</artifactId>
+    <artifactId>MonitorServer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>pet-store</name>
+    <name>MonitorServer</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
@@ -35,6 +35,13 @@
             <artifactId>swagger-annotations</artifactId>
             <version>1.6.2</version>
         </dependency>
+
+		<!-- For task scheduling -->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.2.1</version>
+		</dependency>
 
         <!-- https://mvnrepository.com/artifact/io.gsonfire/gson-fire -->
         <dependency>
@@ -174,13 +181,38 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-    </dependencies>
+
+        <!-- https://github.com/everit-org/json-schema -->
+        <dependency>
+    		    <groupId>com.github.everit-org.json-schema</groupId>
+    		    <artifactId>org.everit.json.schema</artifactId>
+    		    <version>1.12.2</version>
+		    </dependency>        
+        
+        <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+		    <dependency>
+			      <groupId>org.xerial</groupId>
+			      <artifactId>sqlite-jdbc</artifactId>
+			      <version>3.34.0</version>
+		    </dependency>
+  </dependencies>
+
+	<!-- https://github.com/everit-org/json-schema -->
+	<repositories>
+    	<repository>
+        	<id>jitpack.io</id>
+        	<url>https://jitpack.io</url>
+    	</repository>
+	</repositories>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.Group3.MonitorServer.MonitorServerApplication</mainClass>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -193,12 +225,13 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <templateDirectory>${project.basedir}/src/main/resources/templates</templateDirectory>
-                            <inputSpec>${project.basedir}/src/main/resources/petstore-api.yaml</inputSpec>
+                            <!-- <templateDirectory>${project.basedir}/src/main/resources/templates</templateDirectory> --> <!-- Somehow this line breaks the autogeneration -->
+                            <inputSpec>${project.basedir}/src/main/resources/monitor_api.yaml</inputSpec>
                             <generatorName>spring</generatorName>
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                             </configOptions>
+                            <configurationFile>${project.basedir}/config.yaml</configurationFile>
                         </configuration>
                     </execution>
                 </executions>
