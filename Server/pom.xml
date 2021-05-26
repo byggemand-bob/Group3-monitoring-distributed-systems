@@ -212,7 +212,7 @@
                         </goals>
                         <configuration>
                             <!-- <templateDirectory>${project.basedir}/src/main/resources/templates</templateDirectory>--> <!-- Somehow this line breaks the autogeneration -->
-                            <inputSpec>${project.basedir}/src/main/resources/petstore-api.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api_specification.yaml</inputSpec>
                             <generatorName>spring</generatorName>
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>

@@ -207,7 +207,7 @@
 						</goals>
 						<configuration>
 							<configurationFile>${project.basedir}/config.yaml</configurationFile>
-							<inputSpec>${project.basedir}/src/main/resources/petstore-api.yaml</inputSpec>
+							<inputSpec>${project.basedir}/src/main/resources/api_specification.yaml</inputSpec>
 							<generatorName>java</generatorName> <!-- spring for server/java for client -->
 							<configOptions>
 								<sourceFolder>src/gen/java/main</sourceFolder>
