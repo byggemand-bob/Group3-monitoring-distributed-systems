@@ -9,11 +9,11 @@
 		<version>2.4.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.Group3</groupId>
+	<groupId>com.group3</groupId>
 	<artifactId>client</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>pet-store</name>
-	<description>Demo project for Spring Boot</description>
+	<version>1.0.0</version>
+	<name>client</name>
+	<description>Client node template for C-Mon monitoring framework</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
