@@ -87,7 +87,7 @@ public class ConfigurationManager {
 
 		for (String req  :requiredProperties) {
 			if (props.containsKey(req)) {
-				if (props.getProperty(req) == null) {
+				if (props.getProperty(req).equals(EMPTY)) {
 					msg.add("Required Property " + req + " has no value\n");
 				}
 			} else {
