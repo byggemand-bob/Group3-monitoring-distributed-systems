@@ -197,7 +197,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-	                <mainClass>com.Group3.petstore.PetstoreApplication</mainClass>
+	                <mainClass>com.group3.server.ServerApplication</mainClass>
                 </configuration>
             </plugin>
 
@@ -211,8 +211,8 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <!-- <inputSpec>${project.basedir}/src/main/resources/api_specification.yaml</inputSpec>  -->
-                            <inputSpec>${project.basedir}/src/main/resources/test/petstore-api-extended.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api_specification.yaml</inputSpec>
+                            <!-- <inputSpec>${project.basedir}/src/main/resources/test/petstore-api-extended.yaml</inputSpec> -->
                             <generatorName>spring</generatorName>
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
