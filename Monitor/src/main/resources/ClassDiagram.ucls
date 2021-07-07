@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.4" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="com.group3.monitorServer.constraint.exception.ConstraintAlreadyExistsException" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/constraint/exception/ConstraintAlreadyExistsException.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="225" x="856" y="1120"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="com.group3.monitorServer.messageProcessor.notifier.htmlNotifier.HTMLNotifier" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messageProcessor/notifier/htmlNotifier/HTMLNotifier.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="189" width="320" x="319" y="217"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="com.group3.monitorServer.constraint.store.ConstraintImporter" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/constraint/store/ConstraintImporter.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="153" width="226" x="896" y="572"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="4" language="java" name="com.group3.monitorServer.messages.MessageInterface" project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messages/MessageInterface.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="117" width="210" x="2966" y="1120"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <interface id="5" language="java" name="com.group3.monitorServer.messageProcessor.notifier.Notifier" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messageProcessor/notifier/Notifier.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="99" width="320" x="1801" y="891"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="6" language="java" name="com.group3.monitorServer.messageProcessor.TimingMonitorDataMessageID" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messageProcessor/TimingMonitorDataMessageID.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="204" x="2794" y="572"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="com.group3.monitorServer.messageProcessor.workers.TimingMonitorDataWorker" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messageProcessor/workers/TimingMonitorDataWorker.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="153" width="612" x="2142" y="572"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="com.group3.monitorServer.messages.ErrorDataMessage" project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messages/ErrorDataMessage.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="189" width="210" x="3080" y="891"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="com.group3.monitorServer.messages.TimingMonitorDataMessage" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messages/TimingMonitorDataMessage.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="189" width="252" x="2767" y="891"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="com.group3.monitorServer.constraint.analyze.ConstraintAnalysisDetails" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/constraint/analyze/ConstraintAnalysisDetails.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="270" x="298" y="891"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="com.group3.monitorServer.messages.MessageCreator" project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messages/MessageCreator.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="189" width="289" x="3101" y="572"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="com.group3.monitorServer.MonitorServerApplication" project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/MonitorServerApplication.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="117" width="168" x="592" y="24"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="com.group3.monitorServer.messages.MonitorClientInterface" project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messages/MonitorClientInterface.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="81" width="167" x="2966" y="1547"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="14" language="java" name="com.group3.monitorServer.controller.requirements.Requirement" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/controller/requirements/Requirement.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="81" width="219" x="1162" y="572"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="15" language="java" name="com.group3.monitorServer.constraint.analyze.ConstraintAnalyzer" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/constraint/analyze/ConstraintAnalyzer.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="495" x="319" y="572"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="com.group3.monitorServer.constraint.ConstraintKey" project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/constraint/ConstraintKey.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="225" width="166" x="650" y="1120"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="com.group3.monitorServer.Receiver" project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/Receiver.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="153" width="307" x="1442" y="24"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="18" language="java" name="com.group3.monitorServer.messages.MessageTypeID" project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messages/MessageTypeID.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="117" width="195" x="3237" y="1120"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="19" language="java" name="com.group3.monitorServer.constraint.validator.ConstraintUserInputValidation" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/constraint/validator/ConstraintUserInputValidation.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="204" x="972" y="891"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="com.group3.monitorServer.constraint.Constraint" project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/constraint/Constraint.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="387" width="189" x="421" y="1120"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="com.group3.monitorServer.messages.SQLManager" project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messages/SQLManager.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="477" width="244" x="3199" y="1956"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="com.group3.monitorServer.messageProcessor.notifier.htmlNotifier.HTMLWriter" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messageProcessor/notifier/htmlNotifier/HTMLWriter.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="279" width="288" x="-51" y="572"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="com.group3.monitorServer.controller.Controller" project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/controller/Controller.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="225" width="195" x="1442" y="217"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="com.group3.monitorServer.controller.requirements.AvailableCPURequirement" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/controller/requirements/AvailableCPURequirement.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="153" width="219" x="1162" y="217"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="com.group3.monitorServer.messages.SQLMessageManager" project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messages/SQLMessageManager.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="369" width="234" x="2142" y="1547"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="com.group3.monitorServer.constraint.store.ConstraintStore" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/constraint/store/ConstraintStore.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="153" width="261" x="650" y="891"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="27" language="java" name="com.group3.monitorServer.messageProcessor.workers.ErrorMessageWorker" 
+    project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messageProcessor/workers/ErrorMessageWorker.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="395" x="1686" y="572"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="28" language="java" name="com.group3.monitorServer.controller.Controllable" project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/controller/Controllable.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="135" width="162" x="1463" y="572"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="29" language="java" name="com.group3.monitorServer.messageProcessor.Delegator" project="MonitorServer" 
+    file="/MonitorServer/src/main/java/com/group3/monitorServer/messageProcessor/Delegator.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="315" width="407" x="2673" y="217"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <realization id="30">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="4"/>  
+  </realization>  
+  <association id="31">    
+    <bendpoint x="3110" y="217"/>    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="32" name="messageCreator"/>      
+      <multiplicity id="33" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="34">    
+    <bendpoint x="1131" y="217"/>    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <association id="35">    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="36" name="ControlledThreads"/>      
+      <multiplicity id="37" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="28" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="38">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="39" name="msg1"/>      
+      <multiplicity id="40" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="41">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="27"/>  
+  </dependency>  
+  <dependency id="42">    
+    <bendpoint x="2776" y="1120"/>    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <association id="43">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="44" name="msg"/>      
+      <multiplicity id="45" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="46">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <association id="47">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="48" name="htmlWriter"/>      
+      <multiplicity id="49" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="50">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="23"/>  
+  </dependency>  
+  <dependency id="51">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="52">    
+    <bendpoint x="3399" y="891"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="53">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="54">    
+    <bendpoint x="3320" y="891"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="55">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <association id="56">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="57" name="timingMonitorDataMessage"/>      
+      <multiplicity id="58" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="59">    
+    <bendpoint x="3462" y="217"/>    
+    <bendpoint x="3462" y="572"/>    
+    <bendpoint x="3462" y="891"/>    
+    <bendpoint x="3462" y="1120"/>    
+    <bendpoint x="3462" y="1547"/>    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="21"/>  
+  </dependency>  
+  <dependency id="60">    
+    <bendpoint x="3049" y="572"/>    
+    <bendpoint x="3049" y="891"/>    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="61">    
+    <bendpoint x="2797" y="1120"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="25"/>  
+  </dependency>  
+  <dependency id="62">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="63">    
+    <bendpoint x="3028" y="572"/>    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="64">    
+    <bendpoint x="844" y="572"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="26"/>  
+  </dependency>  
+  <dependency id="65">    
+    <bendpoint x="598" y="891"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="20"/>  
+  </dependency>  
+  <dependency id="66">    
+    <bendpoint x="3070" y="572"/>    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="67">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="19"/>  
+  </dependency>  
+  <realization id="68">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="4"/>  
+  </realization>  
+  <association id="69">    
+    <bendpoint x="2111" y="572"/>    
+    <end type="SOURCE" refId="29" navigable="false">      
+      <attribute id="70" name="notifier"/>      
+      <multiplicity id="71" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="72">    
+    <bendpoint x="865" y="217"/>    
+    <bendpoint x="865" y="572"/>    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="26"/>  
+  </dependency>  
+  <association id="73">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="74" name="notifier"/>      
+      <multiplicity id="75" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="76">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="77" name="constAnalyzer"/>      
+      <multiplicity id="78" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="79">    
+    <bendpoint x="941" y="891"/>    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="20"/>  
+  </dependency>  
+  <dependency id="80">    
+    <bendpoint x="267" y="572"/>    
+    <bendpoint x="267" y="891"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="20"/>  
+  </dependency>  
+  <dependency id="81">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="82">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="83">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="24"/>  
+  </dependency>  
+  <dependency id="84">    
+    <bendpoint x="3441" y="217"/>    
+    <bendpoint x="3441" y="572"/>    
+    <bendpoint x="3378" y="891"/>    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <association id="85">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="86" name="constraint"/>      
+      <multiplicity id="87" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="88">    
+    <end type="SOURCE" refId="29" navigable="false">      
+      <attribute id="89" name="messageCreator"/>      
+      <multiplicity id="90" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="91">    
+    <bendpoint x="1411" y="217"/>    
+    <bendpoint x="1411" y="572"/>    
+    <bendpoint x="1411" y="891"/>    
+    <bendpoint x="1411" y="1120"/>    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="92" name="sqlMessageManager"/>      
+      <multiplicity id="93" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="94">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <association id="95">    
+    <bendpoint x="1770" y="891"/>    
+    <bendpoint x="1770" y="1120"/>    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="96" name="sqlMessageManager"/>      
+      <multiplicity id="97" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="98">    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="99" name="singleton"/>      
+      <multiplicity id="100" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="101">    
+    <bendpoint x="1655" y="572"/>    
+    <bendpoint x="1655" y="891"/>    
+    <bendpoint x="1655" y="1120"/>    
+    <end type="SOURCE" refId="29" navigable="false">      
+      <attribute id="102" name="sqlMessageManager"/>      
+      <multiplicity id="103" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="104">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="14"/>  
+  </realization>  
+  <association id="105">    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="106" name="requirementList"/>      
+      <multiplicity id="107" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="108">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="109">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="25"/>  
+  </dependency>  
+  <dependency id="110">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="26"/>  
+  </dependency>  
+  <association id="111">    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="112" name="constraints"/>      
+      <multiplicity id="113" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="114">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="115" name="constraints"/>      
+      <multiplicity id="116" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="117">    
+    <bendpoint x="3420" y="572"/>    
+    <bendpoint x="3420" y="891"/>    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <association id="118">    
+    <end type="SOURCE" refId="25" navigable="false">      
+      <attribute id="119" name="sqlManager"/>      
+      <multiplicity id="120" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="121">    
+    <bendpoint x="3206" y="1120"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="122">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="123">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="16"/>  
+  </dependency>  
+  <dependency id="124">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="29"/>  
+  </dependency>  
+  <dependency id="125">    
+    <bendpoint x="288" y="572"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <association id="126">    
+    <bendpoint x="2151" y="891"/>    
+    <bendpoint x="2151" y="1120"/>    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="127" name="sqlMessageManager"/>      
+      <multiplicity id="128" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="129">    
+    <bendpoint x="1432" y="572"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="5"/>  
+  </realization>  
+  <realization id="130">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="28"/>  
+  </realization>  
+  <association id="131">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="132" name="notifier"/>      
+      <multiplicity id="133" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="134">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="135" name="msg2"/>      
+      <multiplicity id="136" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="137">    
+    <bendpoint x="2463" y="1120"/>    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="25"/>  
+  </dependency>  
+  <dependency id="138">    
+    <bendpoint x="619" y="891"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="16"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
